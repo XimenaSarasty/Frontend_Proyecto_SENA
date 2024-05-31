@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn-primary {
+    @apply text-white text-lg font-inter font-bold py-2 px-8 rounded-lg bg-sena;
+}
+
+.btn-primaryligth {
+    @apply font-inter font-bold py-2 px-4 rounded-lg bg-white border border-black;
+}
+
+.input {
+    @apply font-inter py-2 px-4 rounded bg-input rounded-lg;
+}
+@media (min-width: 768px) {
+    .md\:clip-path {
+      clip-path: polygon(0 0, 80% 0, 100% 29%, 90% 100%, 0 100%);
+    }
+  }
+  
