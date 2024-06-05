@@ -3,7 +3,7 @@ import React from 'react'
 const home = () => {
   return (
     <>
-      <h2>HELLO WORLD</h2>
+      <h2>HELLO WORLD DESDE EL HOME QUE SERÍA EL DASHBOARD</h2>
     </>
   )
 }
