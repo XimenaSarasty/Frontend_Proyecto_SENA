@@ -14,6 +14,7 @@ export default {
         gris: '#585656',
         negro: '#000000',
         input: '#1E1E1E',
+        correo: '#7BA3DF'
       },
       margin: {
         custom: '20rem',
