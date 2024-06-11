@@ -13,7 +13,7 @@ const Contra_3 = () => {
     const [rol, setRol] = useState('');
   
     const mensajeExito = () => {
-      toast.success('¡Cambio de contreaseña correcto!', {
+      toast.success('¡Cambio de contraseña correcto!', {
         position: "top-right",
         autoClose: 2500,
         hideProgressBar: false,

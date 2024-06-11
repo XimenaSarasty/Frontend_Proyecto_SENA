@@ -1,53 +1,49 @@
-import { createContext, useState, useContext } from "react";
-import getToken from '../api/token';
+import { createContext, useState, useContext, useEffect } from "react";
+import { api } from '../api/token';
+
 export const AuthContext = createContext();
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
-    if(!context){
-        throw new Error("useAuth must be withinh an AuthProvider");
-    } 
+    if (!context) {
+        throw new Error("useAuth must be within an AuthProvider");
+    }
     return context;
 }
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [isAuthenticathed, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const signup = async (user) => {
-        try {
-            // const res = await registerRequest(user)
-            // console.log(res);
-            // setUser(res.data);
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
             setIsAuthenticated(true);
-            
-        } catch (error) {
-            setErrors(error.response.data)
-            console.log(error);
         }
-    }
+    }, []);
 
-    const signin = async (user) => {
+    const signin = async ({ Documento, password }) => {
         try {
-            const res = await getToken(user);
-            console.log(res.data);
+            const response = await api.post("/login", { Documento, password });
+            const { token } = response.data;
+            setUser({ Documento }); 
             setIsAuthenticated(true);
-            setUser(res.data)
+            localStorage.setItem("token", token);
         } catch (error) {
-            console.log(error)
+            setErrors(error.response?.data || ["Error de autenticación"]);
         }
-    }
+    };
+
+    const signout = () => {
+        setUser(null);
+        setIsAuthenticated(false);
+        localStorage.removeItem("token");
+    };
 
     return (
-        <AuthContext.Provider value={{
-            signup,
-            signin,
-            user,
-            isAuthenticathed, 
-            errors
-        }}>
+        <AuthContext.Provider value={{ signin, signout, user, isAuthenticated, errors }}>
             {children}
         </AuthContext.Provider>
-    )
+    );
 }

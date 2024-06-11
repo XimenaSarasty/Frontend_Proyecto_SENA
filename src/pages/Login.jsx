@@ -1,24 +1,19 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faKey, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../context/AuthContext';
 import fondo from '/logoSena.png';
-import api from '../api/token';
-// import { useAuth } from '../context/AuthContext';
-
+import { api } from '../api/token';
+import Cookies from 'js-cookie';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
 
-  // const { signin, errors: signErrors } = useAuth();
-
-  // const onSubmited = handleLogin(async (data) => {
-  //   console.log(data);
-  // })
-
-  const   [Documento, setDocumento] = useState("");
+  const [Documento, setDocumento] = useState("");
   const [password, setPassword] = useState("");
+  const { signin } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -40,19 +35,16 @@ const Login = () => {
     localStorage.setItem("Documento", Documento);
 
     try {
-      const body = {
-        Documento: Documento,
-        password: password,
-      };
-
+      const body = { Documento: Documento, password: password };
       const response = await api.post("/login", body);
       if (response.data) {
         const responseData = await response.data;
         const { token } = responseData;
         localStorage.setItem("token", token); 
+        Cookies.set("token", token); 
 
-        if (true) {
-          toast.success("Inicio de sesión exitoso.", {
+        await signin({ Documento, password });
+        toast.success("Inicio de sesión exitoso.", {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -60,11 +52,10 @@ const Login = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-          });
-          setTimeout(() => {
-            navigate("/home");
-          }, 2000);
-        } 
+        });
+        setTimeout(() => {
+          navigate("/home");
+        }, 2000);        
       } 
     } catch (error) {
       toast.error("Credenciales Inválidas", {
@@ -87,7 +78,7 @@ const Login = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
+    <div className="flex flex-col md:flex-row h-screen bg-fondo">
       <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path md:clip-polygon h-full md:h-auto">
         <div className="w-1/2 text-center text-lg">
           <div className="font-inter mb-20">
