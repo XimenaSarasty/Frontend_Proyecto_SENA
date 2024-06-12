@@ -50,7 +50,7 @@ const Contras_1 = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
+    <div className="flex flex-col md:flex-row h-screen bg-fondo">
       <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path md:clip-polygon h-full md:h-auto">
         <div className="w-1/2 text-center text-lg">
           <div className="font-inter mb-20">

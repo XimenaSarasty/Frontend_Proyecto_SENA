@@ -1,16 +1,15 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faKey, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import fondo from '/logoSena.png';
 import { api } from '../api/token';
 import Cookies from 'js-cookie';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { loginSchemas } from '../../../Backend_Sena/src/schemas/Login.schemas'; 
 const Login = () => {
-
   const [Documento, setDocumento] = useState("");
   const [password, setPassword] = useState("");
   const { signin } = useAuth();
@@ -19,23 +18,29 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!Documento || !password) {
-      toast.error("Llenar todos los campos es obligatorio.", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+    try {
+      loginSchemas.parse({ Documento, password });
+    } catch (err) {
+      if (err.errors) {
+        err.errors.forEach((error) => {
+          toast.error(error.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
+      }
       return;
     }
 
     localStorage.setItem("Documento", Documento);
 
     try {
-      const body = { Documento: Documento, password: password };
+      const body = { Documento, password };
       const response = await api.post("/login", body);
       if (response.data) {
         const responseData = await response.data;
@@ -45,20 +50,20 @@ const Login = () => {
 
         await signin({ Documento, password });
         toast.success("Inicio de sesión exitoso.", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
         });
         setTimeout(() => {
           navigate("/home");
         }, 2000);        
       } 
     } catch (error) {
-      toast.error("Credenciales Inválidas", {
+      toast.error("Credenciales inválidas", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -70,12 +75,12 @@ const Login = () => {
     }
   };
 
-   const handleDocumentoChange = (e) => {
+  const handleDocumentoChange = (e) => {
     const value = e.target.value;
     if (/^[0-9]*$/.test(value) && value.length <= 10) {
       setDocumento(value);
     }
-  }
+  };
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-fondo">

@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { toast, ToastContainer } from 'react-toastify';
+import { api } from '../api/token';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Navbar = () => {
@@ -31,11 +32,19 @@ const Navbar = () => {
         );
     };
 
-    const confirmLogout = () => {
-        signout();
-        Cookies.remove('token');
-        navigate('/');
-        toast.dismiss(); 
+    const confirmLogout = async () => {
+      
+        const Documento = 'Documento'; 
+        const password = 'password';
+        
+        const body = { Documento, password };
+        const response = await api.post("/logout", body);
+        if (response.data) {
+            signout();
+            Cookies.remove('token');
+            navigate('/');
+            toast.dismiss(); 
+        }
     };
 
     return (
