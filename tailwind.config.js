@@ -18,7 +18,10 @@ export default {
       },
       margin: {
         custom: '20rem',
-      }
+      },
+      screens: {
+        'nest-hub': { 'raw': '(max-height: 600px)' },
+      },
     },
   },
   variants: {
