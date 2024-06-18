@@ -26,6 +26,7 @@ export default {
   },
   variants: {
     boderWidth: ['responsive', 'hover', 'focus'],
+    display: ['focus-group']
   },
   plugins: [],
 }

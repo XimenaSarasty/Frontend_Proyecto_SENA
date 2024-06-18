@@ -1,11 +1,15 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
+import React, { useState } from 'react'
+import Sidebar from '../components/Sidebar'
+import Dashboard from '../components/Dashboard'
 
 const home = () => {
+  const [sidebarToggle, setSiderbarToggle] = useState(false)
   return (
     <>
-      <h2>HELLO WORLD DESDE EL HOME QUE SERÍA EL DASHBOARD</h2>
-      <Navbar/>
+      <Sidebar sidebarToggle={sidebarToggle}/>
+      <Dashboard 
+      sidebarToggle={sidebarToggle}
+      setSiderbarToggle={setSiderbarToggle}/>      
     </>
   )
 }
