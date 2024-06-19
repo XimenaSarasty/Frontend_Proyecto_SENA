@@ -15,10 +15,38 @@
 .input {
     @apply font-inter py-2 px-4 rounded bg-input rounded-lg;
 }
+
+/* styles.css */
+
 @media (min-width: 768px) {
     .md\:clip-path {
-      clip-path: polygon(0 0, 80% 0, 100% 29%, 90% 100%, 0 100%);
+    clip-path: polygon(0 0, 80% 0, 100% 29%, 90% 100%, 0 100%);
     }
 }
+@media (max-height: 600px) {
+    .pagina {
+      height: auto;
+      padding: 0; 
+      height: max-content;
+    }  
+    .main {
+      padding: 1rem; 
+    }
+    .font-inter h1 {
+      margin-top: 1rem; 
+      font-size: 1.7rem; 
+    }
+    .letras-3 {
+      margin-top: 1rem; 
+      font-size: 1.7rem; 
+    }
+  }
+@media (max-width: 345px) {
+    .hidden-md {
+    display: none;
+    }
+}
+  
+
 
   

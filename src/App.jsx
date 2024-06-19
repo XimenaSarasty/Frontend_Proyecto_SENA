@@ -16,9 +16,9 @@ function App() {
           <Route path='/contras_1' element={<Contras_1 />} />
           <Route path='/contras_2' element={<Contras_2 />} />
           <Route path='/contras_3' element={<Contra_3 />} />
-          <Route element={<ProtectedRoute />}>
+          {/* <Route element={<ProtectedRoute />}> */}
             <Route path='/home' element={<Home />} />
-          </Route>
+          {/* </Route> */}
         </Routes>
       </BrowserRouter>
     </AuthProvider>

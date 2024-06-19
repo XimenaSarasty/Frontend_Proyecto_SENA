@@ -50,34 +50,32 @@ const Contras_1 = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
+    <div className="pagina flex flex-col md:flex-row h-screen bg-fondo">
       <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path md:clip-polygon h-full md:h-auto">
-        <div className="w-1/2 text-center text-lg">
-          <div className="font-inter mb-20">
-            <h1 className="text-white font-normal text-4xl md:text-5xl mt-4">¿Has olvidado</h1>
+        <div className="main w-3/4 md:w-1/2 text-center text-lg">
+          <div className="letras font-inter mb-20 md:mb-8">
+            <h1 className="text-white font-normal text-4xl md:text-5xl mt-6">¿Has olvidado</h1>
             <h1 className="text-white font-normal text-4xl md:text-5xl mt-4">tu contraseña?</h1>              
           </div>
-
-          <div className="space-y-6 text-center">
-              <h1 className="text-white font-normal text-xl md:text-2xl mb-20">Escriba su correo electrónico para recibir un código de
+          <div className="space-y-6 md:space-y-6 text-center">
+              <h1 className="text-white font-normal text-xl md:text-2xl mt-15 mb-20">Escriba su correo electrónico para recibir un código de
                confirmación para establecer una nueva contraseña.</h1>
           </div>
-          
           <div className="space-y-6 text-left mt-4">
-            <div className="input w-full mb-4">
+            <div className="input w-full mb-4 relative">
               <label className="text-sm text-white block mb-1">Correo electrónico</label>
               <div className="flex items-center border-b-2 border-white">
                 <input
                   type="text"
-                  className="flex-1 p-2 bg-transparent text-white focus:outline-none"
+                  className="flex-1 p-2 bg-transparent text-white focus:outline-none pr-10"
                   value={correo}
                   onChange={handleEmailChange}
                 />
-                <FontAwesomeIcon icon={faEnvelope} className="text-white ml-2" />
+                <FontAwesomeIcon icon={faEnvelope} className="absolute right-2 text-white ml-2"/>
               </div>
             </div>
           </div>
-          <button className="btn-primary mt-20" onClick={handleEmail}>Confirmar correo</button>
+          <button className="btn-primary mt-10" onClick={handleEmail}>Confirmar correo</button>
         </div>
       </div>
       <div className="hidden md:flex items-center justify-center md:w-1/2 bg-fondo">
@@ -91,4 +89,3 @@ const Contras_1 = () => {
 };
 
 export default Contras_1;
-
