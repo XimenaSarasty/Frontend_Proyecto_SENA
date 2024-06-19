@@ -36,6 +36,10 @@
       margin-top: 1rem; 
       font-size: 1.7rem; 
     }
+    .letras-3 {
+      margin-top: 1rem; 
+      font-size: 1.7rem; 
+    }
   }
 @media (max-width: 345px) {
     .hidden-md {

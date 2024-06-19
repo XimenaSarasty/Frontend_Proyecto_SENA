@@ -197,6 +197,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+
       <div className="hidden md:flex items-center justify-center md:w-1/2 bg-fondo">
         <div className="w-3/4">
           <img className="w-80 h-80 object-cover" src={fondo} alt="logoSena" />
