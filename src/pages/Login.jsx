@@ -8,7 +8,7 @@ import fondo from '/logoSena.png';
 import { api } from '../api/token';
 import Cookies from 'js-cookie';
 import 'react-toastify/dist/ReactToastify.css';
-import { usuarioSchemas } from '../../../Backend_Sena/src/schemas/Usuario.schemas';
+
 
 const Login = () => {
   const [Documento, setDocumento] = useState("");
@@ -118,21 +118,30 @@ const Login = () => {
       setDocumento(value);
     }
   };
-
   const handlePasswordChange = (e) => {
     const value = e.target.value;
-
+  
     if (value.length <= 20) {
       setPassword(value);
-
-      const passwordValidation = usuarioSchemas.pick({ password: true });
-      const validationResult = passwordValidation.safeParse({
-        password: value,
-      });
-
-      if (!validationResult.success) {
-        const firstError = validationResult.error.errors[0].message;
-        setPasswordError(firstError);
+  
+      const errors = [];
+      
+      if (value.length < 6) {
+        errors.push("La contraseña debe tener mínimo 6 caracteres");
+      } else if (value.length > 20) {
+        errors.push("La contraseña debe tener máximo 20 caracteres");
+      }
+  
+      if (!/[\W_]/.test(value)) {
+        errors.push("La contraseña debe contener al menos un carácter especial");
+      }
+  
+      if (!/[a-z]/.test(value) || !/[A-Z]/.test(value)) {
+        errors.push("La contraseña debe contener al menos una letra minúscula y una mayúscula");
+      }
+  
+      if (errors.length > 0) {
+        setPasswordError(errors[0]);
       } else {
         setPasswordError("");
       }

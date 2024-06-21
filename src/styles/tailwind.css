@@ -7,11 +7,6 @@
 .btn-primary {
     @apply text-white text-lg font-inter font-bold py-2 px-8 rounded-lg bg-sena;
 }
-
-.btn-primaryligth {
-    @apply font-inter font-bold py-2 px-4 rounded-lg bg-white border border-black;
-}
-
 .input {
     @apply font-inter py-2 px-4 rounded bg-input rounded-lg;
 }
@@ -40,13 +35,16 @@
       margin-top: 1rem; 
       font-size: 1.7rem; 
     }
+    .custom-text {
+      font-size: 1rem;
+    }
   }
 @media (max-width: 345px) {
     .hidden-md {
     display: none;
     }
 }
-  
+
 
 
   

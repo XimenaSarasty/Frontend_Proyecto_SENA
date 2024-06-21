@@ -14,13 +14,11 @@ export default {
         gris: '#585656',
         negro: '#000000',
         input: '#1E1E1E',
-        correo: '#7BA3DF'
+        correo: '#7BA3DF',
+        grisClaro: '#D9D9D9'
       },
       margin: {
         custom: '20rem',
-      },
-      screens: {
-        'nest-hub': { 'raw': '(max-height: 600px)' },
       },
     },
   },
