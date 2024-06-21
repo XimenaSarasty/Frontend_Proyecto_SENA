@@ -1,35 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from "./pages/Home.jsx";
+import Login from './pages/Login.jsx';
+import Contras_1 from './pages/Contras_1.jsx';
+import Contras_2 from './pages/Contras_2.jsx';
+import Contra_3 from './pages/Contras_3.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
+import ProtectedRoute from './ProtectedRoute.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Login />} />
+          <Route path='/contras_1' element={<Contras_1 />} />
+          <Route path='/contras_2' element={<Contras_2 />} />
+          <Route path='/contras_3' element={<Contra_3 />} />
+          {/* <Route element={<ProtectedRoute />}> */}
+            <Route path='/home' element={<Home />} />
+          {/* </Route> */}
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;
