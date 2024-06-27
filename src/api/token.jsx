@@ -1,5 +1,5 @@
-import axios from "axios";
-import { URL_api } from "./variables";
+import axios from 'axios';
+import { URL_api } from './variables';
 
 const getToken = () => {
     const token = localStorage.getItem('token');

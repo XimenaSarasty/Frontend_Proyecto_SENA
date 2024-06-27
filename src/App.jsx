@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from "./pages/Home.jsx";
+import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Contras_1 from './pages/Contras_1.jsx';
 import Contras_2 from './pages/Contras_2.jsx';

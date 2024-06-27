@@ -10,7 +10,7 @@ const Sidebar = ({ sidebarToggle }) => {
   return (
     <div className={`fixed w-64 bg-black h-full px-4 py-2 transition-all duration-300 ${sidebarToggle ? 'block' : 'hidden'}`}>
       <div className='relative flex items-center font-inter my-2 mb-4'>
-        <img className="w-10 h-10 object-cover" src={fondo} alt="logoSena" />
+        <img className='w-10 h-10 object-cover' src={fondo} alt='logoSena' />
         <div className='absolute top-0 left-14 z-10 font-inter text-lg custom-text'>
           <h6 className='textMob text-white font-bold'>Inventario del</h6>
           <h6 className='text-sena font-bold'>Mobiliario</h6>

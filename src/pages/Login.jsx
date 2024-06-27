@@ -11,10 +11,10 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const Login = () => {
-  const [Documento, setDocumento] = useState("");
-  const [password, setPassword] = useState("");
-  const [rolName, setRolName] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [Documento, setDocumento] = useState('');
+  const [password, setPassword] = useState('');
+  const [rolName, setRolName] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const { signin } = useAuth();
   const navigate = useNavigate();
 
@@ -22,8 +22,8 @@ const Login = () => {
     e.preventDefault();
 
     if (!Documento) {
-      toast.error("El documento es requerido", {
-        position: "top-right",
+      toast.error('El documento es requerido', {
+        position: 'top-right',
         autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
@@ -35,8 +35,8 @@ const Login = () => {
     }
 
     if (!password) {
-      toast.error("La contraseña es requerida", {
-        position: "top-right",
+      toast.error('La contraseña es requerida', {
+        position: 'top-right',
         autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
@@ -48,8 +48,8 @@ const Login = () => {
     }
 
     if (!rolName) {
-      toast.error("El rol es requerido", {
-        position: "top-right",
+      toast.error('El rol es requerido', {
+        position: 'top-right',
         autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
@@ -61,19 +61,19 @@ const Login = () => {
     }
 
     if (Documento && password && rolName) {
-      localStorage.setItem("Documento", Documento);
+      localStorage.setItem('Documento', Documento);
 
       try {
         const body = { Documento, password };
-        const response = await api.post("/login", body);
+        const response = await api.post('/login', body);
         if (response.data) {
           const { token, role } = response.data;
-          localStorage.setItem("token", token);
-          Cookies.set("token", token);
+          localStorage.setItem('token', token);
+          Cookies.set('token', token);
 
           if (role !== rolName) {
-            toast.error("Acceso denegado. El rol seleccionado no coincide.", {
-              position: "top-right",
+            toast.error('Acceso denegado. El rol seleccionado no coincide.', {
+              position: 'top-right',
               autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: true,
@@ -85,8 +85,8 @@ const Login = () => {
           }
 
           await signin({ Documento, password });
-          toast.success("Inicio de sesión exitoso.", {
-            position: "top-right",
+          toast.success('Inicio de sesión exitoso.', {
+            position: 'top-right',
             autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -95,12 +95,12 @@ const Login = () => {
             progress: undefined,
           });
           setTimeout(() => {
-            navigate("/home");
+            navigate('/home');
           }, 2000);
         }
       } catch (error) {
-        toast.error("Credenciales inválidas", {
-          position: "top-right",
+        toast.error('Credenciales inválidas', {
+          position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -127,89 +127,89 @@ const Login = () => {
       const errors = [];
       
       if (value.length < 6) {
-        errors.push("La contraseña debe tener mínimo 6 caracteres");
+        errors.push('La contraseña debe tener mínimo 6 caracteres');
       } else if (value.length > 20) {
-        errors.push("La contraseña debe tener máximo 20 caracteres");
+        errors.push('La contraseña debe tener máximo 20 caracteres');
       }
   
       if (!/[\W_]/.test(value)) {
-        errors.push("La contraseña debe contener al menos un carácter especial");
+        errors.push('La contraseña debe contener al menos un carácter especial');
       }
   
       if (!/[a-z]/.test(value) || !/[A-Z]/.test(value)) {
-        errors.push("La contraseña debe contener al menos una letra minúscula y una mayúscula");
+        errors.push('La contraseña debe contener al menos una letra minúscula y una mayúscula');
       }
   
       if (errors.length > 0) {
         setPasswordError(errors[0]);
       } else {
-        setPasswordError("");
+        setPasswordError('');
       }
     }
   };
 
   return (
-    <div className="pagina flex flex-col md:flex-row h-screen bg-fondo">
-      <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path h-full md:h-auto">
-        <div className="main w-3/4 md:w-1/2 text-center text-lg">
-          <div className="letras font-inter mb-4 md:mb-8">
-            <h1 className="text-white font-normal text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">Bienvenido a</h1>
-            <h1 className="text-white font-semibold text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">inventario del</h1>
-            <h1 className="text-sena font-semibold text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">Mobiliario</h1>
+    <div className='pagina flex flex-col md:flex-row h-screen bg-fondo'>
+      <div className='w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path h-full md:h-auto'>
+        <div className='main w-3/4 md:w-1/2 text-center text-lg'>
+          <div className='letras font-inter mb-4 md:mb-8'>
+            <h1 className='text-white font-normal text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4'>Bienvenido a</h1>
+            <h1 className='text-white font-semibold text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4'>inventario del</h1>
+            <h1 className='text-sena font-semibold text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4'>Mobiliario</h1>
           </div>
-          <div className="space-y-4 md:space-y-6 text-left">
-            <div className="input w-full mb-2 relative">
-              <label className="text-sm text-white block mb-1">Identificación</label>
-              <div className="flex items-center border-b-2 border-white">
+          <div className='space-y-4 md:space-y-6 text-left'>
+            <div className='input w-full mb-2 relative'>
+              <label className='text-sm text-white block mb-1'>Identificación</label>
+              <div className='flex items-center border-b-2 border-white'>
                 <input
-                  type="text"
-                  className="text flex-1 p-2 bg-transparent text-white focus:outline-none pr-10"
+                  type='text'
+                  className='text flex-1 p-2 bg-transparent text-white focus:outline-none pr-10'
                   value={Documento}
                   onChange={handleDocumentoChange}
                 />
-                <FontAwesomeIcon icon={faUser} className="absolute right-2 text-white ml-2" />
+                <FontAwesomeIcon icon={faUser} className='absolute right-2 text-white ml-2' />
               </div>
             </div>
-            <div className="input w-full mb-2 relative">
-              <label className="text-sm text-white block mb-1">Contraseña</label>
-              <div className="flex items-center border-b-2 border-white">
+            <div className='input w-full mb-2 relative'>
+              <label className='text-sm text-white block mb-1'>Contraseña</label>
+              <div className='flex items-center border-b-2 border-white'>
                 <input
-                  type="password"
-                  className="flex-1 p-2 bg-transparent text-white focus:outline-none pr-10"
+                  type='password'
+                  className='flex-1 p-2 bg-transparent text-white focus:outline-none pr-10'
                   value={password}
                   onChange={handlePasswordChange}
                 />
-                <FontAwesomeIcon icon={faKey} className="absolute right-2 text-white ml-2" />
+                <FontAwesomeIcon icon={faKey} className='absolute right-2 text-white ml-2' />
               </div>
               {passwordError && (
-                <div className="text-red-400 text-sm mt-1">{passwordError}</div>
+                <div className='text-red-400 text-sm mt-1'>{passwordError}</div>
               )}
             </div>
-            <div className="input w-full mb-2 relative ">
-              <label className="text-sm text-white block mb-1">Rol</label>
-              <div className="flex items-start border-b-2 border-white">
+            <div className='input w-full mb-2 relative '>
+              <label className='text-sm text-white block mb-1'>Rol</label>
+              <div className='flex items-start border-b-2 border-white'>
                 <select
-                  className="flex-1 h-8 p-2 bg-input text-white text-sm focus:outline-none appearance-none"
+                  className='flex-1 h-8 p-2 bg-input text-white text-sm focus:outline-none appearance-none'
                   value={rolName}
                   onChange={(e) => setRolName(e.target.value)}
                 >
-                  <option value="">Seleccione su rol</option>
-                  <option value="ADMIN">Administrador</option>
-                  <option value="USUARIO">Usuario</option>
+                  <option value=''>Seleccione su rol</option>
+                  <option value='ADMIN'>Administrador</option>
+                  <option value='USUARIO'>Usuario</option>
                 </select>
               </div>
             </div>
           </div>
-          <button className="btn-primary mt-2 md:mt-8" onClick={handleLogin}>Iniciar sesión</button>
-          <div className="mt-2">
-            <NavLink to={'/contras_1'} className="text-white text-sm md:text-lg mt-4">Olvidé mi contraseña</NavLink>
+          <button className='btn-primary mt-2 md:mt-8' onClick={handleLogin}>Iniciar sesión</button>
+          <div className='mt-2'>
+            <NavLink to={'/contras_1'} className='text-white text-sm md:text-lg mt-4'>Olvidé mi contraseña</NavLink>
           </div>
         </div>
       </div>
 
-      <div className="hidden md:flex items-center justify-center md:w-1/2 bg-fondo">
-        <div className="w-3/4">
-          <img className="w-80 h-80 object-cover" src={fondo} alt="logoSena" />
+      <div className='hidden md:flex items-center justify-center md:w-1/2 bg-fondo'>
+        <div className='w-3/4'>
+          <img className='w-80 h-80 object-cover' src={fondo} alt='logoSena' />
         </div>
       </div>
       <ToastContainer />

@@ -7,12 +7,14 @@ import { api } from '../api/token';
 import { FaBars, FaSearch, FaBell, FaUserCircle } from 'react-icons/fa';
 import 'react-toastify/dist/ReactToastify.css';
 import ModalCsesion from './ModalCsesion';
+import ModalPerfil from './ModalPerfil';
 
 const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
   const { signout } = useAuth();
   const navigate = useNavigate();
   const [showConfirm, setShowConfirm] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalPerfilOpen, setIsModalPerfilOpen] = useState(false);
 
   const handleLogout = () => {
     setShowConfirm(true);
@@ -23,14 +25,14 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
         <button onClick={() => setShowConfirm(false)}>No</button>
       </div>,
       {
-        position: "top-center",
+        position: 'top-center',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: 'light',
       }
     );
   };
@@ -40,13 +42,18 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
     const password = 'password';
 
     const body = { Documento, password };
-    const response = await api.post("/logout", body);
+    const response = await api.post('/logout', body);
     if (response.data) {
       signout();
       Cookies.remove('token');
       navigate('/');
       toast.dismiss();
     }
+  };
+
+  const handleOpenModalPerfil = () => {
+    setIsModalPerfilOpen(true);
+    setIsModalOpen(false); // Cierra el ModalCsesion al abrir el ModalPerfil
   };
 
   return (
@@ -58,7 +65,7 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
         <span className='text-black font-semibold hidden md:inline'>Bienvenido al inventario </span>
         <span className='text-sena font-semibold mt-6 hidden md:inline'>Mobiliario</span>
       </div>
-      <div className="flex justify-end w-full max-w-full">
+      <div className='flex justify-end w-full max-w-full'>
         <div className='flex items-center gap-x-5'>
           <div className='relative items-center md:w-65'>
             <span className='relative md:absolute inside-y-0 left-0 flex items-center pl-40'>
@@ -81,8 +88,10 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
       <ModalCsesion isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>    
         <ul className='font-inter text-sm text-black font-bold'>
           <li>
-            <div className='bg-grisClaro text-center rounded-lg my-2'> 
-              <a href=''>Editar perfil</a>             
+            <div className='bg-grisClaro text-center rounded-lg my-2' onClick={handleOpenModalPerfil}> 
+              <span className='cursor-pointer block w-full text-center'>
+                Editar perfil
+              </span>
             </div>
           </li>
           <li>
@@ -97,12 +106,14 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
           </li>
           <li>
             <div className='bg-grisClaro text-center rounded-lg my-4'> 
-              <span onClick={handleLogout} className="cursor-pointer block w-full text-center">
-              Cerrar Sesión</span>
+              <span onClick={handleLogout} className='cursor-pointer block w-full text-center'>
+                Cerrar Sesión
+              </span>
             </div>
           </li>
         </ul>
       </ModalCsesion>
+      <ModalPerfil isOpen={isModalPerfilOpen} onClose={() => setIsModalPerfilOpen(false)} />
       <ToastContainer />
     </nav>
   );
