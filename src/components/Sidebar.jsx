@@ -5,6 +5,7 @@ import { FaUserLarge } from 'react-icons/fa6';
 import { FaFileExcel } from 'react-icons/fa';
 import { IoBarChartSharp } from 'react-icons/io5';
 import fondo from '/logoSena.png';
+import Usuarios from './../pages/Usuarios';
 
 const Sidebar = ({ sidebarToggle }) => {
   return (
@@ -31,7 +32,7 @@ const Sidebar = ({ sidebarToggle }) => {
           </a>
         </li>
         <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
-          <a href='/home' className='px-3'>
+          <a href='/Usuarios' className='px-3'>
             <FaUserLarge className='inline-block w-6 h-6 mr-2 -mt-2'></FaUserLarge>
             Usuarios
           </a>

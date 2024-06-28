@@ -4,47 +4,55 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Estilos personalizados */
 .btn-primary {
     @apply text-white text-lg font-inter font-bold py-2 px-8 rounded-lg bg-sena;
 }
+
 .input {
     @apply font-inter py-2 px-4 rounded bg-input rounded-lg;
 }
 
-/* styles.css */
-
+/* Media queries personalizadas */
 @media (min-width: 768px) {
     .md\:clip-path {
-    clip-path: polygon(0 0, 80% 0, 100% 29%, 90% 100%, 0 100%);
+        clip-path: polygon(0 0, 80% 0, 100% 29%, 90% 100%, 0 100%);
     }
 }
+
+@media (min-width: 768px) and (max-width: 870px) {
+    .btn-primary {
+        @apply text-white text-sm font-inter font-bold py-1 px-4 rounded-lg bg-sena;
+    }
+    .contG{
+      margin-bottom: 0rem;
+    }
+}
+
 @media (max-height: 600px) {
     .pagina {
-      height: auto;
-      padding: 0; 
-      height: max-content;
-    }  
+        height: auto;
+        padding: 0;
+        height: max-content;
+    }
     .main {
-      padding: 1rem; 
+        padding: 1rem;
     }
     .font-inter h1 {
-      margin-top: 1rem; 
-      font-size: 1.7rem; 
+        margin-top: 1rem;
+        font-size: 1.7rem;
     }
     .letras-3 {
-      margin-top: 1rem; 
-      font-size: 1.7rem; 
+        margin-top: 1rem;
+        font-size: 1.7rem;
     }
     .custom-text {
-      font-size: 1rem;
-    }
-  }
-@media (max-width: 345px) {
-    .hidden-md {
-    display: none;
+        font-size: 1rem;
     }
 }
 
-
-
-  
+@media (max-width: 345px) {
+    .hidden-md {
+        display: none;
+    }
+}
