@@ -5,6 +5,8 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import fondo from '/logoSena.png';
+import axios from 'axios';
+import { api } from '../api/token';
 
 const Contras_1 = () => {
   const navigate = useNavigate();
@@ -22,10 +24,10 @@ const Contras_1 = () => {
       theme: 'light',
     });
     setTimeout(() => navigate('/contras_2'), 3000);
-  }
+  };
 
-  const mensajeError = () => {
-    toast.error('¡Tienes que usar un correo válido!', {
+  const mensajeError = (mensaje) => {
+    toast.error(mensaje, {
       position: 'top-right',
       autoClose: 2500,
       hideProgressBar: false,
@@ -35,19 +37,30 @@ const Contras_1 = () => {
       progress: undefined,
       theme: 'light'
     });
-  }
+  };
 
-  const handleEmail = () => {
+  const handleEmail = async () => {
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
-      mensajeExito();
+      try {
+        const response = await api.post('/crear-codigo', { correo });
+        if (response.status === 200) {
+          mensajeExito();
+        }
+      } catch (error) {
+        if (error.response && error.response.data.message) {
+          mensajeError(error.response.data.message);
+        } else {
+          mensajeError('Error al enviar el correo');
+        }
+      }
     } else {
-      mensajeError();
+      mensajeError('¡Tienes que usar un correo válido!');
     }
-  }
+  };
 
   const handleEmailChange = (e) => {
     setCorreo(e.target.value);
-  }
+  };
 
   return (
     <div className='pagina flex flex-col md:flex-row h-screen bg-fondo'>

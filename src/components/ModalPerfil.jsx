@@ -88,8 +88,10 @@ const ModalPerfil = ({ isOpen, onClose }) => {
       }
     } else if (name === 'correo') {
       const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!value.includes('sena') || !correoRegex.test(value)) {
-        errorMessage = 'El correo debe ser un correo válido institucional.';
+      if (
+      // !value.includes('sena') ||
+      !correoRegex.test(value)) {
+        errorMessage = 'El correo debe ser un correo válido.';
       }
     }
     return errorMessage;
@@ -215,7 +217,7 @@ const ModalPerfil = ({ isOpen, onClose }) => {
           </button>
         </div>
         <div className='flex flex-col md:flex-row px-4 space-y-4 md:space-y-0 md:space-x-4 mb-4'>
-          <div className='contG bg-grisClaro sm:h-64 md:h-72 w-full md:w-1/3 mb-4 rounded-lg flex items-center justify-center relative'>
+          <div className='bg-grisClaro sm:h-64 md:h-72 w-full md:w-1/3 mb-4 rounded-lg flex items-center justify-center relative'>
             <FaUserCircle className='text-black w-32 h-32' />
           </div>
 
