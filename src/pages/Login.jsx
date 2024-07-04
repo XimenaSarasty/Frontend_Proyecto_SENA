@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
@@ -9,14 +9,35 @@ import { api } from '../api/token';
 import Cookies from 'js-cookie';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 const Login = () => {
   const [Documento, setDocumento] = useState('');
   const [password, setPassword] = useState('');
   const [rolName, setRolName] = useState('');
+  const [roles, setRoles] = useState([]);
   const [passwordError, setPasswordError] = useState('');
   const { signin } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await api.get('/roles');
+        setRoles(response.data);
+      } catch (error) {
+        toast.error('Error al cargar roles', {
+          position: 'top-right',
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    };
+
+    fetchRoles();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -72,7 +93,7 @@ const Login = () => {
           Cookies.set('token', token);
 
           if (role !== rolName) {
-            toast.error('Acceso denegado. El rol seleccionado no coincide.', {
+            toast.error('Acceso denegado. El rol seleccionado no es correcto.', {
               position: 'top-right',
               autoClose: 5000,
               hideProgressBar: false,
@@ -118,28 +139,24 @@ const Login = () => {
       setDocumento(value);
     }
   };
+
   const handlePasswordChange = (e) => {
     const value = e.target.value;
-  
     if (value.length <= 20) {
       setPassword(value);
-  
       const errors = [];
-      
       if (value.length < 6) {
         errors.push('La contraseña debe tener mínimo 6 caracteres');
-      } else if (value.length > 20) {
+      }
+      if (value.length > 20) {
         errors.push('La contraseña debe tener máximo 20 caracteres');
       }
-  
       if (!/[\W_]/.test(value)) {
         errors.push('La contraseña debe contener al menos un carácter especial');
       }
-  
       if (!/[a-z]/.test(value) || !/[A-Z]/.test(value)) {
         errors.push('La contraseña debe contener al menos una letra minúscula y una mayúscula');
       }
-  
       if (errors.length > 0) {
         setPasswordError(errors[0]);
       } else {
@@ -185,7 +202,7 @@ const Login = () => {
                 <div className='text-red-400 text-sm mt-1'>{passwordError}</div>
               )}
             </div>
-            <div className='input w-full mb-2 relative '>
+            <div className='input w-full mb-2 relative'>
               <label className='text-sm text-white block mb-1'>Rol</label>
               <div className='flex items-start border-b-2 border-white'>
                 <select
@@ -194,8 +211,11 @@ const Login = () => {
                   onChange={(e) => setRolName(e.target.value)}
                 >
                   <option value=''>Seleccione su rol</option>
-                  <option value='ADMIN'>Administrador</option>
-                  <option value='USUARIO'>Usuario</option>
+                  {roles.map((role) => (
+                    <option key={role.id} value={role.rolName}>
+                      {role.rolName}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

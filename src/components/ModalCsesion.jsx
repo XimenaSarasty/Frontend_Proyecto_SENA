@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { FaTimes, FaUserCircle } from 'react-icons/fa';
+import { api } from '../api/token';
 
 const ModalCsesion = ({ isOpen, onClose, children }) => {
   const [userInfo, setUserInfo] = useState(null);
@@ -17,7 +17,7 @@ const ModalCsesion = ({ isOpen, onClose, children }) => {
     try {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
 
-      const response = await axios.get('http://localhost:9100/perfil', {
+      const response = await api.get('/perfil', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

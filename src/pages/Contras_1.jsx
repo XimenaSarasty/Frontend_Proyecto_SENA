@@ -5,7 +5,6 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import fondo from '/logoSena.png';
-import axios from 'axios';
 import { api } from '../api/token';
 
 const Contras_1 = () => {

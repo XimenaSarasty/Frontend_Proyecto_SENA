@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { api } from '../api/token';
 import { FaTimes, FaUserCircle } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -37,7 +37,7 @@ const ModalPerfil = ({ isOpen, onClose }) => {
     try {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
 
-      const response = await axios.get('http://localhost:9100/perfil', {
+      const response = await api.get('/perfil', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -60,7 +60,7 @@ const ModalPerfil = ({ isOpen, onClose }) => {
 
   const fetchUserRole = async (roleId) => {
     try {
-      const response = await axios.get(`http://localhost:9100/roles/${roleId}`);
+      const response = await api.get(`/roles/${roleId}`);
       if (response.status === 200) {
         setFormData((prevData) => ({
           ...prevData,
@@ -151,7 +151,7 @@ const ModalPerfil = ({ isOpen, onClose }) => {
     try {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
 
-      const response = await axios.put(`http://localhost:9100/usuarios/${userInfo.id}`, formData, {
+      const response = await api.put(`/usuarios/${userInfo.id}`, formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
