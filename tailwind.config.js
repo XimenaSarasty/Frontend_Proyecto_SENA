@@ -9,7 +9,7 @@ export default {
     },
     extend: {
       colors: {
-        sena: '#01AF00',
+        sena: '#01AF08',
         fondo: '#F9FDEC',
         gris: '#585656',
         negro: '#000000',
