@@ -13,7 +13,7 @@ const api = axios.create({
 api.interceptors.request.use((request) => {
   const token = getToken();
   request.headers.Authorization = token;
-  return request;
+  return request;  
 });
 
 export { getToken, api };

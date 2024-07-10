@@ -3,8 +3,10 @@ import { api } from '../api/token';
 import { FaTimes } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../context/AuthContext';
 
 const EditUserModal = ({ isOpen, onClose, user }) => {
+    const { currentUser, signout } = useAuth();
     const [loading, setLoading] = useState(false);
     const [roles, setRoles] = useState([]);
     const [estados, setEstados] = useState([]);
@@ -13,7 +15,6 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
         nombre: '',
         Documento: '',
         correo: '',
-        password: '',
         rolId: '',
         estadoId: '',
     });
@@ -85,11 +86,6 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
             if (!correoRegex.test(value)) {
                 errorMessage = 'El correo debe ser un correo válido.';
             }
-        } else if (name === 'password') {
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?])[a-zA-Z0-9!@#$%^&*?]{8,}$/;
-            if (!passwordRegex.test(value)) {
-            errorMessage = 'La contraseña debe contener una mayúscula, una minúscula, un carácter especial, y entre 8 a 20 caracteres.';
-            }
         }
         return errorMessage;
     };
@@ -108,7 +104,7 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
     };
 
     const handleUpdate = async () => {
-        const { nombre, correo, Documento, password, rolId, estadoId } = formData;
+        const { nombre, correo, Documento, rolId, estadoId } = formData;
 
         if (!nombre || !correo || !Documento || !rolId || !estadoId) {
             toast.error('Todos los campos son obligatorios.', { position: 'top-right' });
@@ -117,19 +113,18 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
 
         setLoading(true);
         try {
-            const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
             const response = await api.put(`/usuarios/${user.id}`, {
                 nombre,
                 correo,
-                password,
                 Documento,
                 RolId: rolId,
                 EstadoId: estadoId,
             }, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
             });
+
             if (response.status === 200) {
                 toast.success('Usuario actualizado exitosamente', {
                     position: 'top-right',
@@ -139,22 +134,30 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                    onClose: () => {
-                        window.location.href = '/Usuarios';
-                    },
                 });
+                onClose(response.data);
+
+                // Redirigir si el documento del usuario logueado ha cambiado
+                if (currentUser && currentUser.Documento === user.Documento && currentUser.Documento !== formData.Documento) {
+                    await signout(); // Cerrar sesión del usuario
+                    window.location.href = '/';
+                }
             } else {
                 console.error('Error updating user profile:', response.data.message);
                 toast.error('Error al actualizar la información del usuario.', { position: 'top-right' });
             }
         } catch (error) {
             console.error('Error updating user profile:', error);
-            toast.error('Error al actualizar la información del usuario.', { position: 'top-right' });
+            if (error.response && error.response.status === 401) {
+                window.location.href = '/';
+            } else {
+                toast.error('Error al actualizar la información del usuario.', { position: 'top-right' });
+            }
         } finally {
             setLoading(false);
         }
     };
-
+        
     return (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-fondo bg-opacity-50'>
             <div className='bg-white rounded-lg shadow-lg sm:w-full md:w-1/4 mt-4 max-h-screen overflow-y-auto'>
@@ -188,7 +191,6 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                                         />
                                         {formErrors.nombre && <div className='text-red-400 text-sm mt-1 px-2'>{formErrors.nombre}</div>}
                                     </div>
-
                                     <div className='flex flex-col'>
                                         <label className='mb-1 font-bold text-sm'>Documento *</label>
                                         <input
@@ -196,10 +198,15 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                                             type='text'
                                             name="Documento"
                                             value={formData.Documento}
-                                            onChange={handleInputChange}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*$/.test(value)) { 
+                                                    handleInputChange(e);
+                                                }
+                                            }}
                                             onKeyPress={(e) => {
-                                                if (/[A-Za-z]/.test(e.key)) {
-                                                    e.preventDefault();
+                                                if (!/[0-9]/.test(e.key)) {
+                                                    e.preventDefault(); 
                                                 }
                                             }}
                                             maxLength={10}
@@ -218,18 +225,6 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                                         />
                                         {formErrors.correo && <div className='text-red-400 text-sm mt-1'>{formErrors.correo}</div>}
                                     </div>
-
-                                    <div className='flex flex-col'>
-                                    <label className='mb-1 font-bold text-sm'>Contraseña *</label>
-                                    <input
-                                        className='bg-grisClaro text-sm rounded-lg px-2 h-8'
-                                        type='password'
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                    />
-                                    {formErrors.password && <p className='text-red-400 text-sm mt-1'>{formErrors.password}</p>}
-                                    </div> 
 
                                     <div className='flex flex-col'>
                                         <label className='mb-1 font-bold text-sm'>Rol *</label>
@@ -269,10 +264,10 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                         )}
                     </div>
                 </div>
-                <div className='sm:w-full md:w-1/3 flex flex-col justify-end'>
-                    <div className='flex justify-between mb-4'>
-                        <button className='btn-danger' onClick={onClose}>Cancelar</button>
-                        <button className='btn-primary' onClick={handleUpdate}>Actualizar</button>
+                <div className='sm:w-full md:w-full flex flex-col justify-end'>
+                    <div className='flex justify-center mb-4 mx-2'>
+                        <button className='btn-danger2 mx-2' onClick={onClose}>Cancelar</button>
+                        <button className='btn-primary2 mx-2' onClick={handleUpdate}>Actualizar</button>
                     </div>
                 </div>
             </div>

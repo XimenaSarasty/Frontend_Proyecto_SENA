@@ -12,7 +12,8 @@ const ModalPerfil = ({ isOpen, onClose }) => {
     nombre: '',
     Documento: '',
     correo: '',
-    rolName: ''
+    password: '',
+    rolName: '',
   });
 
   useEffect(() => {
@@ -93,7 +94,12 @@ const ModalPerfil = ({ isOpen, onClose }) => {
       !correoRegex.test(value)) {
         errorMessage = 'El correo debe ser un correo válido.';
       }
-    }
+    } else if (name === 'password') {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?])[a-zA-Z0-9!@#$%^&*?]{8,}$/;
+      if (!passwordRegex.test(value)) {
+      errorMessage = 'La contraseña debe contener una mayúscula, una minúscula, un carácter especial, y entre 8 a 20 caracteres.';
+      }
+  }
     return errorMessage;
   };
 
@@ -112,15 +118,17 @@ const ModalPerfil = ({ isOpen, onClose }) => {
   };
 
   const handleUpdate = async () => {
-    const { nombre, Documento, correo } = formData;
+    const { nombre, Documento, password, correo } = formData;
     const nombreError = validateInput('nombre', nombre);
     const documentoError = validateInput('Documento', Documento);
     const correoError = validateInput('correo', correo);
+    const passwordError = validateInput('password', password);
 
-    if (nombreError || documentoError || correoError) {
+    if (nombreError || documentoError || password || correoError) {
       setFormErrors({
         nombre: nombreError,
         Documento: documentoError,
+        password: password,
         correo: correoError,
       });
       toast.error('Por favor, corrige los errores antes de actualizar.', {
@@ -250,19 +258,24 @@ const ModalPerfil = ({ isOpen, onClose }) => {
 
                   <div className='flex flex-col'>
                     <label className='mb-1 font-bold text-sm'>Documento *</label>
-                    <input
-                      className='bg-grisClaro text-sm rounded-lg px-2 h-8'
-                      type='text'
-                      name="Documento"
-                      value={formData.Documento}
-                      onChange={handleInputChange}
-                      onKeyPress={(e) => {
-                        if (/[A-Za-z]/.test(e.key)) {
-                          e.preventDefault();
+                      <input
+                        className='bg-grisClaro text-sm rounded-lg px-2 h-8'
+                        type='text'
+                        name="Documento"
+                        value={formData.Documento}
+                        onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\d*$/.test(value)) { 
+                          handleInputChange(e);
                         }
-                      }}
-                      maxLength={10}
-                    />
+                        }}
+                        onKeyPress={(e) => {
+                          if (!/[0-9]/.test(e.key)) {
+                            e.preventDefault(); 
+                          }
+                          }}
+                          maxLength={10}
+                        />
                     {formErrors.Documento && <div className='text-red-400 text-sm mt-1'>{formErrors.Documento}</div>}
                   </div>
 
@@ -277,6 +290,18 @@ const ModalPerfil = ({ isOpen, onClose }) => {
                     />
                     {formErrors.correo && <div className='text-red-400 text-sm mt-1'>{formErrors.correo}</div>}
                   </div>
+
+                  <div className='flex flex-col'>
+                    <label className='mb-1 font-bold text-sm'>Contraseña *</label>
+                      <input
+                        className='bg-grisClaro text-sm rounded-lg px-2 h-8'
+                        type='password'
+                        name="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        />
+                    {formErrors.password && <p className='text-red-400 text-sm mt-1'>{formErrors.password}</p>}
+                  </div> 
 
                   <div className='flex flex-col'>
                     <label className='mb-1 font-bold text-sm'>Rol</label>
