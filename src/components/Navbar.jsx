@@ -120,19 +120,16 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
 
 export default Navbar;
 
-
-
-//CODIGO POR SI LA EMBARRO
+//CODIGO POR SI LA EMBARRO EN LA ALERTA
 // import React, { useState } from 'react';
+// import { FaBars, FaSearch, FaBell, FaUserCircle } from 'react-icons/fa';
+// import ModalCsesion from './ModalCsesion';
+// import ModalPerfil from './ModalPerfil';
 // import { useAuth } from '../context/AuthContext';
 // import { useNavigate } from 'react-router-dom';
 // import Cookies from 'js-cookie';
 // import { toast, ToastContainer } from 'react-toastify';
 // import { api } from '../api/token';
-// import { FaBars, FaSearch, FaBell, FaUserCircle } from 'react-icons/fa';
-// import 'react-toastify/dist/ReactToastify.css';
-// import ModalCsesion from './ModalCsesion';
-// import ModalPerfil from './ModalPerfil';
 
 // const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
 //   const { signout } = useAuth();
@@ -182,7 +179,7 @@ export default Navbar;
 //   };
 
 //   return (
-//     <nav className={`bg-fondo shadow px-4 py-3 flex justify-between items-center fixed top-0 left-0 z-50 w-full transition-all duration-300`} 
+//     <nav className={`bg-gray-200 shadow px-4 py-3 flex justify-between items-center fixed top-0 left-0 z-50 w-full transition-all duration-300`} 
 //     style={{ marginLeft: sidebarToggle ? '16rem' : '0', width: sidebarToggle ? 'calc(100% - 16rem)' : '100%' }}>
 //       <div className='flex items-center text-xl'>
 //         <FaBars className='text-black mr-4 cursor-pointer'
@@ -198,7 +195,7 @@ export default Navbar;
 //             </span>
 //             <input type='text' 
 //               placeholder='Buscar aquí'
-//               className='w-full px-4 py-1 pl-22 rounded-lg shadow outline-none hidden md:block bg-grisClaro'/>
+//               className='w-full px-4 py-1 pl-22 rounded-lg shadow outline-none hidden md:block bg-gray-100'/>
 //           </div>
 //           <div className='text-white'>
 //             <FaBell className='w-6 h-6 text-black' />
@@ -213,24 +210,24 @@ export default Navbar;
 //       <ModalCsesion isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>    
 //         <ul className='font-inter text-sm text-black font-bold'>
 //           <li>
-//             <div className='bg-grisClaro text-center rounded-lg my-2' onClick={handleOpenModalPerfil}> 
+//             <div className='bg-gray-100 text-center rounded-lg my-2' onClick={handleOpenModalPerfil}> 
 //               <span className='cursor-pointer block w-full text-center'>
 //                 Editar perfil
 //               </span>
 //             </div>
 //           </li>
 //           <li>
-//             <div className='bg-grisClaro text-center rounded-lg my-4'> 
+//             <div className='bg-gray-100 text-center rounded-lg my-4'> 
 //               <a href=''>Ayuda</a>
 //             </div>
 //           </li>
 //           <li>
-//             <div className='bg-grisClaro text-center rounded-lg my-4'> 
+//             <div className='bg-gray-100 text-center rounded-lg my-4'> 
 //               <a href=''>Configuración</a>
 //             </div>
 //           </li>
 //           <li>
-//             <div className='bg-grisClaro text-center rounded-lg my-4'> 
+//             <div className='bg-gray-100 text-center rounded-lg my-4'> 
 //               <span onClick={handleLogout} className='cursor-pointer block w-full text-center'>
 //                 Cerrar Sesión
 //               </span>

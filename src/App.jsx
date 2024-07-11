@@ -7,6 +7,7 @@ import Contra_3 from './pages/Contras_3.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 import Usuarios from './pages/Usuarios.jsx';
+import Roles from './pages/Roles.jsx';
 
 function App() {
   return (
@@ -18,10 +19,11 @@ function App() {
           <Route path='/contras_2' element={<Contras_2 />} />
           <Route path='/contras_3' element={<Contra_3 />} />
           <Route path='/usuarios' element={<Usuarios />} /> 
+          <Route path='/roles' element={<Roles />} /> 
 
-          <Route element={<ProtectedRoute />}>
+          {/* <Route element={<ProtectedRoute />}> */}
             <Route path='/home' element={<Home />} />            
-          </Route>
+          {/* </Route> */}
         </Routes>
       </BrowserRouter>
     </AuthProvider>

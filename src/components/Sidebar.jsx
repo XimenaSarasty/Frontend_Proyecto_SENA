@@ -4,6 +4,9 @@ import { LiaToolsSolid } from 'react-icons/lia';
 import { FaUserLarge } from 'react-icons/fa6';
 import { FaFileExcel } from 'react-icons/fa';
 import { IoBarChartSharp } from 'react-icons/io5';
+import { FaUsers } from "react-icons/fa";
+import { PiChalkboardTeacher } from "react-icons/pi";
+
 import fondo from '/logoSena.png';
 
 const Sidebar = ({ sidebarToggle }) => {
@@ -34,6 +37,18 @@ const Sidebar = ({ sidebarToggle }) => {
           <a href='/Usuarios' className='px-3'>
             <FaUserLarge className='inline-block w-6 h-6 mr-2 -mt-2'></FaUserLarge>
             Usuarios
+          </a>
+        </li>
+        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
+          <a href='' className='px-3'>
+            <FaUsers className='inline-block w-6 h-6 mr-2 -mt-2'></FaUsers>
+            Roles
+          </a>
+        </li>
+        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
+          <a href='roles' className='px-3'>
+            <PiChalkboardTeacher  className='inline-block w-6 h-6 mr-2 -mt-2'></PiChalkboardTeacher>
+            Instructores
           </a>
         </li>
         <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>

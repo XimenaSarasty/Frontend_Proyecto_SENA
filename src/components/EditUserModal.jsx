@@ -3,10 +3,8 @@ import { api } from '../api/token';
 import { FaTimes } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAuth } from '../context/AuthContext';
 
 const EditUserModal = ({ isOpen, onClose, user }) => {
-    const { currentUser, signout } = useAuth();
     const [loading, setLoading] = useState(false);
     const [roles, setRoles] = useState([]);
     const [estados, setEstados] = useState([]);
@@ -135,13 +133,10 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                     draggable: true,
                     progress: undefined,
                 });
-                onClose(response.data);
+                setTimeout(() => {
+                    onClose(response.data);
+                }, 2000);
 
-                // Redirigir si el documento del usuario logueado ha cambiado
-                if (currentUser && currentUser.Documento === user.Documento && currentUser.Documento !== formData.Documento) {
-                    await signout(); // Cerrar sesión del usuario
-                    window.location.href = '/';
-                }
             } else {
                 console.error('Error updating user profile:', response.data.message);
                 toast.error('Error al actualizar la información del usuario.', { position: 'top-right' });
