@@ -7,10 +7,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import AddRolModal from '../components/AddRolModal';
-import EditRolModal from '../components/EditRolModal';
+import AddCategModal from '../components/AddCategModal';
+import EditCategModal from '../components/EditCategModal';
 
-const Roles = () => {
+const Categorias = () => {
     const [sidebarToggle, setSidebarToggle] = useState(false);
     const [data, setData] = useState([]);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
@@ -46,7 +46,7 @@ const Roles = () => {
         },
         {
             name: 'rolName',
-            label: 'Rol',
+            label: 'Categoria',
             options: {
                 customBodyRender: (value) => (
                     <div className="text-center">{value}</div>
@@ -80,10 +80,10 @@ const Roles = () => {
         
         const worksheet = XLSX.utils.json_to_sheet(exportData);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Roles");
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Categorias");
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        saveAs(data, 'Roles.xlsx');
+        saveAs(data, 'Categorias.xlsx');
     };
 
     const handleEditClick = (rowIndex) => {
@@ -113,15 +113,15 @@ const Roles = () => {
                     setSidebarToggle={setSidebarToggle} 
                 />
                 <div className='flex justify-end mt-2'>
-                    <button className='btn-primary' onClick={() => setIsOpenAddModal(true)}>Agregar Rol</button>
+                    <button className='btn-primary' onClick={() => setIsOpenAddModal(true)}>Agregar Categoria</button>
                 </div>
                 <div className="flex-grow flex items-center justify-center">
                     <div className="max-w-4xl mx-auto">
                         {loading ? (
-                            <div className="text-center">Cargando roles...</div>
+                            <div className="text-center">Cargando categorias...</div>
                         ) : (
                             <MUIDataTable
-                                title={"Roles"}
+                                title={"Categorias"}
                                 data={roles}
                                 columns={columns}
                                 options={{
@@ -174,13 +174,13 @@ const Roles = () => {
                 </div>
             </div>
             {selectedRol && (
-                <EditRolModal
+                <EditCategModal
                     isOpen={isOpenEditModal}
                     onClose={handleCloseEditModal}
                     rol={selectedRol}
                 />
             )}
-            <AddRolModal
+            <AddCategModal
                 isOpen={isOpenAddModal}
                 onClose={handleCloseAddModal}
                 onNewRolData={handleNewRolData}
@@ -189,4 +189,4 @@ const Roles = () => {
     );
 };
 
-export default Roles;
+export default Categorias

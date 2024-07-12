@@ -5,39 +5,58 @@ import Dashboard from '../components/Dashboard';
 import MUIDataTable from "mui-datatables";
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
+import clsx from 'clsx';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import AddRolModal from '../components/AddRolModal';
-import EditRolModal from '../components/EditRolModal';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import EditInstructorModal from '../components/EditInstructorModal';
+import AddInstructorModal from '../components/AddInstructorModal';
 
-const Roles = () => {
+const Instructores =()=>{
     const [sidebarToggle, setSidebarToggle] = useState(false);
     const [data, setData] = useState([]);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-    const [selectedRol, setSelectedRol] = useState(null);
+    const [selectedUser, setSelectedInstructor] = useState(null);
     const [isOpenAddModal, setIsOpenAddModal] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [roles, setRoles] = useState([]);
+
+    const fetchData = async ()=> {
+        setLoading(true); // Inicia el estado de carga
+        try {
+            const response = await api.get('/Instructor', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+
+            const InstructoresyCreador = await Promise.all(response.data.map(async (instructor) => {
+                const usuarioResponse = await api.get(`/usuarios/${instructor.UsuarioId}`);
+                const estadoResponse = await api.get(`/Estado/${instructor.EstadoId}`);
+                
+                return {
+                    ...instructor,
+                    usuarioname: usuarioResponse.data.nombre,
+                    estadoName: estadoResponse.data.estadoName,
+                };
+            }));
+
+            InstructoresyCreador.sort((a, b) => a.id - b.id);
+            setData(InstructoresyCreador);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+        setLoading(false); // Finaliza el estado de carga
+    };
 
     useEffect(() => {
-        const fetchRoles = async () => {
-            setLoading(true); 
-            try {
-                const response = await api.get('/roles');
-                setRoles(response.data);
-            } catch (error) {
-                console.error('Error al cargar roles:', error); 
-            }
-            setLoading(false); 
-        };
-    
-        fetchRoles();
+        fetchData();
     }, []);
 
-    const columns = [
+    const columsInstructor = [
         {
             name: 'id',
-            label: 'Id',
+            label: 'id',
             options: {
                 customBodyRender: (value) => (
                     <div className="text-center">{value}</div>
@@ -45,11 +64,43 @@ const Roles = () => {
             },
         },
         {
-            name: 'rolName',
-            label: 'Rol',
+            name: 'nombre',
+            label: 'Nombre',
             options: {
                 customBodyRender: (value) => (
                     <div className="text-center">{value}</div>
+                ),
+            },
+        },
+        {
+            name: 'correo',
+            label: 'Correo',
+            options: {
+                customBodyRender: (value) => (
+                    <div className="text-center">{value}</div>
+                ),
+            },
+        },
+        {
+            name: 'usuarioname',
+            label: 'Usuario',
+            options: {
+                customBodyRender: (value) => (
+                    <div className="text-center">{value}</div>
+                ),
+            },
+        },
+        {
+            name: 'estadoName',
+            label: 'Estado',
+            options: {
+                customBodyRender: (value) => (
+                    <div className={clsx('text-center', {
+                        'text-sena': value === 'ACTIVO',
+                        'text-red-500': value === 'INACTIVO',
+                    })}>
+                        {value}
+                    </div>
                 ),
             },
         },
@@ -73,57 +124,81 @@ const Roles = () => {
         },
     ];
 
-    const handleCustomExport = (rows) => {
-        const exportData = rows.map(row => ({
-            rolName: row.data[1],
-        }));
-        
-        const worksheet = XLSX.utils.json_to_sheet(exportData);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Roles");
-        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        saveAs(data, 'Roles.xlsx');
-    };
-
-    const handleEditClick = (rowIndex) => {
-        const rol = roles[rowIndex];
-        setSelectedRol(rol);
+    const handleEditClick = (rowIndex) =>{
+        const instructor = data[rowIndex];
+        setSelectedInstructor(instructor);
         setIsOpenEditModal(true);
     };
 
-    const handleNewRolData = (newRol) => {
-        setData([...data, newRol]);
+    const handleCloseEditModal = (updateIntructor) => {
+        if(updateIntructor){
+            const updatedData = data.map(instructor =>
+                instructor.id === updateIntructor.id? updateIntructor : instructor
+            );
+
+            setData(updatedData);
+            toast.success('Instructor actualizado correctamente',{
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        setIsOpenEditModal(false);
+        setSelectedInstructor(null);
+        fetchData();
+    };
+
+    const handleOpenAddModal = () => {
+        setIsOpenAddModal(true);
     };
 
     const handleCloseAddModal = () => {
         setIsOpenAddModal(false);
     };
 
-    const handleCloseEditModal = () => {
-        setIsOpenEditModal(false);
+    const handleCustomExport = (rows) => {
+        const exportData = rows.map(row => ({
+            id: row.data[0],
+            Nombre: row.data[1],
+            Correo: row.data[2],
+        }));
+        
+        const worksheet = XLSX.utils.json_to_sheet(exportData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Instructores");
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+        saveAs(data, 'Instructores.xlsx');
     };
 
-    return (
+    const handleNewUserData = (newIntructor) => {
+        setData([...data, newIntructor]);
+    };
+
+    return(
         <div className="flex min-h-screen">
             <Sidebar sidebarToggle={sidebarToggle} />
             <div className={`flex flex-col flex-grow p-6 bg-gray-100 ${sidebarToggle ? 'ml-64' : ''}`}>
                 <Dashboard 
-                    sidebarToggle={sidebarToggle}
-                    setSidebarToggle={setSidebarToggle} 
+                        sidebarToggle={sidebarToggle}
+                        setSidebarToggle={setSidebarToggle} 
                 />
                 <div className='flex justify-end mt-2'>
-                    <button className='btn-primary' onClick={() => setIsOpenAddModal(true)}>Agregar Rol</button>
+                    <button className='btn-primary' onClick={handleOpenAddModal}>Agregar Instructor</button>
                 </div>
                 <div className="flex-grow flex items-center justify-center">
-                    <div className="max-w-4xl mx-auto">
-                        {loading ? (
-                            <div className="text-center">Cargando roles...</div>
-                        ) : (
-                            <MUIDataTable
-                                title={"Roles"}
-                                data={roles}
-                                columns={columns}
+                    <div className="w-full max-w-7xl overflow-auto">
+                    {loading ? (
+                        <div className="text-center">Cargando Instructores...</div>
+                    ) : (
+                        <MUIDataTable
+                                title={"Instructores"}
+                                data={data}
+                                columns={columsInstructor}
                                 options={{
                                     responsive: "standard",
                                     selectableRows: "none",
@@ -169,24 +244,27 @@ const Roles = () => {
                                     },
                                 }}
                             />
-                        )}
+                    )}
                     </div>
                 </div>
+
             </div>
-            {selectedRol && (
-                <EditRolModal
+
+            {selectedUser && (
+                <EditInstructorModal
                     isOpen={isOpenEditModal}
                     onClose={handleCloseEditModal}
-                    rol={selectedRol}
+                    user={selectedUser}
                 />
             )}
-            <AddRolModal
+            <AddInstructorModal
                 isOpen={isOpenAddModal}
                 onClose={handleCloseAddModal}
-                onNewRolData={handleNewRolData}
+                onNewUserData={handleNewUserData}
             />
         </div>
     );
+
 };
 
-export default Roles;
+export default Instructores;

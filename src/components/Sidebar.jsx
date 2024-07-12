@@ -6,6 +6,7 @@ import { FaFileExcel } from 'react-icons/fa';
 import { IoBarChartSharp } from 'react-icons/io5';
 import { FaUsers } from "react-icons/fa";
 import { PiChalkboardTeacher } from "react-icons/pi";
+import { TbCategory } from "react-icons/tb";
 
 import fondo from '/logoSena.png';
 
@@ -40,13 +41,19 @@ const Sidebar = ({ sidebarToggle }) => {
           </a>
         </li>
         <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
-          <a href='roles' className='px-3'>
+          <a href='/roles' className='px-3'>
             <FaUsers className='inline-block w-6 h-6 mr-2 -mt-2'></FaUsers>
             Roles
           </a>
         </li>
         <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
-          <a href='roles' className='px-3'>
+          <a href='/categorias' className='px-3'>
+            <TbCategory className='inline-block w-6 h-6 mr-2 -mt-2'></TbCategory>
+            Categorias
+          </a>
+        </li>
+        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
+          <a href='/instructores' className='px-3'>
             <PiChalkboardTeacher  className='inline-block w-6 h-6 mr-2 -mt-2'></PiChalkboardTeacher>
             Instructores
           </a>

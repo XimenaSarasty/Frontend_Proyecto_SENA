@@ -8,6 +8,8 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 import Usuarios from './pages/Usuarios.jsx';
 import Roles from './pages/Roles.jsx';
+import Categorias from './pages/Categorias.jsx';
+import Instructores from './pages/Instructores.jsx';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path='/contras_3' element={<Contra_3 />} />
           <Route path='/usuarios' element={<Usuarios />} /> 
           <Route path='/roles' element={<Roles />} /> 
+          <Route path='/categorias' element={<Categorias />} /> 
+          <Route path='/instructores' element={<Instructores/>}/>
 
           {/* <Route element={<ProtectedRoute />}> */}
             <Route path='/home' element={<Home />} />            

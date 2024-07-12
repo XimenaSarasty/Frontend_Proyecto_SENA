@@ -4,7 +4,7 @@ import { FaTimes } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const AddRolModal = ({ isOpen, onClose }) => {
+const AddCategModal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
         RolId: '',
       });
@@ -33,7 +33,7 @@ const AddRolModal = ({ isOpen, onClose }) => {
             setFormErrors({ fetch: response.data.message });
           }
         } catch (error) {
-          setFormErrors({ fetch: 'Error al cargar la información del rol.' });
+          setFormErrors({ fetch: 'Error al cargar la información del usuario.' });
         } finally {
           setLoading(false);
         }
@@ -66,7 +66,7 @@ const AddRolModal = ({ isOpen, onClose }) => {
           });
     
           if (response.status === 201) {
-            toast.success('Categoria agregado exitosamente', {
+            toast.success('Rol agregado exitosamente', {
               position: 'top-right',
               autoClose: 2500,
               hideProgressBar: false,
@@ -103,10 +103,10 @@ const AddRolModal = ({ isOpen, onClose }) => {
                 ) : (
                   <div className='font-inter ml-2'>
                     <div className='space-y-2 md:space-y-2 text-left'>
-                      <h6 className='font-bold text-center text-2xl mb-2'>Agregar Rol</h6>
+                      <h6 className='font-bold text-center text-2xl mb-2'>Agregar Categoria</h6>
     
                       <div className='flex flex-col'>
-                        <label className='mb-1 font-bold text-sm'>Rol *</label>
+                        <label className='mb-1 font-bold text-sm'>Categoria Nueva *</label>
                         <input
                           className='bg-grisClaro text-sm rounded-lg px-2 h-8'
                           type='text'
@@ -137,4 +137,4 @@ const AddRolModal = ({ isOpen, onClose }) => {
       );
     };    
 
-export default AddRolModal
+export default AddCategModal

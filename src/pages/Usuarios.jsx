@@ -22,7 +22,7 @@ const Usuarios = () => {
     const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
-        setLoading(true); 
+        setLoading(true);
         try {
             const response = await api.get('/usuarios', {
                 headers: {
@@ -33,7 +33,7 @@ const Usuarios = () => {
             const usuariosConRolesYEstados = await Promise.all(response.data.map(async (usuario) => {
                 const rolResponse = await api.get(`/roles/${usuario.RolId}`);
                 const estadoResponse = await api.get(`/Estado/${usuario.EstadoId}`);
-                
+
                 return {
                     ...usuario,
                     rolName: rolResponse.data.rolName,
@@ -45,18 +45,61 @@ const Usuarios = () => {
             setData(usuariosConRolesYEstados);
         } catch (error) {
             console.error('Error fetching user data:', error);
+            toast.error('Error al cargar los datos de usuarios', {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
-        setLoading(false); 
+        setLoading(false);
     };
 
     useEffect(() => {
         fetchData();
     }, []);
 
+    const handleEditClick = (rowIndex) => {
+        const user = data[rowIndex];
+        setSelectedUser(user);
+        setIsOpenEditModal(true);
+    };
+
+    const handleCloseEditModal = (updatedUser) => {
+        if (updatedUser) {
+            fetchData(); // Refetch data after updating a user to ensure data consistency
+            toast.success('Usuario actualizado exitosamente', {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        setIsOpenEditModal(false);
+        setSelectedUser(null);
+    };
+
+    const handleOpenAddModal = () => {
+        setIsOpenAddModal(true);
+    };
+
+    const handleCloseAddModal = (newUser) => {
+        if (newUser) {
+            fetchData(); // Refetch data after adding a new user to ensure data consistency
+        }
+        setIsOpenAddModal(false);
+    };
+
     const columns = [
         {
             name: 'id',
-            label: 'id',
+            label: 'ID',
             options: {
                 customBodyRender: (value) => (
                     <div className="text-center">{value}</div>
@@ -105,7 +148,7 @@ const Usuarios = () => {
             options: {
                 customBodyRender: (value) => (
                     <div className={clsx('text-center', {
-                        'text-sena': value === 'ACTIVO',
+                        'text-green-500': value === 'ACTIVO',
                         'text-red-500': value === 'INACTIVO',
                     })}>
                         {value}
@@ -133,42 +176,6 @@ const Usuarios = () => {
         },
     ];
 
-    const handleEditClick = (rowIndex) => {
-        const user = data[rowIndex];
-        setSelectedUser(user);
-        setIsOpenEditModal(true);
-    };
-
-    const handleCloseEditModal = (updatedUser) => {
-        if (updatedUser) {
-            const updatedData = data.map(user =>
-                user.id === updatedUser.id ? updatedUser : user
-            );
-    
-            setData(updatedData);
-            toast.success('Usuario actualizado exitosamente', {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
-        setIsOpenEditModal(false);
-        setSelectedUser(null);
-        fetchData();
-    };
-   
-    const handleOpenAddModal = () => {
-        setIsOpenAddModal(true);
-    };
-
-    const handleCloseAddModal = () => {
-        setIsOpenAddModal(false);
-    };
-
     const handleCustomExport = (rows) => {
         const exportData = rows.map(row => ({
             id: row.data[0],
@@ -182,10 +189,6 @@ const Usuarios = () => {
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
         saveAs(data, 'Usuarios.xlsx');
-    };
-
-    const handleNewUserData = (newUser) => {
-        setData([...data, newUser]);
     };
 
     return (
@@ -267,7 +270,6 @@ const Usuarios = () => {
             <AddUserModal
                 isOpen={isOpenAddModal}
                 onClose={handleCloseAddModal}
-                onNewUserData={handleNewUserData}
             />
         </div>
     );

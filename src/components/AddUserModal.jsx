@@ -61,6 +61,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
   }, []);
 
   const fetchUserProfile = async () => {
+    setLoading(true);
     try {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
       const response = await api.get('/perfil', {
@@ -149,6 +150,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
       return;
     }
 
+    setLoading(true);
     try {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
       const response = await api.post('/usuarios', formData, {
@@ -160,15 +162,16 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
       if (response.status === 201) {
         toast.success('Usuario agregado exitosamente', {
           position: 'top-right',
-          autoClose: 2500,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
         });
-        onClose();
-        window.location.href = '/Usuarios';
+        setTimeout(() => {
+          onClose(response.data);
+      }, 2000);
 
       } else {
         showToastError('Ocurrió un error!, por favor intenta con un documento o correo diferente.');
@@ -176,6 +179,9 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
     } catch (error) {
       showToastError('Ocurrió un error!, por favor intenta con un documento o correo diferente.');
     }
+    finally {
+    setLoading(false);
+}
   };
 
   return (
