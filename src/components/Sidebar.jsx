@@ -40,7 +40,7 @@ const Sidebar = ({ sidebarToggle }) => {
           </a>
         </li>
         <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
-          <a href='' className='px-3'>
+          <a href='roles' className='px-3'>
             <FaUsers className='inline-block w-6 h-6 mr-2 -mt-2'></FaUsers>
             Roles
           </a>

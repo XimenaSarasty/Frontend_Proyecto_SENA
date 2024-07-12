@@ -7,16 +7,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import EditUserModal from '../components/EditUserModal';
-import AddUserModal from '../components/AddUserModal';
-// import { toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import AddRolModal from '../components/AddRolModal';
+import EditRolModal from '../components/EditRolModal';
 
 const Roles = () => {
     const [sidebarToggle, setSidebarToggle] = useState(false);
     const [data, setData] = useState([]);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedRol, setSelectedRol] = useState(null);
     const [isOpenAddModal, setIsOpenAddModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [roles, setRoles] = useState([]);
@@ -77,26 +75,25 @@ const Roles = () => {
 
     const handleCustomExport = (rows) => {
         const exportData = rows.map(row => ({
-            id: row.data[0],
             rolName: row.data[1],
         }));
         
         const worksheet = XLSX.utils.json_to_sheet(exportData);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Usuarios");
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Roles");
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        saveAs(data, 'Usuarios.xlsx');
+        saveAs(data, 'Roles.xlsx');
     };
 
     const handleEditClick = (rowIndex) => {
-        const user = data[rowIndex];
-        setSelectedUser(user);
+        const rol = roles[rowIndex];
+        setSelectedRol(rol);
         setIsOpenEditModal(true);
     };
 
-    const handleNewUserData = (newUser) => {
-        setData([...data, newUser]);
+    const handleNewRolData = (newRol) => {
+        setData([...data, newRol]);
     };
 
     const handleCloseAddModal = () => {
@@ -176,17 +173,17 @@ const Roles = () => {
                     </div>
                 </div>
             </div>
-            {selectedUser && (
-                <EditUserModal
+            {selectedRol && (
+                <EditRolModal
                     isOpen={isOpenEditModal}
                     onClose={handleCloseEditModal}
-                    user={selectedUser}
+                    rol={selectedRol}
                 />
             )}
-            <AddUserModal
+            <AddRolModal
                 isOpen={isOpenAddModal}
                 onClose={handleCloseAddModal}
-                onNewUserData={handleNewUserData}
+                onNewRolData={handleNewRolData}
             />
         </div>
     );

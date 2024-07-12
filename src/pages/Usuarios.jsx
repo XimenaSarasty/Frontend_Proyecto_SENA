@@ -22,7 +22,7 @@ const Usuarios = () => {
     const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
-        setLoading(true); // Inicia el estado de carga
+        setLoading(true); 
         try {
             const response = await api.get('/usuarios', {
                 headers: {
@@ -46,7 +46,7 @@ const Usuarios = () => {
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
-        setLoading(false); // Finaliza el estado de carga
+        setLoading(false); 
     };
 
     useEffect(() => {
