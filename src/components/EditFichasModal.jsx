@@ -4,117 +4,113 @@ import { FaTimes } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
+const EditFichasModal = ({ isOpen, onClose, ficha }) => {
     const [loading, setLoading] = useState(false);
     const [estados, setEstados] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [usuario, setUsuario] = useState([]);
     const [formData, setFormData] = useState({
-        nombre: '',
-        correo: '',
+        NumeroFicha: '',
         EstadoId: '',
         UsuarioId: '',
     });
 
     useEffect(() => {
-        if (isOpen && instructor) {
-            fetchInstructorDetails(instructor.id);
+        if (isOpen && ficha) {
+            fetchFichaDetails(ficha.id);
         }
-    }, [isOpen, instructor]);
+    }, [isOpen, ficha]);    
 
     useEffect(() => {
 
-        const fetchusuario = async () => {
-        try {
-            const response = await api.get('/usuarios');
-            setUsuario(response.data);
-        } catch (error) {
-            showToastError('Error al cargar usuario');
-        }
+            const fetchusuario = async () => {
+            try {
+                const response = await api.get('/usuarios');
+                setUsuario(response.data);
+            } catch (error) {
+                showToastError('Error al cargar usuario');
+            }
+            };
+
+        const fetchEstados = async () => {
+            try {
+                const response = await api.get('/Estado');
+                setEstados(response.data);
+            } catch (error) {
+                toast.error('Error al cargar los estados', { position: 'top-right' });
+            }
         };
+        
+        fetchusuario();
+        fetchEstados();
+    }, []);
 
-    const fetchEstados = async () => {
-        try {
-            const response = await api.get('/Estado');
-            setEstados(response.data);
-        } catch (error) {
-            toast.error('Error al cargar los estados', { position: 'top-right' });
-        }
-    };
-    
-    fetchusuario();
-    fetchEstados();
-}, []);
-
-    const fetchInstructorDetails = async (instructorId) => {
+    const fetchFichaDetails = async (fichaId) => {
         setLoading(true);
         try {
-            const response = await api.get(`/Instructor/${instructorId}`);
+            const response = await api.get(`/Fichas/${fichaId}`);
             if (response.status === 200) {
-                const { nombre, correo, EstadoId, UsuarioId } = response.data;
+                const { NumeroFicha, EstadoId, UsuarioId  } = response.data;
                 setFormData({
-                    nombre: nombre || '',
-                    correo: correo || '',
+                    NumeroFicha: NumeroFicha || '',
                     EstadoId: EstadoId || '',
                     UsuarioId: UsuarioId || '',
-                });
+                  });
                 setLoading(false);
             } else {
-                console.error('Error fetching instructor details:', response.data.message);
-                toast.error('Error al cargar la información del instructor.', { position: 'top-right' });
+                console.error('Error fetching ficha details:', response.data.message);
+                toast.error('Error al cargar la información de la ficha.', { position: 'top-right' });
                 setLoading(false);
             }
         } catch (error) {
-            console.error('Error fetching instructor details:', error);
-            toast.error('Error al cargar la información del instructor.', { position: 'top-right' });
+            console.error('Error fetching ficha details:', error);
+            toast.error('Error al cargar la información de la ficha.', { position: 'top-right' });
             setLoading(false);
         }
     };
 
-    const validateInputInstructor = (name, value) => {
+    const validateInputFichas = (name, value) => {
         let errorMessage = '';
-        if (name === 'nombre') {
-            const nameRegex = /^[A-Za-z\s-_\u00C0-\u017F]+$/;
-            if (!nameRegex.test(value) || /\d/.test(value)) {
-                errorMessage = 'El nombre no puede contener caracteres especiales.';
-            }
-        } else if (name === 'correo') {
-            const correoRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!correoRegex.test(value)) {
-                errorMessage = 'El correo debe ser un correo válido.';
+        if (name === 'NumeroFicha') {
+            const numeroFichaRegex = /^[A-Za-z0-9\s-]+$/;
+            if (!numeroFichaRegex.test(value)) {
+                errorMessage = 'El número de ficha no puede contener caracteres especiales.';
             }
         }
         return errorMessage;
     };
 
-    const handleInputChangeInstructor = (e) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
-        const processedValue = (name === 'estadoId') ? Number(value) : value;
-        const errorMessage = validateInputInstructor(name, processedValue);
+        const errorMessage = validateInputFichas(name, value);
         setFormErrors((prevErrors) => ({
             ...prevErrors,
             [name]: errorMessage,
         }));
         setFormData((prevData) => ({
             ...prevData,
-            [name]: processedValue,
+            [name]: value,
         }));
     };
 
-    const handleUpdateInstructor = async () => {
-        const { nombre, correo, EstadoId, UsuarioId } = formData;
-    
-        if (!nombre || !correo || !EstadoId || !UsuarioId) {
+    const handleUpdateFichas = async () => {
+        const { NumeroFicha, EstadoId, UsuarioId } = formData;
+
+        if (!NumeroFicha || !EstadoId || !UsuarioId) {
             toast.error('Todos los campos son obligatorios.', { position: 'top-right' });
             return;
         }
-    
+
         setLoading(true);
-        try {                   
-            const response = await api.put(`/Instructor/${instructor.id}`, formData);
-    
+        try {
+        const response = await api.put(`/Fichas/${ficha.id}`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+
             if (response.status === 200) {
-                toast.success('Instructor actualizado exitosamente', {
+                toast.success('Ficha actualizada exitosamente', {
                     position: 'top-right',
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -126,26 +122,26 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
                 setTimeout(() => {
                     onClose(response.data);
                 }, 2000);
+
             } else {
-                console.error('Error updating instructor profile:', response.data.message);
-                toast.error('Error al actualizar la información del instructor.', { position: 'top-right' });
+                console.error('Error updating ficha profile:', response.data.message);
+                toast.error('Error al actualizar la información de la ficha.', { position: 'top-right' });
             }
         } catch (error) {
-            console.error('Error updating instructor profile:', error);
+            console.error('Error updating ficha profile:', error);
             if (error.response && error.response.status === 401) {
-                window.location.href = '/'; 
+                window.location.href = '/';
             } else {
-                toast.error('Error al actualizar la información del instructor.', { position: 'top-right' });
+                toast.error('Error al actualizar la información de la ficha.', { position: 'top-right' });
             }
         } finally {
             setLoading(false);
         }
     };
-    
         
     return (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-fondo bg-opacity-50'>
-            <div className='bg-white rounded-lg shadow-lg sm:w-full md:w-1/4 mt-4 mb-4 max-h-screen overflow-y-auto'>
+            <div className='bg-white rounded-lg shadow-lg sm:w-full md:w-1/4 mt-4 max-h-screen overflow-y-auto'>
                 <div className='flex justify-end p-2'>
                     <button onClick={onClose}>
                         <FaTimes className='text-black w-4 h-4' />
@@ -158,35 +154,18 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
                         ) : (
                             <div className='font-inter ml-2'>
                                 <div className='space-y-2 md:space-y-2 text-left'>
-                                    <h6 className='font-bold text-center text-2xl mb-2'>Editar Instructor</h6>
+                                    <h6 className='font-bold text-center text-2xl mb-2'>Editar Ficha</h6>
 
                                     <div className='flex flex-col'>
-                                        <label className='mb-1 font-bold text-sm'>Nombres y Apellidos *</label>
+                                        <label className='mb-1 font-bold text-sm'>Número de Ficha *</label>
                                         <input
                                             className='bg-grisClaro text-sm rounded-lg px-2 h-8'
                                             type='text'
-                                            name="nombre"
-                                            value={formData.nombre}
-                                            onChange={handleInputChangeInstructor}
-                                            onKeyPress={(e) => {
-                                                if (/\d/.test(e.key)) {
-                                                    e.preventDefault();
-                                                }
-                                            }}
+                                            name="NumeroFicha"
+                                            value={formData.NumeroFicha}
+                                            onChange={handleInputChange}
                                         />
-                                        {formErrors.nombre && <div className='text-red-400 text-sm mt-1 px-2'>{formErrors.nombre}</div>}
-                                    </div>
-
-                                    <div className='flex flex-col'>
-                                        <label className='mb-1 font-bold text-sm'>Correo *</label>
-                                        <input
-                                            className='bg-grisClaro text-sm rounded-lg px-2 h-8'
-                                            type='text'
-                                            name="correo"
-                                            value={formData.correo}
-                                            onChange={handleInputChangeInstructor}
-                                        />
-                                        {formErrors.correo && <div className='text-red-400 text-sm mt-1'>{formErrors.correo}</div>}
+                                        {formErrors.NumeroFicha && <div className='text-red-400 text-sm mt-1 px-2'>{formErrors.NumeroFicha}</div>}
                                     </div>
 
                                     <div className='flex flex-col'>
@@ -195,7 +174,7 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
                                                 className='bg-grisClaro text-sm rounded-lg px-2 h-8'
                                                 name="UsuarioId"
                                                 value={formData.UsuarioId}
-                                                onChange={handleInputChangeInstructor}
+                                                onChange={handleInputChange}
                                         >
                                                 <option value=''>Seleccionar Usuario</option>
                                                 {usuario.map((usuario) => (
@@ -210,7 +189,7 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
                                             className='bg-grisClaro text-sm rounded-lg px-2 h-8'
                                             name="EstadoId"
                                             value={formData.EstadoId}
-                                            onChange={handleInputChangeInstructor}
+                                            onChange={handleInputChange}
                                         >
                                             <option value=''>Seleccionar Estado</option>
                                             {estados.map((estado) => (
@@ -228,7 +207,7 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
                 <div className='sm:w-full md:w-full flex flex-col justify-end'>
                     <div className='flex justify-center mb-4 mx-2'>
                         <button className='btn-danger2 mx-2' onClick={onClose}>Cancelar</button>
-                        <button className='btn-primary2 mx-2' onClick={handleUpdateInstructor}>Actualizar</button>
+                        <button className='btn-primary2 mx-2' onClick={handleUpdateFichas}>Actualizar</button>
                     </div>
                 </div>
             </div>
@@ -237,4 +216,4 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
     );
 };
 
-export default EditinstructorModal;
+export default EditFichasModal;

@@ -11,86 +11,86 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
         UsuarioId:'',
         EstadoId: '',
     });
-    const [usuarios, setUsuario] = useState([]);
+    const [usuario, setUsuario] = useState([]);
     const [estados, setEstados] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (isOpen) {
-            fetchInstructorProfile();
+            fetchUserProfile();
         }
     }, [isOpen]);
 
     useEffect(() => {
         if (instructor) {
-            setFormData({
-                nombre: instructor.nombre || '',
-                correo: instructor.correo || '',
-                UsuarioId: instructor.UsuarioId || '',
-                EstadoId: instructor.EstadoId || '',
-            });
+        setFormData({
+            nombre: instructor.nombre || '',
+            correo: instructor.correo || '',
+            UsuarioId: instructor.UsuarioId || '',
+            EstadoId: instructor.EstadoId || '',
+        });
         }
     }, [instructor]);
 
-    useEffect(() =>{
-        const fetchUsuario = async () => {
-            try {
-                const response = await api.get('/usuarios');
-                setUsuario(response.data);
-                } catch (error) {
-                showToastError('Error al cargar los usuarios');
-                }
-            };
-        
-            const fetchStates = async () => {
-                try {
-                const response = await api.get('/Estado');
-                setEstados(response.data);
-                } catch (error) {
-                showToastError('Error al cargar los estados');
-                }
-            };
-        
-            fetchUsuario();
-            fetchStates();
+    useEffect(() => {
+        const fetchusuario = async () => {
+        try {
+            const response = await api.get('/usuarios');
+            setUsuario(response.data);
+        } catch (error) {
+            showToastError('Error al cargar usuario');
+        }
+        };
+
+        const fetchStates = async () => {
+        try {
+            const response = await api.get('/Estado');
+            setEstados(response.data);
+        } catch (error) {
+            showToastError('Error al cargar los estados');
+        }
+        };
+
+        fetchusuario();
+        fetchStates();
     }, []);
 
-    const fetchInstructorProfile = async ()=>{
+    const fetchUserProfile = async () => {
+        setLoading(true);
         try {
             const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
             const response = await api.get('/perfil', {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-            },
+                'Authorization': `Bearer ${token}`,
+                },
             });
         
             if (response.status === 200) {
-            setFormErrors({});
+                setFormErrors({});
             } else {
-            setFormErrors({ fetch: response.data.message });
+                setFormErrors({ fetch: response.data.message });
             }
-        } catch (error) {
-                setFormErrors({ fetch: 'Error al cargar la información del usuario.' });
+            } catch (error) {
+            setFormErrors({ fetch: 'Error al cargar la información del usuario.' });
             } finally {
-                setLoading(false);
+            setLoading(false);
         }
     };
-
 
     const validateInput = (name, value) => {
         let errorMessage = '';
         if (name === 'nombre') {
-            const nameRegex = /^[A-Za-z\s-_\u00C0-\u017F]+$/;
+        const nameRegex = /^[A-Za-z\s-_\u00C0-\u017F]+$/;
             if (!nameRegex.test(value) || /\d/.test(value)) {
-                errorMessage = 'El nombre del instructor puede contener caracteres especiales.';
+                errorMessage = 'El nombre no puede contener caracteres especiales.';
             }
         } else if (name === 'correo') {
-            const correoRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const correoRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             if (!correoRegex.test(value)) {
                 errorMessage = 'El correo debe ser un correo válido.';
             }
-        }
+        } 
         return errorMessage;
     };
 
@@ -109,65 +109,70 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
             [name]: processedValue,
         }));
     };
-    
+
     const showToastError = (message) => {
         toast.error(message, {
+        position: 'top-right',
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    };
+
+    const handleCreateInstructor = async () => {
+        const { nombre, correo, UsuarioId, EstadoId } = formData;
+        const nombreError = validateInput('nombre', nombre);
+        const correoError = validateInput('correo', correo);
+
+        if (nombreError || correoError ) {
+        setFormErrors({
+            nombre: nombreError,
+            correo: correoError,
+        });
+        showToastError('Por favor, corrige los errores antes de agregar.');
+        return;
+        }
+
+        if (!nombre || !correo || !UsuarioId || !EstadoId) {
+        showToastError('Todos los campos son obligatorios.');
+        return;
+        }
+
+        setLoading(true);
+        try {
+        const token = document.cookie.replace(/(?:(?:^|.;\s)token\s*\=\s*([^;]).$)|^.*$/, '$1');
+        const response = await api.post('/Instructor', formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        if (response.status === 201) {
+            toast.success('Instructor agregado exitosamente', {
             position: 'top-right',
-            autoClose: 2500,
+            autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-        });
-    };
-
-    const handleCreate = async () => {
-        const { nombre, correo, UsuarioId, EstadoId } = formData;
-        const nombreError = validateInput('nombre', nombre);
-        const correoError = validateInput('correo', correo);
-
-    if (nombreError || correoError) {
-        setFormErrors({
-            nombre: nombreError,
-            correo: correoError,
-    });
-        showToastError('Por favor, corrige los errores antes de agregar.');
-        return;
-    }
-
-    if (!nombre || !correo ||  !UsuarioId || !EstadoId) {
-        showToastError('Todos los campos son obligatorios.');
-        return;
-    }
-
-    try {
-        const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
-        const response = await api.post('/Instructor', formData, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
             });
-    
-            if (response.status === 201) {
-            toast.success('Usuario agregado exitosamente', {
-                position: 'top-right',
-                autoClose: 2500,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-            onClose();
-            window.location.href = '/instructores';
-    
-            } else {
-            showToastError('Ocurrió un error!, por favor intenta con un documento o correo diferente.');
-            }
-        } catch (error) {
-            showToastError('Ocurrió un error!, por favor intenta con un documento o correo diferente.');
+            setTimeout(() => {
+            onClose(response.data);
+        }, 2000);
+
+        } else {
+            showToastError('Ocurrió un error!, por favor intenta con un correo diferente.');
         }
+        } catch (error) {
+        showToastError('Ocurrió un error!, por favor intenta con un correo diferente.');
+        }
+        finally {
+        setLoading(false);
+    }
     };
 
     return(
@@ -229,7 +234,7 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
                             onChange={handleInputChange}
                         >
                             <option value=''>Seleccionar Usuario</option>
-                            {usuarios.map((usuario) => (
+                            {usuario.map((usuario) => (
                             <option key={usuario.id} value={usuario.id}>{usuario.nombre}</option>
                             ))}
                         </select>
@@ -261,7 +266,7 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
                     <div className='sm:w-full md:w-full flex flex-col justify-end'>
                         <div className='flex justify-center mt-4 mb-4 mx-2'>
                         <button className='btn-danger2 mx-2' onClick={onClose}>Cancelar</button>
-                        <button className='btn-primary2 mx-2'onClick={handleCreate}>Agregar</button>
+                        <button className='btn-primary2 mx-2'onClick={handleCreateInstructor}>Agregar</button>
                         </div>
                     </div>
                     </div>
@@ -272,7 +277,6 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
             <ToastContainer />
         </div>
     );
-
 };
 
 export default AddInstructorModal;

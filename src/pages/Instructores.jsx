@@ -17,12 +17,12 @@ const Instructores =()=>{
     const [sidebarToggle, setSidebarToggle] = useState(false);
     const [data, setData] = useState([]);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-    const [selectedUser, setSelectedInstructor] = useState(null);
+    const [selectedInstructor, setSelectedInstructor] = useState(null);
     const [isOpenAddModal, setIsOpenAddModal] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const fetchData = async ()=> {
-        setLoading(true); // Inicia el estado de carga
+        setLoading(true); 
         try {
             const response = await api.get('/Instructor', {
                 headers: {
@@ -45,18 +45,71 @@ const Instructores =()=>{
             setData(InstructoresyCreador);
         } catch (error) {
             console.error('Error fetching user data:', error);
+            toast.error('Error al cargar los datos de usuarios', {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
-        setLoading(false); // Finaliza el estado de carga
+        setLoading(false); 
     };
 
     useEffect(() => {
         fetchData();
     }, []);
 
+    const handleEditClick = (rowIndex) =>{
+        const instructor = data[rowIndex];
+        setSelectedInstructor(instructor);
+        setIsOpenEditModal(true);
+    };
+
+    const handleCloseEditModalIntructor = (updateIntructor) => {
+        if(updateIntructor){
+            fetchData(); 
+            toast.success('Instructor actualizado correctamente',{
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        setSelectedInstructor(null);
+        setIsOpenEditModal(false);
+    };
+
+    const handleOpenAddModal = () => {
+        setIsOpenAddModal(true);
+    };
+
+    const handleCloseAddModalIntructor = (newIntructor) => {
+        if(newIntructor){
+            fetchData(); 
+            toast.success('Instructor agregado exitosamente', {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        setSelectedInstructor(null);
+        setIsOpenAddModal(false);
+    };
+
     const columsInstructor = [
         {
             name: 'id',
-            label: 'id',
+            label: 'ID',
             options: {
                 customBodyRender: (value) => (
                     <div className="text-center">{value}</div>
@@ -124,42 +177,6 @@ const Instructores =()=>{
         },
     ];
 
-    const handleEditClick = (rowIndex) =>{
-        const instructor = data[rowIndex];
-        setSelectedInstructor(instructor);
-        setIsOpenEditModal(true);
-    };
-
-    const handleCloseEditModal = (updateIntructor) => {
-        if(updateIntructor){
-            const updatedData = data.map(instructor =>
-                instructor.id === updateIntructor.id? updateIntructor : instructor
-            );
-
-            setData(updatedData);
-            toast.success('Instructor actualizado correctamente',{
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
-        setIsOpenEditModal(false);
-        setSelectedInstructor(null);
-        fetchData();
-    };
-
-    const handleOpenAddModal = () => {
-        setIsOpenAddModal(true);
-    };
-
-    const handleCloseAddModal = () => {
-        setIsOpenAddModal(false);
-    };
-
     const handleCustomExport = (rows) => {
         const exportData = rows.map(row => ({
             id: row.data[0],
@@ -175,10 +192,6 @@ const Instructores =()=>{
         saveAs(data, 'Instructores.xlsx');
     };
 
-    const handleNewUserData = (newIntructor) => {
-        setData([...data, newIntructor]);
-    };
-
     return(
         <div className="flex min-h-screen">
             <Sidebar sidebarToggle={sidebarToggle} />
@@ -192,9 +205,7 @@ const Instructores =()=>{
                 </div>
                 <div className="flex-grow flex items-center justify-center">
                     <div className="w-full max-w-7xl overflow-auto">
-                    {loading ? (
-                        <div className="text-center">Cargando Instructores...</div>
-                    ) : (
+                        
                         <MUIDataTable
                                 title={"Instructores"}
                                 data={data}
@@ -244,23 +255,22 @@ const Instructores =()=>{
                                     },
                                 }}
                             />
-                    )}
+                    
                     </div>
                 </div>
 
             </div>
 
-            {selectedUser && (
+            {selectedInstructor && (
                 <EditInstructorModal
                     isOpen={isOpenEditModal}
-                    onClose={handleCloseEditModal}
-                    user={selectedUser}
+                    onClose={handleCloseEditModalIntructor}
+                    instructor={selectedInstructor}
                 />
             )}
             <AddInstructorModal
                 isOpen={isOpenAddModal}
-                onClose={handleCloseAddModal}
-                onNewUserData={handleNewUserData}
+                onClose={handleCloseAddModalIntructor}
             />
         </div>
     );

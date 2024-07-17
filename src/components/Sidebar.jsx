@@ -26,18 +26,18 @@ const Sidebar = ({ sidebarToggle }) => {
       </div>
       <hr />
       <ul className='mt-3 text-white font-bold font-inter'>
-        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
+        {/* <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
           <a href='/home' className='px-3'>
             <FaHome className='inline-block w-6 h-6 mr-2 -mt-2'></FaHome>
             Dashboard
           </a>
-        </li>
-        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
+        </li> */}
+        {/* <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
           <a href='/home' className='px-3'>
             <LiaToolsSolid className='inline-block w-6 h-6 mr-2 -mt-2'></LiaToolsSolid>
             Productos
           </a>
-        </li>
+        </li> */}
         <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
           <a href='/Usuarios' className='px-3'>
             <FaUserLarge className='inline-block w-6 h-6 mr-2 -mt-2'></FaUserLarge>
@@ -50,12 +50,12 @@ const Sidebar = ({ sidebarToggle }) => {
             Roles
           </a>
         </li>
-        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
+        {/* <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
           <a href='/categorias' className='px-3'>
             <TbCategory className='inline-block w-6 h-6 mr-2 -mt-2'></TbCategory>
             Categorias
           </a>
-        </li>
+        </li> */}
         <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
           <a href='/instructores' className='px-3'>
             <PiChalkboardTeacher className='inline-block w-6 h-6 mr-2 -mt-2'></PiChalkboardTeacher>
@@ -68,7 +68,7 @@ const Sidebar = ({ sidebarToggle }) => {
             Fichas
           </a>
         </li>
-        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
+        {/* <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
           <a href='/home' className='px-3'>
             <FaFileExcel className='inline-block w-6 h-6 mr-2 -mt-2'></FaFileExcel>
             Importar excel
@@ -79,7 +79,7 @@ const Sidebar = ({ sidebarToggle }) => {
             <IoBarChartSharp className='inline-block w-6 h-6 mr-2 -mt-2'></IoBarChartSharp>
             Charts
           </a>
-        </li>
+        </li> */}
       </ul>
     </motion.div>
   );
