@@ -6,7 +6,7 @@ import { faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
-import axios from 'axios';
+import { api } from '../api/token';
 
 const Contras_3 = () => {
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ const Contras_3 = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.put('http://localhost:9100/nuevo-password',
+      const response = await api.put('/nuevo-password',
         { correo, password },
         { withCredentials: true }
       );

@@ -112,7 +112,7 @@ const Contras_1 = () => {
 
 export default Contras_1;
 
-//CODIGO SIN RESPONSIVE
+//CODIGO DE JOSE
 // import { useNavigate } from 'react-router-dom';
 // import React, { useState } from 'react';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -187,15 +187,15 @@ export default Contras_1;
 //     <div className='pagina flex flex-col md:flex-row h-screen bg-fondo'>
 //       <div className='w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path md:clip-polygon h-full md:h-auto'>
 //         <div className='main w-3/4 md:w-1/2 text-center text-lg'>
-//           <div className='letras font-inter mb-20 md:mb-8'>
-//             <h1 className='text-white font-normal text-4xl md:text-5xl mt-6'>¿Has olvidado</h1>
-//             <h1 className='text-white font-normal text-4xl md:text-5xl mt-4'>tu contraseña?</h1>              
+//           <div className='letras font-inter mb-10 md:mb-8'>
+//             <h3 className='text-white font-normal text-3xl md:text-4xl mt-2'>¿Has olvidado</h3>
+//             <h3 className='text-white font-normal text-3xl md:text-4xl md:mt-2'>tu contraseña?</h3>              
 //           </div>
-//           <div className='space-y-6 md:space-y-6 text-center'>
-//               <h1 className='text-white font-normal text-xl md:text-2xl mt-15 mb-20'>Escriba su correo electrónico para recibir un código de
-//                confirmación para establecer una nueva contraseña.</h1>
+//           <div className='space-y-6 text-center mb-16 mt-8'>
+//               <h1 className='text-white font-normal text-xl md:text-2xl lg:text-2xl mt-2 md:mt-4'>Escriba su correo electrónico para recibir un código de
+//                 confirmación para establecer una nueva contraseña.</h1>
 //           </div>
-//           <div className='space-y-6 text-left mt-4'>
+//           <div className='space-y-6 text-left'>
 //             <div className='input w-full mb-4 relative'>
 //               <label className='text-sm text-white block mb-1'>Correo electrónico</label>
 //               <div className='flex items-center border-b-2 border-white'>
@@ -210,8 +210,8 @@ export default Contras_1;
 //               </div>
 //             </div>
 //           </div>
-//           <button className='btn-primary mt-10' onClick={handleEmail} disabled={isLoading}>
-//             {isLoading ? 'Enviando...' : 'Confirmar correo'}
+//           <button className='btn-primary mt-16 mb-2' onClick={handleEmail}>
+//             ENVIAR CORREO
 //           </button>
 //         </div>
 //       </div>

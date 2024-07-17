@@ -3,10 +3,12 @@ import { FaBars, FaSearch, FaBell, FaUserCircle } from 'react-icons/fa';
 import ModalCsesion from './ModalCsesion';
 import ModalPerfil from './ModalPerfil';
 import ConfirmLogoutModal from './ConfirmLogoutModal';
+import ModalNotificaciones from './ModalNotificaciones'; // Importar el modal de notificaciones
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { api } from '../api/token';
+import { motion } from 'framer-motion';
 
 const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
   const { signout } = useAuth();
@@ -14,6 +16,13 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalPerfilOpen, setIsModalPerfilOpen] = useState(false);
   const [showConfirmLogout, setShowConfirmLogout] = useState(false); 
+  const [isNotificacionesOpen, setIsNotificacionesOpen] = useState(false); // Estado del modal de notificaciones
+
+  const notifications = [
+    "Notificación 1",
+    "Notificación 2",
+    "Notificación 3"
+  ]; // Ejemplo de notificaciones
 
   const handleLogout = () => {
     setShowConfirmLogout(true);
@@ -42,6 +51,7 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
     setIsModalOpen(false);
     setIsModalPerfilOpen(false);
     setShowConfirmLogout(false); 
+    setIsNotificacionesOpen(false); // Cerrar el modal de notificaciones
   };
 
   return (
@@ -76,7 +86,7 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
             />
           </div>
           <div className='text-white'>
-            <FaBell className='w-6 h-6 text-black' />
+            <FaBell className='w-6 h-6 text-black cursor-pointer' onClick={() => setIsNotificacionesOpen(true)} />
           </div>
           <div>
             <button className='text-white group' onClick={() => setIsModalOpen(true)}>
@@ -117,6 +127,7 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
         onClose={() => setShowConfirmLogout(false)}
         onConfirm={confirmLogout}
       />
+      <ModalNotificaciones isOpen={isNotificacionesOpen} onClose={handleCloseModals} notifications={notifications} />
     </nav>
   );
 };
