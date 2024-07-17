@@ -4,75 +4,74 @@ import { FaTimes } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const EditUserModal = ({ isOpen, onClose, user }) => {
+const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
     const [loading, setLoading] = useState(false);
-    const [roles, setRoles] = useState([]);
     const [estados, setEstados] = useState([]);
     const [formErrors, setFormErrors] = useState({});
+    const [usuario, setUsuario] = useState([]);
     const [formData, setFormData] = useState({
         nombre: '',
-        Documento: '',
         correo: '',
-        rolId: '',
-        estadoId: '',
+        EstadoId: '',
+        UsuarioId: '',
     });
 
     useEffect(() => {
-        if (isOpen && user) {
-            fetchUserDetails(user.id);
+        if (isOpen && instructor) {
+            fetchInstructorDetails(instructor.id);
         }
-    }, [isOpen, user]);
+    }, [isOpen, instructor]);
 
     useEffect(() => {
-        const fetchRoles = async () => {
-            try {
-                const response = await api.get('/roles');
-                setRoles(response.data);
-            } catch (error) {
-                toast.error('Error al cargar roles', { position: 'top-right' });
-            }
+
+        const fetchusuario = async () => {
+        try {
+            const response = await api.get('/usuarios');
+            setUsuario(response.data);
+        } catch (error) {
+            showToastError('Error al cargar usuario');
+        }
         };
 
-        const fetchEstados = async () => {
-            try {
-                const response = await api.get('/Estado');
-                setEstados(response.data);
-            } catch (error) {
-                toast.error('Error al cargar los estados', { position: 'top-right' });
-            }
-        };
+    const fetchEstados = async () => {
+        try {
+            const response = await api.get('/Estado');
+            setEstados(response.data);
+        } catch (error) {
+            toast.error('Error al cargar los estados', { position: 'top-right' });
+        }
+    };
+    
+    fetchusuario();
+    fetchEstados();
+}, []);
 
-        fetchRoles();
-        fetchEstados();
-    }, []);
-
-    const fetchUserDetails = async (userId) => {
+    const fetchInstructorDetails = async (instructorId) => {
         setLoading(true);
         try {
-            const response = await api.get(`/usuarios/${userId}`);
+            const response = await api.get(`/Instructor/${instructorId}`);
             if (response.status === 200) {
-                const { nombre, Documento, correo, RolId, EstadoId } = response.data;
+                const { nombre, correo, EstadoId, UsuarioId } = response.data;
                 setFormData({
                     nombre: nombre || '',
-                    Documento: Documento || '',
                     correo: correo || '',
-                    rolId: RolId || '',
-                    estadoId: EstadoId || '',
+                    EstadoId: EstadoId || '',
+                    UsuarioId: UsuarioId || '',
                 });
                 setLoading(false);
             } else {
-                console.error('Error fetching user details:', response.data.message);
-                toast.error('Error al cargar la información del usuario.', { position: 'top-right' });
+                console.error('Error fetching instructor details:', response.data.message);
+                toast.error('Error al cargar la información del instructor.', { position: 'top-right' });
                 setLoading(false);
             }
         } catch (error) {
-            console.error('Error fetching user details:', error);
-            toast.error('Error al cargar la información del usuario.', { position: 'top-right' });
+            console.error('Error fetching instructor details:', error);
+            toast.error('Error al cargar la información del instructor.', { position: 'top-right' });
             setLoading(false);
         }
     };
 
-    const validateInput = (name, value) => {
+    const validateInputInstructor = (name, value) => {
         let errorMessage = '';
         if (name === 'nombre') {
             const nameRegex = /^[A-Za-z\s-_\u00C0-\u017F]+$/;
@@ -88,43 +87,34 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
         return errorMessage;
     };
 
-    const handleInputChange = (e) => {
+    const handleInputChangeInstructor = (e) => {
         const { name, value } = e.target;
-        const errorMessage = validateInput(name, value);
+        const processedValue = (name === 'estadoId') ? Number(value) : value;
+        const errorMessage = validateInputInstructor(name, processedValue);
         setFormErrors((prevErrors) => ({
             ...prevErrors,
             [name]: errorMessage,
         }));
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value,
+            [name]: processedValue,
         }));
     };
 
-    const handleUpdate = async () => {
-        const { nombre, correo, Documento, rolId, estadoId } = formData;
-
-        if (!nombre || !correo || !Documento || !rolId || !estadoId) {
+    const handleUpdateInstructor = async () => {
+        const { nombre, correo, EstadoId, UsuarioId } = formData;
+    
+        if (!nombre || !correo || !EstadoId || !UsuarioId) {
             toast.error('Todos los campos son obligatorios.', { position: 'top-right' });
             return;
         }
-
+    
         setLoading(true);
-        try {
-            const response = await api.put(`/usuarios/${user.id}`, {
-                nombre,
-                correo,
-                Documento,
-                RolId: rolId,
-                EstadoId: estadoId,
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-
+        try {                   
+            const response = await api.put(`/Instructor/${instructor.id}`, formData);
+    
             if (response.status === 200) {
-                toast.success('Usuario actualizado exitosamente', {
+                toast.success('Instructor actualizado exitosamente', {
                     position: 'top-right',
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -136,26 +126,26 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                 setTimeout(() => {
                     onClose(response.data);
                 }, 2000);
-
             } else {
-                console.error('Error updating user profile:', response.data.message);
-                toast.error('Error al actualizar la información del usuario.', { position: 'top-right' });
+                console.error('Error updating instructor profile:', response.data.message);
+                toast.error('Error al actualizar la información del instructor.', { position: 'top-right' });
             }
         } catch (error) {
-            console.error('Error updating user profile:', error);
+            console.error('Error updating instructor profile:', error);
             if (error.response && error.response.status === 401) {
-                window.location.href = '/';
+                window.location.href = '/'; 
             } else {
-                toast.error('Error al actualizar la información del usuario.', { position: 'top-right' });
+                toast.error('Error al actualizar la información del instructor.', { position: 'top-right' });
             }
         } finally {
             setLoading(false);
         }
     };
+    
         
     return (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-fondo bg-opacity-50'>
-            <div className='bg-white rounded-lg shadow-lg sm:w-full md:w-1/4 mt-4 max-h-screen overflow-y-auto'>
+            <div className='bg-white rounded-lg shadow-lg sm:w-full md:w-1/4 mt-4 mb-4 max-h-screen overflow-y-auto'>
                 <div className='flex justify-end p-2'>
                     <button onClick={onClose}>
                         <FaTimes className='text-black w-4 h-4' />
@@ -168,7 +158,7 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                         ) : (
                             <div className='font-inter ml-2'>
                                 <div className='space-y-2 md:space-y-2 text-left'>
-                                    <h6 className='font-bold text-center text-2xl mb-2'>Editar Usuario</h6>
+                                    <h6 className='font-bold text-center text-2xl mb-2'>Editar Instructor</h6>
 
                                     <div className='flex flex-col'>
                                         <label className='mb-1 font-bold text-sm'>Nombres y Apellidos *</label>
@@ -177,7 +167,7 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                                             type='text'
                                             name="nombre"
                                             value={formData.nombre}
-                                            onChange={handleInputChange}
+                                            onChange={handleInputChangeInstructor}
                                             onKeyPress={(e) => {
                                                 if (/\d/.test(e.key)) {
                                                     e.preventDefault();
@@ -185,28 +175,6 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                                             }}
                                         />
                                         {formErrors.nombre && <div className='text-red-400 text-sm mt-1 px-2'>{formErrors.nombre}</div>}
-                                    </div>
-                                    <div className='flex flex-col'>
-                                        <label className='mb-1 font-bold text-sm'>Documento *</label>
-                                        <input
-                                            className='bg-grisClaro text-sm rounded-lg px-2 h-8'
-                                            type='text'
-                                            name="Documento"
-                                            value={formData.Documento}
-                                            onChange={(e) => {
-                                                const value = e.target.value;
-                                                if (/^\d*$/.test(value)) { 
-                                                    handleInputChange(e);
-                                                }
-                                            }}
-                                            onKeyPress={(e) => {
-                                                if (!/[0-9]/.test(e.key)) {
-                                                    e.preventDefault(); 
-                                                }
-                                            }}
-                                            maxLength={10}
-                                        />
-                                        {formErrors.Documento && <div className='text-red-400 text-sm mt-1'>{formErrors.Documento}</div>}
                                     </div>
 
                                     <div className='flex flex-col'>
@@ -216,35 +184,33 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                                             type='text'
                                             name="correo"
                                             value={formData.correo}
-                                            onChange={handleInputChange}
+                                            onChange={handleInputChangeInstructor}
                                         />
                                         {formErrors.correo && <div className='text-red-400 text-sm mt-1'>{formErrors.correo}</div>}
                                     </div>
 
                                     <div className='flex flex-col'>
-                                        <label className='mb-1 font-bold text-sm'>Rol *</label>
-                                        <select
-                                            className='bg-grisClaro text-sm rounded-lg px-2 h-8'
-                                            name="rolId"
-                                            value={formData.rolId}
-                                            onChange={handleInputChange}
+                                        <label className='mb-1 font-bold text-sm'>Usuario *</label>
+                                            <select
+                                                className='bg-grisClaro text-sm rounded-lg px-2 h-8'
+                                                name="UsuarioId"
+                                                value={formData.UsuarioId}
+                                                onChange={handleInputChangeInstructor}
                                         >
-                                            <option value=''>Seleccionar Rol</option>
-                                            {roles.map((role) => (
-                                                <option key={role.id} value={role.id}>
-                                                    {role.rolName}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                                <option value=''>Seleccionar Usuario</option>
+                                                {usuario.map((usuario) => (
+                                                <option key={usuario.id} value={usuario.id}>{usuario.nombre}</option>
+                                                ))}
+                                            </select>
+                                        </div>
 
                                     <div className='flex flex-col'>
                                         <label className='mb-1 font-bold text-sm'>Estado *</label>
                                         <select
                                             className='bg-grisClaro text-sm rounded-lg px-2 h-8'
-                                            name="estadoId"
-                                            value={formData.estadoId}
-                                            onChange={handleInputChange}
+                                            name="EstadoId"
+                                            value={formData.EstadoId}
+                                            onChange={handleInputChangeInstructor}
                                         >
                                             <option value=''>Seleccionar Estado</option>
                                             {estados.map((estado) => (
@@ -262,7 +228,7 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                 <div className='sm:w-full md:w-full flex flex-col justify-end'>
                     <div className='flex justify-center mb-4 mx-2'>
                         <button className='btn-danger2 mx-2' onClick={onClose}>Cancelar</button>
-                        <button className='btn-primary2 mx-2' onClick={handleUpdate}>Actualizar</button>
+                        <button className='btn-primary2 mx-2' onClick={handleUpdateInstructor}>Actualizar</button>
                     </div>
                 </div>
             </div>
@@ -271,4 +237,4 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
     );
 };
 
-export default EditUserModal;
+export default EditinstructorModal;

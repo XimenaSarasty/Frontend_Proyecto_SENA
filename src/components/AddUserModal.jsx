@@ -61,6 +61,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
   }, []);
 
   const fetchUserProfile = async () => {
+    setLoading(true);
     try {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
       const response = await api.get('/perfil', {
@@ -149,6 +150,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
       return;
     }
 
+    setLoading(true);
     try {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
       const response = await api.post('/usuarios', formData, {
@@ -160,22 +162,26 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
       if (response.status === 201) {
         toast.success('Usuario agregado exitosamente', {
           position: 'top-right',
-          autoClose: 2500,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
         });
-        onClose();
-        window.location.href = '/Usuarios';
+        setTimeout(() => {
+          onClose(response.data);
+      }, 2000);
 
       } else {
-        showToastError(`Error al agregar la información del usuario: ${response.data.message}`);
+        showToastError('Ocurrió un error!, por favor intenta con un documento o correo diferente.');
       }
     } catch (error) {
-      showToastError(`Error al agregar la información del usuario: ${error.response?.data?.message || error.message}`);
+      showToastError('Ocurrió un error!, por favor intenta con un documento o correo diferente.');
     }
+    finally {
+    setLoading(false);
+}
   };
 
   return (
@@ -195,7 +201,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
             ) : (
               <div className='font-inter ml-2'>
                 <div className='space-y-2 md:space-y-2 text-left'>
-                  <h6 className='font-bold text-center text-2xl mb-2'>Agregar Usuario</h6>
+                  <h6 className='font-bold text-center text-2xl mb-2'>Registro Usuario</h6>
 
                   <div className='flex flex-col'>
                     <label className='mb-1 font-bold text-sm'>Nombres y Apellidos *</label>
@@ -294,13 +300,11 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
                         </select>
                   </div>
                 </div>
-                <div className='flex justify-center mt-4 mb-2'>
-                  <button
-                    className='btn-primary mb-4'
-                    onClick={handleCreate}
-                  >
-                    Agregar
-                  </button>
+                <div className='sm:w-full md:w-full flex flex-col justify-end'>
+                  <div className='flex justify-center mt-4 mb-4 mx-2'>
+                    <button className='btn-danger2 mx-2' onClick={onClose}>Cancelar</button>
+                    <button className='btn-primary2 mx-2'onClick={handleCreate}>Agregar</button>
+                  </div>
                 </div>
               </div>
             )}

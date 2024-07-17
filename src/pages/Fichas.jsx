@@ -8,41 +8,41 @@ import IconButton from '@mui/material/IconButton';
 import clsx from 'clsx';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import EditUserModal from '../components/EditUserModal';
-import AddUserModal from '../components/AddUserModal';
+import EditFichasModal from '../components/EditFichasModal';
+import AddFichasModal from '../components/AddFichasModal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Usuarios = () => {
+const Fichas = () => {
     const [sidebarToggle, setSidebarToggle] = useState(false);
     const [data, setData] = useState([]);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedFicha, setSelectedFicha] = useState(null);
     const [isOpenAddModal, setIsOpenAddModal] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
-        setLoading(true);
+        setLoading(true); 
         try {
-            const response = await api.get('/usuarios', {
+            const response = await api.get('/Fichas', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
 
-            const usuariosConRolesYEstados = await Promise.all(response.data.map(async (usuario) => {
-                const rolResponse = await api.get(`/roles/${usuario.RolId}`);
-                const estadoResponse = await api.get(`/Estado/${usuario.EstadoId}`);
+            const FichasConDetalles = await Promise.all(response.data.map(async (ficha) => {
+                const usuarioResponse = await api.get(`/usuarios/${ficha.UsuarioId}`);
+                const estadoResponse = await api.get(`/Estado/${ficha.EstadoId}`);
 
                 return {
-                    ...usuario,
-                    rolName: rolResponse.data.rolName,
+                    ...ficha,
+                    usuarioname: usuarioResponse.data.nombre,
                     estadoName: estadoResponse.data.estadoName,
                 };
             }));
 
-            usuariosConRolesYEstados.sort((a, b) => a.id - b.id);
-            setData(usuariosConRolesYEstados);
+            FichasConDetalles.sort((a, b) => a.id - b.id);
+            setData(FichasConDetalles);
         } catch (error) {
             console.error('Error fetching user data:', error);
             toast.error('Error al cargar los datos de usuarios', {
@@ -55,51 +55,17 @@ const Usuarios = () => {
                 progress: undefined,
             });
         }
-        setLoading(false);
+        setLoading(false); 
     };
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    const handleEditClick = (rowIndex) => {
-        const user = data[rowIndex];
-        setSelectedUser(user);
-        setIsOpenEditModal(true);
-    };
-
-    const handleCloseEditModal = (updatedUser) => {
-        if (updatedUser) {
-            fetchData();
-            toast.success('Usuario actualizado exitosamente', {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
-        setIsOpenEditModal(false);
-        setSelectedUser(null);
-    };
-
-    const handleOpenAddModal = () => {
-        setIsOpenAddModal(true);
-    };
-
-    const handleCloseAddModal = (newUser) => {
-        if (newUser) {
-            fetchData(); // Refetch data after adding a new user to ensure data consistency
-        }
-        setIsOpenAddModal(false);
-    };
-
-    const columns = [
+    const columnsFicha = [
         {
-            name: 'id',
-            label: 'ID',
+            name: 'NumeroFicha',
+            label: 'Número de Ficha',
             options: {
                 customBodyRender: (value) => (
                     <div className="text-center">{value}</div>
@@ -107,35 +73,8 @@ const Usuarios = () => {
             },
         },
         {
-            name: 'Documento',
-            label: 'Documento',
-            options: {
-                customBodyRender: (value) => (
-                    <div className="text-center">{value}</div>
-                ),
-            },
-        },
-        {
-            name: 'nombre',
-            label: 'Nombre',
-            options: {
-                customBodyRender: (value) => (
-                    <div className="text-center">{value}</div>
-                ),
-            },
-        },
-        {
-            name: 'correo',
-            label: 'Correo',
-            options: {
-                customBodyRender: (value) => (
-                    <div className="text-center">{value}</div>
-                ),
-            },
-        },
-        {
-            name: 'rolName',
-            label: 'Rol',
+            name: 'usuarioname',
+            label: 'Usuario',
             options: {
                 customBodyRender: (value) => (
                     <div className="text-center">{value}</div>
@@ -148,7 +87,7 @@ const Usuarios = () => {
             options: {
                 customBodyRender: (value) => (
                     <div className={clsx('text-center', {
-                        'text-green-500': value === 'ACTIVO',
+                        'text-sena': value === 'ACTIVO',
                         'text-red-500': value === 'INACTIVO',
                     })}>
                         {value}
@@ -176,41 +115,84 @@ const Usuarios = () => {
         },
     ];
 
+    const handleEditClick = (rowIndex) => {
+        const ficha = data[rowIndex];
+        setSelectedFicha(ficha);
+        setIsOpenEditModal(true);
+    };
+
+    const handleCloseEditModalFicha = (updateFicha) => {
+        if (updateFicha) {
+            fetchData(); 
+            toast.success('Ficha actualizada correctamente', {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        setIsOpenEditModal(false);
+        setSelectedFicha(null);
+    };
+
+    const handleOpenAddModal = () => {
+        setIsOpenAddModal(true);
+    };
+
+    const handleCloseAddModalFicha = (newFicha) => {
+        if(newFicha){
+            fetchData(); 
+            toast.success('Ficha agregada exitosamente', {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        setSelectedFicha(null);
+        setIsOpenAddModal(false);
+    };
+
     const handleCustomExport = (rows) => {
         const exportData = rows.map(row => ({
-            id: row.data[0],
-            Nombre: row.data[2],
-            Correo: row.data[3],
+            NumeroFicha: row.data[0],
+            Estado: row.data[1],
         }));
-        
+
         const worksheet = XLSX.utils.json_to_sheet(exportData);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Usuarios");
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Fichas");
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        saveAs(data, 'Usuarios.xlsx');
+        saveAs(data, 'Fichas.xlsx');
     };
 
     return (
         <div className="flex min-h-screen">
             <Sidebar sidebarToggle={sidebarToggle} />
             <div className={`flex flex-col flex-grow p-6 bg-gray-100 ${sidebarToggle ? 'ml-64' : ''}`}>
-                <Dashboard 
+                <Dashboard
                     sidebarToggle={sidebarToggle}
-                    setSidebarToggle={setSidebarToggle} 
+                    setSidebarToggle={setSidebarToggle}
                 />
                 <div className='flex justify-end mt-2'>
-                    <button className='btn-primary' onClick={handleOpenAddModal}>Agregar Usuario</button>
+                    <button className='btn-primary' onClick={handleOpenAddModal}>Agregar Ficha</button>
                 </div>
                 <div className="flex-grow flex items-center justify-center">
                     <div className="w-full max-w-7xl overflow-auto">
                         {loading ? (
-                            <div className="text-center">Cargando usuarios...</div>
+                            <div className="text-center">Cargando Fichas...</div>
                         ) : (
                             <MUIDataTable
-                                title={"Usuarios"}
+                                title={"Fichas"}
                                 data={data}
-                                columns={columns}
+                                columns={columnsFicha}
                                 options={{
                                     responsive: "standard",
                                     selectableRows: "none",
@@ -260,19 +242,20 @@ const Usuarios = () => {
                     </div>
                 </div>
             </div>
-            {selectedUser && (
-                <EditUserModal
+
+            {selectedFicha && (
+                <EditFichasModal
                     isOpen={isOpenEditModal}
-                    onClose={handleCloseEditModal}
-                    user={selectedUser}
+                    onClose={handleCloseEditModalFicha}
+                    ficha={selectedFicha}
                 />
             )}
-            <AddUserModal
+            <AddFichasModal
                 isOpen={isOpenAddModal}
-                onClose={handleCloseAddModal}
+                onClose={handleCloseAddModalFicha}
             />
         </div>
     );
 };
 
-export default Usuarios;
+export default Fichas;

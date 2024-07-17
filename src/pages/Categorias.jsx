@@ -5,128 +5,39 @@ import Dashboard from '../components/Dashboard';
 import MUIDataTable from "mui-datatables";
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
-import clsx from 'clsx';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import EditUserModal from '../components/EditUserModal';
-import AddUserModal from '../components/AddUserModal';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import AddCategModal from '../components/AddCategModal';
+import EditCategModal from '../components/EditCategModal';
 
-const Usuarios = () => {
+const Categorias = () => {
     const [sidebarToggle, setSidebarToggle] = useState(false);
     const [data, setData] = useState([]);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedRol, setSelectedRol] = useState(null);
     const [isOpenAddModal, setIsOpenAddModal] = useState(false);
     const [loading, setLoading] = useState(true);
-
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const response = await api.get('/usuarios', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-
-            const usuariosConRolesYEstados = await Promise.all(response.data.map(async (usuario) => {
-                const rolResponse = await api.get(`/roles/${usuario.RolId}`);
-                const estadoResponse = await api.get(`/Estado/${usuario.EstadoId}`);
-
-                return {
-                    ...usuario,
-                    rolName: rolResponse.data.rolName,
-                    estadoName: estadoResponse.data.estadoName,
-                };
-            }));
-
-            usuariosConRolesYEstados.sort((a, b) => a.id - b.id);
-            setData(usuariosConRolesYEstados);
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-            toast.error('Error al cargar los datos de usuarios', {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
-        setLoading(false);
-    };
+    const [roles, setRoles] = useState([]);
 
     useEffect(() => {
-        fetchData();
+        const fetchRoles = async () => {
+            setLoading(true); 
+            try {
+                const response = await api.get('/roles');
+                setRoles(response.data);
+            } catch (error) {
+                console.error('Error al cargar roles:', error); 
+            }
+            setLoading(false); 
+        };
+    
+        fetchRoles();
     }, []);
-
-    const handleEditClick = (rowIndex) => {
-        const user = data[rowIndex];
-        setSelectedUser(user);
-        setIsOpenEditModal(true);
-    };
-
-    const handleCloseEditModal = (updatedUser) => {
-        if (updatedUser) {
-            fetchData();
-            toast.success('Usuario actualizado exitosamente', {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
-        setIsOpenEditModal(false);
-        setSelectedUser(null);
-    };
-
-    const handleOpenAddModal = () => {
-        setIsOpenAddModal(true);
-    };
-
-    const handleCloseAddModal = (newUser) => {
-        if (newUser) {
-            fetchData(); // Refetch data after adding a new user to ensure data consistency
-        }
-        setIsOpenAddModal(false);
-    };
 
     const columns = [
         {
             name: 'id',
-            label: 'ID',
-            options: {
-                customBodyRender: (value) => (
-                    <div className="text-center">{value}</div>
-                ),
-            },
-        },
-        {
-            name: 'Documento',
-            label: 'Documento',
-            options: {
-                customBodyRender: (value) => (
-                    <div className="text-center">{value}</div>
-                ),
-            },
-        },
-        {
-            name: 'nombre',
-            label: 'Nombre',
-            options: {
-                customBodyRender: (value) => (
-                    <div className="text-center">{value}</div>
-                ),
-            },
-        },
-        {
-            name: 'correo',
-            label: 'Correo',
+            label: 'Id',
             options: {
                 customBodyRender: (value) => (
                     <div className="text-center">{value}</div>
@@ -135,24 +46,10 @@ const Usuarios = () => {
         },
         {
             name: 'rolName',
-            label: 'Rol',
+            label: 'Categoria',
             options: {
                 customBodyRender: (value) => (
                     <div className="text-center">{value}</div>
-                ),
-            },
-        },
-        {
-            name: 'estadoName',
-            label: 'Estado',
-            options: {
-                customBodyRender: (value) => (
-                    <div className={clsx('text-center', {
-                        'text-green-500': value === 'ACTIVO',
-                        'text-red-500': value === 'INACTIVO',
-                    })}>
-                        {value}
-                    </div>
                 ),
             },
         },
@@ -178,17 +75,33 @@ const Usuarios = () => {
 
     const handleCustomExport = (rows) => {
         const exportData = rows.map(row => ({
-            id: row.data[0],
-            Nombre: row.data[2],
-            Correo: row.data[3],
+            rolName: row.data[1],
         }));
         
         const worksheet = XLSX.utils.json_to_sheet(exportData);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Usuarios");
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Categorias");
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        saveAs(data, 'Usuarios.xlsx');
+        saveAs(data, 'Categorias.xlsx');
+    };
+
+    const handleEditClick = (rowIndex) => {
+        const rol = roles[rowIndex];
+        setSelectedRol(rol);
+        setIsOpenEditModal(true);
+    };
+
+    const handleNewRolData = (newRol) => {
+        setData([...data, newRol]);
+    };
+
+    const handleCloseAddModal = () => {
+        setIsOpenAddModal(false);
+    };
+
+    const handleCloseEditModal = () => {
+        setIsOpenEditModal(false);
     };
 
     return (
@@ -200,16 +113,16 @@ const Usuarios = () => {
                     setSidebarToggle={setSidebarToggle} 
                 />
                 <div className='flex justify-end mt-2'>
-                    <button className='btn-primary' onClick={handleOpenAddModal}>Agregar Usuario</button>
+                    <button className='btn-primary' onClick={() => setIsOpenAddModal(true)}>Agregar Categoria</button>
                 </div>
                 <div className="flex-grow flex items-center justify-center">
-                    <div className="w-full max-w-7xl overflow-auto">
+                    <div className="max-w-4xl mx-auto">
                         {loading ? (
-                            <div className="text-center">Cargando usuarios...</div>
+                            <div className="text-center">Cargando categorias...</div>
                         ) : (
                             <MUIDataTable
-                                title={"Usuarios"}
-                                data={data}
+                                title={"Categorias"}
+                                data={roles}
                                 columns={columns}
                                 options={{
                                     responsive: "standard",
@@ -260,19 +173,20 @@ const Usuarios = () => {
                     </div>
                 </div>
             </div>
-            {selectedUser && (
-                <EditUserModal
+            {selectedRol && (
+                <EditCategModal
                     isOpen={isOpenEditModal}
                     onClose={handleCloseEditModal}
-                    user={selectedUser}
+                    rol={selectedRol}
                 />
             )}
-            <AddUserModal
+            <AddCategModal
                 isOpen={isOpenAddModal}
                 onClose={handleCloseAddModal}
+                onNewRolData={handleNewRolData}
             />
         </div>
     );
 };
 
-export default Usuarios;
+export default Categorias

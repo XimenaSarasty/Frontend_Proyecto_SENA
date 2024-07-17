@@ -12,7 +12,8 @@ const ModalPerfil = ({ isOpen, onClose }) => {
     nombre: '',
     Documento: '',
     correo: '',
-    rolName: ''
+    password: '',
+    rolName: '',
   });
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const ModalPerfil = ({ isOpen, onClose }) => {
         nombre: userInfo.nombre || '',
         Documento: userInfo.Documento || '',
         correo: userInfo.correo || '',
+        password: '',
         rolName: ''
       });
       fetchUserRole(userInfo.RolId);
@@ -89,9 +91,13 @@ const ModalPerfil = ({ isOpen, onClose }) => {
     } else if (name === 'correo') {
       const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (
-      // !value.includes('sena') ||
-      !correoRegex.test(value)) {
+        !correoRegex.test(value)) {
         errorMessage = 'El correo debe ser un correo válido.';
+      }
+    } else if (name === 'password') {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?])[a-zA-Z0-9!@#$%^&*?]{8,}$/;
+      if (!passwordRegex.test(value)) {
+        errorMessage = 'La contraseña debe contener una mayúscula, una minúscula, un carácter especial, y entre 8 a 20 caracteres.';
       }
     }
     return errorMessage;
@@ -112,15 +118,19 @@ const ModalPerfil = ({ isOpen, onClose }) => {
   };
 
   const handleUpdate = async () => {
-    const { nombre, Documento, correo } = formData;
+    const { nombre, Documento, password, correo } = formData;
     const nombreError = validateInput('nombre', nombre);
     const documentoError = validateInput('Documento', Documento);
     const correoError = validateInput('correo', correo);
 
-    if (nombreError || documentoError || correoError) {
+    // Solo valida la contraseña si hay una entrada
+    const passwordError = password ? validateInput('password', password) : null; 
+
+    if (nombreError || documentoError || correoError || passwordError) {
       setFormErrors({
         nombre: nombreError,
         Documento: documentoError,
+        password: passwordError,
         correo: correoError,
       });
       toast.error('Por favor, corrige los errores antes de actualizar.', {
@@ -148,17 +158,31 @@ const ModalPerfil = ({ isOpen, onClose }) => {
       return;
     }
 
+    const updateData = {
+      nombre,
+      Documento,
+      correo,
+    };
+
+    // Solo incluye la contraseña en los datos de actualización si se ha proporcionado
+    if (password) {
+      updateData.password = password;
+    }
+
     try {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1');
 
-      const response = await api.put(`/usuarios/${userInfo.id}`, formData, {
+      const response = await api.put(`/usuarios/${userInfo.id}`, updateData, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
       if (response.status === 200) {
-        if (formData.Documento !== userInfo.Documento) {
+        const isDocumentUpdated = formData.Documento !== userInfo.Documento;
+        const isPasswordUpdated = Boolean(password);
+
+        if (isDocumentUpdated || isPasswordUpdated) {
           toast.success('Usuario actualizado exitosamente', {
             position: 'top-right',
             autoClose: 2000,
@@ -204,7 +228,7 @@ const ModalPerfil = ({ isOpen, onClose }) => {
         progress: undefined,
       });
     }
-  };
+};
 
   if (!isOpen) return null;
 
@@ -250,19 +274,24 @@ const ModalPerfil = ({ isOpen, onClose }) => {
 
                   <div className='flex flex-col'>
                     <label className='mb-1 font-bold text-sm'>Documento *</label>
-                    <input
-                      className='bg-grisClaro text-sm rounded-lg px-2 h-8'
-                      type='text'
-                      name="Documento"
-                      value={formData.Documento}
-                      onChange={handleInputChange}
-                      onKeyPress={(e) => {
-                        if (/[A-Za-z]/.test(e.key)) {
-                          e.preventDefault();
+                      <input
+                        className='bg-grisClaro text-sm rounded-lg px-2 h-8'
+                        type='text'
+                        name="Documento"
+                        value={formData.Documento}
+                        onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\d*$/.test(value)) { 
+                          handleInputChange(e);
                         }
-                      }}
-                      maxLength={10}
-                    />
+                        }}
+                        onKeyPress={(e) => {
+                          if (!/[0-9]/.test(e.key)) {
+                            e.preventDefault(); 
+                          }
+                          }}
+                          maxLength={10}
+                        />
                     {formErrors.Documento && <div className='text-red-400 text-sm mt-1'>{formErrors.Documento}</div>}
                   </div>
 
@@ -276,6 +305,19 @@ const ModalPerfil = ({ isOpen, onClose }) => {
                       onChange={handleInputChange}
                     />
                     {formErrors.correo && <div className='text-red-400 text-sm mt-1'>{formErrors.correo}</div>}
+                  </div>
+
+                  <div className='flex flex-col'>
+                    <label className='mb-1 font-bold text-sm'>Contraseña *</label>
+                    <input
+                      className='bg-grisClaro text-sm rounded-lg px-2 h-8'
+                      type='password'
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      placeholder='Ingresa una nueva contraseña'
+                    />
+                    {formErrors.password && <p className='text-red-400 text-sm mt-1'>{formErrors.password}</p>}
                   </div>
 
                   <div className='flex flex-col'>
