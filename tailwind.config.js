@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -11,11 +12,13 @@ export default {
       colors: {
         sena: '#01AF08',
         fondo: '#F9FDEC',
-        gris: '#585656',
+        gris: '#938B8B',
         negro: '#000000',
         input: '#1E1E1E',
         correo: '#7BA3DF',
-        grisClaro: '#D9D9D9'
+        grisClaro: '#D9D9D9',
+        noEdit: '#A59C9C',
+        naranja: '#fd7e14'
       },
       margin: {
         custom: '20rem',
@@ -28,4 +31,5 @@ export default {
   },
   plugins: [],
 }
+
 

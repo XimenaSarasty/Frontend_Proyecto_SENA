@@ -11,6 +11,8 @@ import Roles from './pages/Roles.jsx';
 import Categorias from './pages/Categorias.jsx';
 import Instructores from './pages/Instructores.jsx';
 import Fichas from './pages/Fichas.jsx';
+import ImportExcel from './pages/ImportExcel.jsx';
+
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
           <Route path='/categorias' element={<Categorias />} /> 
           <Route path='/instructores' element={<Instructores/>}/>
           <Route path='/fichas' element={<Fichas/>}/> 
+          <Route path='/excel' element={<ImportExcel/>}/> 
 
           {/* <Route element={<ProtectedRoute />}> */}
             <Route path='/home' element={<Home />} />            

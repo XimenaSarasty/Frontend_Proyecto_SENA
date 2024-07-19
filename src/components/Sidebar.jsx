@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaHome, FaFileExcel, FaUsers } from 'react-icons/fa';
+import { FaHome, FaFileExcel, FaUsers, FaRegFileExcel } from 'react-icons/fa';
 import { LiaToolsSolid } from 'react-icons/lia';
 import { FaUserLarge } from 'react-icons/fa6';
 import { IoBarChartSharp } from 'react-icons/io5';
@@ -66,6 +66,12 @@ const Sidebar = ({ sidebarToggle }) => {
           <a href='/fichas' className='px-3'>
           <SiGoogleclassroom className='inline-block w-6 h-6 mr-2 -mt-2'></SiGoogleclassroom>
             Fichas
+          </a>
+        </li>
+        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
+          <a href='/excel' className='px-3'>
+          <FaRegFileExcel  className='inline-block w-6 h-6 mr-2 -mt-2'></FaRegFileExcel>
+            Importar Excel
           </a>
         </li>
         {/* <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>

@@ -229,7 +229,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
                       value={formData.Documento}
                       onChange={handleInputChange}
                       onKeyPress={(e) => {
-                        if (/[A-Za-z]/.test(e.key)) {
+                        if (/[^0-9]/.test(e.key)) {
                           e.preventDefault();
                         }
                       }}

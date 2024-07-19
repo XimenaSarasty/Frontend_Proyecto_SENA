@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../api/token';
 import { FaTimes } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
@@ -9,6 +10,7 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
     const [roles, setRoles] = useState([]);
     const [estados, setEstados] = useState([]);
     const [formErrors, setFormErrors] = useState({});
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         nombre: '',
         Documento: '',
@@ -144,7 +146,9 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
         } catch (error) {
             console.error('Error updating user profile:', error);
             if (error.response && error.response.status === 401) {
-                window.location.href = '/';
+                setTimeout(() => {
+                    navigate('/');
+                })
             } else {
                 toast.error('Error al actualizar la información del usuario.', { position: 'top-right' });
             }
