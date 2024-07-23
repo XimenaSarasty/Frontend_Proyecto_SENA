@@ -103,13 +103,6 @@ const EditCategModal = ({ isOpen, onClose, rol }) => {
         });
     };
 
-    const handleClose = () => {
-        setFormData({
-            rolName: '',
-        });
-        onClose();
-    };
-
     if (!isOpen) return null;
         
     return (

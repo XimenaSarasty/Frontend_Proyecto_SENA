@@ -75,7 +75,7 @@ const AddCategModal = ({ isOpen, onClose }) => {
               draggable: true,
               progress: undefined,
             });
-            onClose();
+            // onClose();
             window.location.href = '/roles';
     
           } else {

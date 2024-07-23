@@ -71,15 +71,6 @@ const Instructores =()=>{
     const handleCloseEditModalIntructor = (updateIntructor) => {
         if(updateIntructor){
             fetchData(); 
-            toast.success('Instructor actualizado correctamente',{
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
         }
         setSelectedInstructor(null);
         setIsOpenEditModal(false);
@@ -92,15 +83,6 @@ const Instructores =()=>{
     const handleCloseAddModalIntructor = (newIntructor) => {
         if(newIntructor){
             fetchData(); 
-            toast.success('Instructor agregado exitosamente', {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
         }
         setSelectedInstructor(null);
         setIsOpenAddModal(false);
@@ -195,7 +177,7 @@ const Instructores =()=>{
     return(
         <div className="flex min-h-screen">
             <Sidebar sidebarToggle={sidebarToggle} />
-            <div className={`flex flex-col flex-grow p-6 bg-gray-100 ${sidebarToggle ? 'ml-64' : ''}`}>
+            <div className={`flex flex-col flex-grow p-6 bg-gray-100 ${sidebarToggle ? 'ml-64' : ''} mt-16`}>
                 <Dashboard 
                         sidebarToggle={sidebarToggle}
                         setSidebarToggle={setSidebarToggle} 
@@ -216,6 +198,11 @@ const Instructores =()=>{
                                     download: true,
                                     rowsPerPage: 5,
                                     rowsPerPageOptions: [5, 10, 15],
+                                    setRowProps: (row, dataIndex, rowIndex) => {
+                                        return {
+                                            style: { padding: '2px 0' }
+                                        };
+                                    },
                                     onDownload: (buildHead, buildBody, columns, data) => {
                                         handleCustomExport(data);
                                         return false;

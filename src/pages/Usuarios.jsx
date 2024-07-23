@@ -71,15 +71,6 @@ const Usuarios = () => {
     const handleCloseEditModal = (updatedUser) => {
         if (updatedUser) {
             fetchData();
-            toast.success('Usuario actualizado exitosamente', {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
         }
         setIsOpenEditModal(false);
         setSelectedUser(null);
@@ -87,14 +78,17 @@ const Usuarios = () => {
 
     const handleOpenAddModal = () => {
         setIsOpenAddModal(true);
+    // toast.dismiss();
     };
 
     const handleCloseAddModal = (newUser) => {
         if (newUser) {
-            fetchData(); // Refetch data after adding a new user to ensure data consistency
+            fetchData(); 
         }
         setIsOpenAddModal(false);
+        // toast.dismiss(); // Elimina las alertas activas
     };
+    
 
     const columns = [
         {
@@ -194,7 +188,7 @@ const Usuarios = () => {
     return (
         <div className="flex min-h-screen">
             <Sidebar sidebarToggle={sidebarToggle} />
-            <div className={`flex flex-col flex-grow p-6 bg-gray-100 ${sidebarToggle ? 'ml-64' : ''}`}>
+            <div className={`flex flex-col flex-grow p-6 bg-gray-100 ${sidebarToggle ? 'ml-64' : ''} mt-16`}>
                 <Dashboard 
                     sidebarToggle={sidebarToggle}
                     setSidebarToggle={setSidebarToggle} 
@@ -217,6 +211,11 @@ const Usuarios = () => {
                                     download: true,
                                     rowsPerPage: 5,
                                     rowsPerPageOptions: [5, 10, 15],
+                                    setRowProps: (row, dataIndex, rowIndex) => {
+                                        return {
+                                            style: { padding: '2px 0' }
+                                        };
+                                    },
                                     onDownload: (buildHead, buildBody, columns, data) => {
                                         handleCustomExport(data);
                                         return false;

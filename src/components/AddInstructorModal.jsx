@@ -161,7 +161,7 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
             progress: undefined,
             });
             setTimeout(() => {
-            onClose(response.data);
+            // onClose(response.data);
         }, 2000);
 
         } else {

@@ -131,7 +131,7 @@ const AddFichasModal = ({ isOpen, onClose, ficha }) => {
                 progress: undefined,
             });
             setTimeout(() => {
-                onClose(response.data);
+                // onClose(response.data);
             }, 2000);
         } else {
             showToastError('Ocurrió un error al agregar la ficha.');

@@ -252,7 +252,11 @@ const EditUserModal = ({ isOpen, onClose, user }) => {
                                         >
                                             <option value=''>Seleccionar Estado</option>
                                             {estados.map((estado) => (
-                                                <option key={estado.id} value={estado.id}>
+                                                <option key={estado.id} value={estado.id}
+                                                style={{
+                                                color: estado.estadoName === 'ACTIVO' ? 'green' : estado.estadoName === 'INACTIVO' ? 'red' : 'inherit',
+                                                }}
+                                                >
                                                     {estado.estadoName}
                                                 </option>
                                             ))}

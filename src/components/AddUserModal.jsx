@@ -17,10 +17,22 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
   const [estados, setEstados] = useState([]);
   const [formErrors, setFormErrors] = useState({});
   const [loading, setLoading] = useState(true);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       fetchUserProfile();
+    } else {
+      setFormData({
+        nombre: '',
+        Documento: '',
+        correo: '',
+        password: '',
+        RolId: '',
+        EstadoId: '',
+      });
+      setFormErrors({});
+      setFormSubmitted(false);
     }
   }, [isOpen]);
 
@@ -160,6 +172,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
       });
 
       if (response.status === 201) {
+        setFormSubmitted(true);
         toast.success('Usuario agregado exitosamente', {
           position: 'top-right',
           autoClose: 2000,
@@ -170,18 +183,24 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
           progress: undefined,
         });
         setTimeout(() => {
-          onClose(response.data);
-      }, 2000);
-
+          setFormData({
+            nombre: '',
+            Documento: '',
+            correo: '',
+            password: '',
+            RolId: '',
+            EstadoId: '',
+          });
+          setFormSubmitted(false);
+        }, 2000);
       } else {
         showToastError('Ocurrió un error!, por favor intenta con un documento o correo diferente.');
       }
     } catch (error) {
       showToastError('Ocurrió un error!, por favor intenta con un documento o correo diferente.');
+    } finally {
+      setLoading(false);
     }
-    finally {
-    setLoading(false);
-}
   };
 
   return (
@@ -194,11 +213,6 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
         </div>
         <div className='flex items-center justify-center space-y-4 md:space-y-0 mb-4'>
           <div className='w-full md:w-3/4'>
-            {loading ? (
-              <p>Cargando información...</p>
-            ) : formErrors.fetch ? (
-              <p className='text-red-500'>{formErrors.fetch}</p>
-            ) : (
               <div className='font-inter ml-2'>
                 <div className='space-y-2 md:space-y-2 text-left'>
                   <h6 className='font-bold text-center text-2xl mb-2'>Registro Usuario</h6>
@@ -229,13 +243,12 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
                       value={formData.Documento}
                       onChange={handleInputChange}
                       onKeyPress={(e) => {
-                        if (/[^0-9]/.test(e.key)) {
+                        if (!/[0-9]/.test(e.key)) {
                           e.preventDefault();
                         }
                       }}
                       maxLength={10}
                     />
-                    {formErrors.Documento && <div className='text-red-400 text-sm mt-1'>{formErrors.Documento}</div>}
                   </div>
 
                   <div className='flex flex-col'>
@@ -247,7 +260,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
                       value={formData.correo}
                       onChange={handleInputChange}
                     />
-                    {formErrors.correo && <div className='text-red-400 text-sm mt-1'>{formErrors.correo}</div>}
+                    {formErrors.correo && <div className='text-red-400 text-sm mt-1 px-2'>{formErrors.correo}</div>}
                   </div>
 
                   <div className='flex flex-col'>
@@ -259,7 +272,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
                       value={formData.password}
                       onChange={handleInputChange}
                     />
-                    {formErrors.password && <div className='text-red-400 text-sm mt-1'>{formErrors.password}</div>}
+                    {formErrors.password && <div className='text-red-400 text-sm mt-1 px-2'>{formErrors.password}</div>}
                   </div>
 
                   <div className='flex flex-col'>
@@ -270,9 +283,9 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
                       value={formData.RolId}
                       onChange={handleInputChange}
                     >
-                      <option value=''>Seleccionar Rol</option>
-                      {roles.map((role) => (
-                        <option key={role.id} value={role.id}>{role.rolName}</option>
+                      <option value="">Seleccione un rol</option>
+                      {roles.map((rol) => (
+                        <option key={rol.id} value={rol.id}>{rol.rolName}</option>
                       ))}
                     </select>
                   </div>
@@ -299,15 +312,14 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
                             ))}
                         </select>
                   </div>
-                </div>
-                <div className='sm:w-full md:w-full flex flex-col justify-end'>
-                  <div className='flex justify-center mt-4 mb-4 mx-2'>
-                    <button className='btn-danger2 mx-2' onClick={onClose}>Cancelar</button>
-                    <button className='btn-primary2 mx-2'onClick={handleCreate}>Agregar</button>
-                  </div>
+                  <div className='sm:w-full md:w-full flex flex-col justify-end'>
+                    <div className='flex justify-center mt-4 mb-4 mx-2'>
+                      <button className='btn-danger2 mx-2' onClick={onClose}>Cancelar</button>
+                      <button className='btn-primary2 mx-2'onClick={handleCreate}>Agregar</button>
+                    </div>
+                  </div> 
                 </div>
               </div>
-            )}
           </div>
         </div>
       </div>
@@ -317,4 +329,3 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
 };
 
 export default AddUserModal;
-

@@ -176,7 +176,7 @@ const Fichas = () => {
     return (
         <div className="flex min-h-screen">
             <Sidebar sidebarToggle={sidebarToggle} />
-            <div className={`flex flex-col flex-grow p-6 bg-gray-100 ${sidebarToggle ? 'ml-64' : ''}`}>
+            <div className={`flex flex-col flex-grow p-6 bg-gray-100 ${sidebarToggle ? 'ml-64' : ''} mt-16`}>
                 <Dashboard
                     sidebarToggle={sidebarToggle}
                     setSidebarToggle={setSidebarToggle}
@@ -199,6 +199,11 @@ const Fichas = () => {
                                     download: true,
                                     rowsPerPage: 5,
                                     rowsPerPageOptions: [5, 10, 15],
+                                    setRowProps: (row, dataIndex, rowIndex) => {
+                                        return {
+                                            style: { padding: '2px 0' }
+                                        };
+                                    },
                                     onDownload: (buildHead, buildBody, columns, data) => {
                                         handleCustomExport(data);
                                         return false;

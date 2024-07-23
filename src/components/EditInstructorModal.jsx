@@ -214,8 +214,12 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
                                         >
                                             <option value=''>Seleccionar Estado</option>
                                             {estados.map((estado) => (
-                                                <option key={estado.id} value={estado.id}>
-                                                    {estado.estadoName}
+                                                <option key={estado.id} value={estado.id}
+                                                style={{
+                                                color: estado.estadoName === 'ACTIVO' ? 'green' : estado.estadoName === 'INACTIVO' ? 'red' : 'inherit',
+                                                }}
+                                                >
+                                                {estado.estadoName}
                                                 </option>
                                             ))}
                                         </select>
