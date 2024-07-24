@@ -108,7 +108,7 @@ const ImportExcel = () => {
   return (
     <div className="flex min-h-screen">
       <Sidebar sidebarToggle={sidebarToggle} />
-      <div className={`flex flex-col flex-grow p-6 bg-gray-100 ${sidebarToggle ? 'ml-64' : ''}`}>
+      <div className={`flex flex-col flex-grow p-6 bg-gray-100 ${sidebarToggle ? 'ml-64' : ''} mt-16`}>
         <Dashboard
           sidebarToggle={sidebarToggle}
           setSidebarToggle={setSidebarToggle}
@@ -132,19 +132,21 @@ const ImportExcel = () => {
         </div>
         {uploading && <LinearProgress className="h-2 w-full mb-4" color="primary" />}
         <div className="flex flex-grow">
-          <div className="w-1/2 mt-2 pr-2">
-            <MUIDataTable
-              title={'Lista de Documentos Excel'}
-              data={data}
-              columns={columns}
-              options={options}
-            />
+          <div className="flex justify-center w-1/2 mt-2 pr-2">
+            <div className='w-3/4'>
+              <MUIDataTable
+                title={'Lista de Documentos Excel'}
+                data={data}
+                columns={columns}
+                options={options}
+              />
+            </div>
           </div>
           <div className="w-1/2 pl-2 h-full flex justify-center items-center">
             <div className="flex justify-center p-2">
               <div
-                className="border border-gray-300 p-2 overflow-auto"
-                style={{ maxHeight: '600px', maxWidth: '600px', transform: 'scale(0.6)', transformOrigin: 'top left' }}
+                className="border border-sena shadow-lg p-2 overflow-auto"
+                style={{ maxHeight: '600px', maxWidth: '600px', transform: 'scale(0.6)', transformOrigin: 'top center' }}
                 dangerouslySetInnerHTML={{ __html: thumbnailHtml }}
               ></div>
             </div>

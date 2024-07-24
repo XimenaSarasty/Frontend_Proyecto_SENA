@@ -22,42 +22,39 @@ const Usuarios = () => {
     const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
+        console.time('fetchData');
         setLoading(true);
         try {
-            const response = await api.get('/usuarios', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-
-            const usuariosConRolesYEstados = await Promise.all(response.data.map(async (usuario) => {
-                const rolResponse = await api.get(`/roles/${usuario.RolId}`);
-                const estadoResponse = await api.get(`/Estado/${usuario.EstadoId}`);
-
-                return {
-                    ...usuario,
-                    rolName: rolResponse.data.rolName,
-                    estadoName: estadoResponse.data.estadoName,
-                };
-            }));
-
-            usuariosConRolesYEstados.sort((a, b) => a.id - b.id);
-            setData(usuariosConRolesYEstados);
+          const response = await api.get('/usuarios', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+      
+          const usuariosConRolesYEstados = response.data.map(usuario => ({
+            ...usuario,
+            rolName: usuario.Rol ? usuario.Rol.rolName : 'Desconocido',  // Manejo de posibles valores indefinidos
+            estadoName: usuario.Estado ? usuario.Estado.estadoName : 'Desconocido',  // Manejo de posibles valores indefinidos
+          }));
+      
+          usuariosConRolesYEstados.sort((a, b) => a.id - b.id);
+          setData(usuariosConRolesYEstados);
         } catch (error) {
-            console.error('Error fetching user data:', error);
-            toast.error('Error al cargar los datos de usuarios', {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+          console.error('Error fetching user data:', error);
+          toast.error('Error al cargar los datos de usuarios', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
         setLoading(false);
-    };
-
+        console.timeEnd('fetchData');
+      };      
+      
     useEffect(() => {
         fetchData();
     }, []);
