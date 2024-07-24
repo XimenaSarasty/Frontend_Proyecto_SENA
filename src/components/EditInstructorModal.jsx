@@ -8,12 +8,11 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
     const [loading, setLoading] = useState(false);
     const [estados, setEstados] = useState([]);
     const [formErrors, setFormErrors] = useState({});
-    const [usuario, setUsuario] = useState([]);
     const [formData, setFormData] = useState({
         nombre: '',
         correo: '',
+        celular: '',
         EstadoId: '',
-        UsuarioId: '',
     });
 
     useEffect(() => {
@@ -23,40 +22,28 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
     }, [isOpen, instructor]);
 
     useEffect(() => {
-
-        const fetchusuario = async () => {
-        try {
-            const response = await api.get('/usuarios');
-            setUsuario(response.data);
-        } catch (error) {
-            showToastError('Error al cargar usuario');
-        }
-        };
-
-    const fetchEstados = async () => {
-        try {
-            const response = await api.get('/Estado');
-            setEstados(response.data);
-        } catch (error) {
-            toast.error('Error al cargar los estados', { position: 'top-right' });
-        }
-    };
-    
-    fetchusuario();
-    fetchEstados();
-}, []);
+        const fetchEstados = async () => {
+            try {
+                const response = await api.get('/Estado');
+                setEstados(response.data);
+            } catch (error) {
+                toast.error('Error al cargar los estados', { position: 'top-right' });
+            }
+        };        
+        fetchEstados();
+    }, []);
 
     const fetchInstructorDetails = async (instructorId) => {
         setLoading(true);
         try {
             const response = await api.get(`/Instructor/${instructorId}`);
             if (response.status === 200) {
-                const { nombre, correo, EstadoId, UsuarioId } = response.data;
+                const { nombre, correo, celular, EstadoId } = response.data;
                 setFormData({
                     nombre: nombre || '',
                     correo: correo || '',
+                    celular: celular ||'',
                     EstadoId: EstadoId || '',
-                    UsuarioId: UsuarioId || '',
                 });
                 setLoading(false);
             } else {
@@ -102,9 +89,9 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
     };
 
     const handleUpdateInstructor = async () => {
-        const { nombre, correo, EstadoId, UsuarioId } = formData;
+        const { nombre, correo, celular, EstadoId } = formData;
     
-        if (!nombre || !correo || !EstadoId || !UsuarioId) {
+        if (!nombre || !correo || !celular || !EstadoId ) {
             toast.error('Todos los campos son obligatorios.', { position: 'top-right' });
             return;
         }
@@ -141,7 +128,6 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
             setLoading(false);
         }
     };
-    
         
     return (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-fondo bg-opacity-50'>
@@ -153,9 +139,9 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
                 </div>
                 <div className='flex items-center justify-center space-y-4 md:space-y-0 mb-4'>
                     <div className='w-full md:w-3/4'>
-                        {loading ? (
+                        {/* {loading ? (
                             <p>Cargando información...</p>
-                        ) : (
+                        ) : ( */}
                             <div className='font-inter ml-2'>
                                 <div className='space-y-2 md:space-y-2 text-left'>
                                     <h6 className='font-bold text-center text-2xl mb-2'>Editar Instructor</h6>
@@ -190,19 +176,21 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
                                     </div>
 
                                     <div className='flex flex-col'>
-                                        <label className='mb-1 font-bold text-sm'>Usuario *</label>
-                                            <select
-                                                className='bg-grisClaro text-sm rounded-lg px-2 h-8'
-                                                name="UsuarioId"
-                                                value={formData.UsuarioId}
-                                                onChange={handleInputChangeInstructor}
-                                        >
-                                                <option value=''>Seleccionar Usuario</option>
-                                                {usuario.map((usuario) => (
-                                                <option key={usuario.id} value={usuario.id}>{usuario.nombre}</option>
-                                                ))}
-                                            </select>
-                                        </div>
+                                        <label className='mb-1 font-bold text-sm'>Telefono *</label>
+                                        <input
+                                            className='bg-grisClaro text-sm rounded-lg px-2 h-8'
+                                            type='text'
+                                            name="celular"
+                                            value={formData.celular}
+                                            onChange={handleInputChangeInstructor}
+                                            onKeyPress={(e) => {
+                                              if (!/[0-9]/.test(e.key)) {
+                                                e.preventDefault();
+                                              }
+                                            }}
+                                            maxLength={10}
+                                        />
+                                    </div>
 
                                     <div className='flex flex-col'>
                                         <label className='mb-1 font-bold text-sm'>Estado *</label>
@@ -226,7 +214,7 @@ const EditinstructorModal = ({ isOpen, onClose, instructor }) => {
                                     </div>
                                 </div>
                             </div>
-                        )}
+                        {/* )} */}
                     </div>
                 </div>
                 <div className='sm:w-full md:w-full flex flex-col justify-end'>

@@ -5,6 +5,7 @@ import { FaUserLarge } from 'react-icons/fa6';
 import { IoBarChartSharp } from 'react-icons/io5';
 import { PiChalkboardTeacher } from 'react-icons/pi';
 import { TbCategory } from 'react-icons/tb';
+import { MdOutlineCategory } from "react-icons/md";
 import { SiGoogleclassroom } from "react-icons/si";
 import { motion } from 'framer-motion';
 import fondo from '/logoSena.png';
@@ -50,12 +51,6 @@ const Sidebar = ({ sidebarToggle }) => {
             Roles
           </a>
         </li>
-        {/* <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
-          <a href='/categorias' className='px-3'>
-            <TbCategory className='inline-block w-6 h-6 mr-2 -mt-2'></TbCategory>
-            Categorias
-          </a>
-        </li> */}
         <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
           <a href='/instructores' className='px-3'>
             <PiChalkboardTeacher className='inline-block w-6 h-6 mr-2 -mt-2'></PiChalkboardTeacher>
@@ -66,6 +61,18 @@ const Sidebar = ({ sidebarToggle }) => {
           <a href='/fichas' className='px-3'>
           <SiGoogleclassroom className='inline-block w-6 h-6 mr-2 -mt-2'></SiGoogleclassroom>
             Fichas
+          </a>
+        </li>
+        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
+          <a href='/categorias' className='px-3'>
+            <TbCategory className='inline-block w-6 h-6 mr-2 -mt-2'></TbCategory>
+            Categorias
+          </a>
+        </li>
+        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
+          <a href='/subcategorias' className='px-3'>
+            <MdOutlineCategory className='inline-block w-6 h-6 mr-2 -mt-2'></MdOutlineCategory>
+            Subcategorias
           </a>
         </li>
         <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>

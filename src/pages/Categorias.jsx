@@ -5,6 +5,7 @@ import Dashboard from '../components/Dashboard';
 import MUIDataTable from "mui-datatables";
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
+import clsx from 'clsx';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import AddCategModal from '../components/AddCategModal';
@@ -12,27 +13,60 @@ import EditCategModal from '../components/EditCategModal';
 
 const Categorias = () => {
     const [sidebarToggle, setSidebarToggle] = useState(false);
-    const [data, setData] = useState([]);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-    const [selectedRol, setSelectedRol] = useState(null);
+    const [selectedCategoria, setSelectedCategoria] = useState(null);
     const [isOpenAddModal, setIsOpenAddModal] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [roles, setRoles] = useState([]);
+    const [data, setData] = useState([]);
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+          const response = await api.get('/categorias', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+
+          const categoriasConEstados = response.data.map(categoria => ({
+            ...categoria,
+           estadoName: categoria.Estado ? categoria.Estado.estadoName : 'Desconocido',
+          }));
+
+          categoriasConEstados.sort((a, b) => a.id - b.id);
+          setData(categoriasConEstados);
+
+        } catch (error) {
+            console.error('Error fetching categoria data:', error);
+        }
+        setLoading(false);
+    };
 
     useEffect(() => {
-        const fetchRoles = async () => {
-            setLoading(true); 
-            try {
-                const response = await api.get('/roles');
-                setRoles(response.data);
-            } catch (error) {
-                console.error('Error al cargar roles:', error); 
-            }
-            setLoading(false); 
-        };
-    
-        fetchRoles();
+        fetchData();
     }, []);
+
+    const handleEditClick = (rowIndex) => {
+        const categoria = data[rowIndex];
+        setSelectedCategoria(categoria);
+        setIsOpenEditModal(true);
+    };
+
+    const handleCloseAddModalCategorias = (newCategoria) => {
+        if (newCategoria) {
+            fetchData(); 
+        }
+        setSelectedCategoria(null);
+        setIsOpenAddModal(false);
+    };
+
+    const handleCloseEditModalCategorias = (updateCategoria) => {
+        if (updateCategoria) {
+            fetchData(); 
+        }
+        setSelectedCategoria(null);
+        setIsOpenEditModal(false);
+    };
 
     const columns = [
         {
@@ -45,11 +79,25 @@ const Categorias = () => {
             },
         },
         {
-            name: 'rolName',
+            name: 'categoriaName',
             label: 'Categoria',
             options: {
                 customBodyRender: (value) => (
                     <div className="text-center">{value}</div>
+                ),
+            },
+        },
+        {
+            name: 'estadoName',
+            label: 'Estado',
+            options: {
+                customBodyRender: (value) => (
+                    <div className={clsx('text-center', {
+                        'text-green-500': value === 'ACTIVO',
+                        'text-red-500': value === 'INACTIVO',
+                    })}>
+                        {value}
+                    </div>
                 ),
             },
         },
@@ -86,24 +134,6 @@ const Categorias = () => {
         saveAs(data, 'Categorias.xlsx');
     };
 
-    const handleEditClick = (rowIndex) => {
-        const rol = roles[rowIndex];
-        setSelectedRol(rol);
-        setIsOpenEditModal(true);
-    };
-
-    const handleNewRolData = (newRol) => {
-        setData([...data, newRol]);
-    };
-
-    const handleCloseAddModal = () => {
-        setIsOpenAddModal(false);
-    };
-
-    const handleCloseEditModal = () => {
-        setIsOpenEditModal(false);
-    };
-
     return (
         <div className="flex min-h-screen">
             <Sidebar sidebarToggle={sidebarToggle} />
@@ -122,7 +152,7 @@ const Categorias = () => {
                         ) : (
                             <MUIDataTable
                                 title={"Categorias"}
-                                data={roles}
+                                data={data}
                                 columns={columns}
                                 options={{
                                     responsive: "standard",
@@ -178,17 +208,16 @@ const Categorias = () => {
                     </div>
                 </div>
             </div>
-            {selectedRol && (
+            {selectedCategoria && (
                 <EditCategModal
                     isOpen={isOpenEditModal}
-                    onClose={handleCloseEditModal}
-                    rol={selectedRol}
+                    onClose={handleCloseEditModalCategorias}
+                    categoria={selectedCategoria}
                 />
             )}
             <AddCategModal
                 isOpen={isOpenAddModal}
-                onClose={handleCloseAddModal}
-                onNewRolData={handleNewRolData}
+                onClose={handleCloseAddModalCategorias}                
             />
         </div>
     );

@@ -12,6 +12,7 @@ import Categorias from './pages/Categorias.jsx';
 import Instructores from './pages/Instructores.jsx';
 import Fichas from './pages/Fichas.jsx';
 import ImportExcel from './pages/ImportExcel.jsx';
+import Subcategorias from './pages/Subcategorias.jsx';
 
 
 function App() {
@@ -25,7 +26,8 @@ function App() {
           <Route path='/contras_3' element={<Contra_3 />} />
           <Route path='/usuarios' element={<Usuarios />} /> 
           <Route path='/roles' element={<Roles />} /> 
-          <Route path='/categorias' element={<Categorias />} /> 
+          <Route path='/categorias' element={<Categorias />} />
+          <Route path='/subcategorias' element={<Subcategorias />} />
           <Route path='/instructores' element={<Instructores/>}/>
           <Route path='/fichas' element={<Fichas/>}/> 
           <Route path='/excel' element={<ImportExcel/>}/> 

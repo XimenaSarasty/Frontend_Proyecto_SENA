@@ -185,7 +185,7 @@ const Fichas = () => {
                     <button className='btn-primary' onClick={handleOpenAddModal}>Agregar Ficha</button>
                 </div>
                 <div className="flex-grow flex items-center justify-center">
-                    <div className="w-full max-w-7xl overflow-auto">
+                    <div className="max-w-4xl mx-auto">
                         {loading ? (
                             <div className="text-center">Cargando Fichas...</div>
                         ) : (
