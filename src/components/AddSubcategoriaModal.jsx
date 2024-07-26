@@ -4,17 +4,14 @@ import { FaTimes } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddUserModal = ({ isOpen, onClose, user }) => {
-  const [roles, setRoles] = useState([]);
-  const [estados, setEstados] = useState([]);
+const AddSubcategoriaModal = ({ isOpen, onClose }) => {
+  const [categorias, setCategorias] = useState([]);
   const [formErrors, setFormErrors] = useState({});
   const [loading, setLoading] = useState(true);
+  const [estados, setEstados] = useState([]);
   const [formData, setFormData] = useState({
-    nombre: "",
-    Documento: "",
-    correo: "",
-    password: "",
-    RolId: "",
+    subcategoriaName: "",
+    CategoriaId: "",
     EstadoId: "",
   });
 
@@ -25,59 +22,36 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (user) {
-      setFormData({
-        nombre: user.nombre || "",
-        Documento: user.Documento || "",
-        correo: user.correo || "",
-        password: user.password || "",
-        RolId: user.RolId || "",
-        EstadoId: user.EstadoId || "",
-      });
-    }
-  }, [user]);
-
-  useEffect(() => {
-    const fetchRoles = async () => {
+    const fetchcategorias = async () => {
       try {
-        const response = await api.get("/roles");
-        setRoles(response.data);
+        const response = await api.get("/categorias");
+        setCategorias(response.data);
       } catch (error) {
-        showToastError("Error al cargar roles");
+        showToastError("Error al cargar categorias");
       }
     };
+    fetchcategorias();
+  }, []);
 
-    const fetchStates = async () => {
+  useEffect(() => {
+    const fetchEstados = async () => {
       try {
         const response = await api.get("/Estado");
         setEstados(response.data);
       } catch (error) {
-        showToastError("Error al cargar los estados");
+        toast.error("Error al cargar los estados", { position: "top-right" });
       }
     };
-
-    fetchRoles();
-    fetchStates();
+    fetchEstados();
   }, []);
 
   const validateInput = (name, value) => {
     let errorMessage = "";
-    if (name === "nombre") {
+    if (name === "subcategoriaName") {
       const nameRegex = /^[A-Za-z\s-_\u00C0-\u017F]+$/;
       if (!nameRegex.test(value) || /\d/.test(value)) {
-        errorMessage = "El nombre no puede contener caracteres especiales.";
-      }
-    } else if (name === "correo") {
-      const correoRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!correoRegex.test(value)) {
-        errorMessage = "El correo debe ser un correo válido.";
-      }
-    } else if (name === "password") {
-      const passwordRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?])[a-zA-Z0-9!@#$%^&*?]{8,}$/;
-      if (!passwordRegex.test(value)) {
         errorMessage =
-          "La contraseña debe contener una mayúscula, una minúscula, un carácter especial, y entre 8 a 20 caracteres.";
+          "El subcategoria no puede contener caracteres especiales.";
       }
     }
     return errorMessage;
@@ -93,7 +67,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value.toUpperCase(),
     }));
   };
 
@@ -108,36 +82,30 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
       progress: undefined,
     });
   };
-
   const resetForm = () => {
     setFormData({
-      nombre: "",
-      Documento: "",
-      correo: "",
-      password: "",
-      RolId: "",
+      subcategoriaName: "",
+      CategoriaId: "",
       EstadoId: "",
     });
   };
 
-
   const handleCreate = async () => {
-    const { nombre, correo, password, Documento, RolId, EstadoId } = formData;
-    const nombreError = validateInput("nombre", nombre);
-    const correoError = validateInput("correo", correo);
-    const passwordError = validateInput("password", password);
+    const { subcategoriaName, CategoriaId, EstadoId } = formData;
+    const subcategoriaNameError = validateInput(
+      "subcategoriaName",
+      subcategoriaName
+    );
 
-    if (nombreError || correoError || passwordError) {
+    if (subcategoriaNameError) {
       setFormErrors({
-        nombre: nombreError,
-        correo: correoError,
-        password: passwordError,
+        subcategoriaName: subcategoriaNameError,
       });
       showToastError("Por favor, corrige los errores antes de agregar.");
       return;
     }
 
-    if (!nombre || !Documento || !correo || !password || !RolId || !EstadoId) {
+    if (!subcategoriaName || !CategoriaId || !EstadoId) {
       showToastError("Todos los campos son obligatorios.");
       return;
     }
@@ -148,14 +116,14 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
         /(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/,
         "$1"
       );
-      const response = await api.post("/usuarios", formData, {
+      const response = await api.post("/subcategoria", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.status === 201) {
-        toast.success("Usuario agregado exitosamente", {
+        toast.success("Subcategoria agregada exitosamente", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -167,14 +135,10 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
         resetForm();
         setTimeout(() => {}, 2000);
       } else {
-        showToastError(
-          "Ocurrió un error!, por favor intenta con un documento o correo diferente."
-        );
+        showToastError("Ocurrió un error!, por favor intenta con otro nombre.");
       }
     } catch (error) {
-      showToastError(
-        "Ocurrió un error!, por favor intenta con un documento o correo diferente."
-      );
+      showToastError("Ocurrió un error!, por favor intenta con otro nombre.");
     } finally {
       setLoading(false);
     }
@@ -197,18 +161,18 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
             <div className="font-inter ml-2">
               <div className="space-y-2 md:space-y-2 text-left">
                 <h6 className="font-bold text-center text-2xl mb-2">
-                  Registro Usuario
+                  Registro Subcategoria
                 </h6>
 
                 <div className="flex flex-col">
                   <label className="mb-1 font-bold text-sm">
-                    Nombres y Apellidos *
+                    Subcategoria *
                   </label>
                   <input
                     className="bg-grisClaro text-sm rounded-lg px-2 h-8"
                     type="text"
-                    name="nombre"
-                    value={formData.nombre}
+                    name="subcategoriaName"
+                    value={formData.subcategoriaName}
                     onChange={handleInputChange}
                     onKeyPress={(e) => {
                       if (/\d/.test(e.key)) {
@@ -216,74 +180,25 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
                       }
                     }}
                   />
-                  {formErrors.nombre && (
+                  {formErrors.subcategoriaName && (
                     <div className="text-red-400 text-sm mt-1 px-2">
-                      {formErrors.nombre}
+                      {formErrors.subcategoriaName}
                     </div>
                   )}
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Documento *</label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                    type="text"
-                    name="Documento"
-                    value={formData.Documento}
-                    onChange={handleInputChange}
-                    onKeyPress={(e) => {
-                      if (!/[0-9]/.test(e.key)) {
-                        e.preventDefault();
-                      }
-                    }}
-                    maxLength={10}
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Correo *</label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                    type="text"
-                    name="correo"
-                    value={formData.correo}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.correo && (
-                    <div className="text-red-400 text-sm mt-1 px-2">
-                      {formErrors.correo}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Contraseña *</label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.password && (
-                    <div className="text-red-400 text-sm mt-1 px-2">
-                      {formErrors.password}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Rol *</label>
+                  <label className="mb-1 font-bold text-sm">Categoria *</label>
                   <select
                     className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                    name="RolId"
-                    value={formData.RolId}
+                    name="CategoriaId"
+                    value={formData.CategoriaId}
                     onChange={handleInputChange}
                   >
-                    <option value="">Seleccione un rol</option>
-                    {roles.map((rol) => (
-                      <option key={rol.id} value={rol.id}>
-                        {rol.rolName}
+                    <option value="">Seleccionar Categoria</option>
+                    {categorias.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.categoriaName}
                       </option>
                     ))}
                   </select>
@@ -316,18 +231,15 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
                     ))}
                   </select>
                 </div>
-                <div className="sm:w-full md:w-full flex flex-col justify-end">
-                  <div className="flex justify-center mt-4 mb-4 mx-2">
-                    <button className="btn-danger2 mx-2" onClick={onClose}>
-                      Cancelar
-                    </button>
-                    <button
-                      className="btn-primary2 mx-2"
-                      onClick={handleCreate}
-                    >
-                      Agregar
-                    </button>
-                  </div>
+              </div>
+              <div className="sm:w-full md:w-full flex flex-col justify-end">
+                <div className="flex justify-center mt-4 mb-4 mx-2">
+                  <button className="btn-danger2 mx-2" onClick={onClose}>
+                    Cancelar
+                  </button>
+                  <button className="btn-primary2 mx-2" onClick={handleCreate}>
+                    Agregar
+                  </button>
                 </div>
               </div>
             </div>
@@ -339,4 +251,4 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
   );
 };
 
-export default AddUserModal;
+export default AddSubcategoriaModal;

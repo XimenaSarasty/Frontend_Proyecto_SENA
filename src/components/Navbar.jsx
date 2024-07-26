@@ -1,44 +1,39 @@
-import React, { useState } from 'react';
-import { FaBars, FaSearch, FaBell, FaUserCircle } from 'react-icons/fa';
-import ModalCsesion from './ModalCsesion';
-import ModalPerfil from './ModalPerfil';
-import ConfirmLogoutModal from './ConfirmLogoutModal';
-import ModalNotificaciones from './ModalNotificaciones'; // Importar el modal de notificaciones
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import { api } from '../api/token';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { FaBars, FaSearch, FaBell, FaUserCircle } from "react-icons/fa";
+import ModalCsesion from "./ModalCsesion";
+import ModalPerfil from "./ModalPerfil";
+import ConfirmLogoutModal from "./ConfirmLogoutModal";
+import ModalNotificaciones from "./ModalNotificaciones";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { api } from "../api/token";
 
 const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
   const { signout } = useAuth();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalPerfilOpen, setIsModalPerfilOpen] = useState(false);
-  const [showConfirmLogout, setShowConfirmLogout] = useState(false); 
-  const [isNotificacionesOpen, setIsNotificacionesOpen] = useState(false); // Estado del modal de notificaciones
+  const [showConfirmLogout, setShowConfirmLogout] = useState(false);
+  const [isNotificacionesOpen, setIsNotificacionesOpen] = useState(false);
 
-  const notifications = [
-    "Notificación 1",
-    "Notificación 2",
-    "Notificación 3"
-  ]; // Ejemplo de notificaciones
+  const notifications = ["Notificación 1", "Notificación 2", "Notificación 3"];
 
   const handleLogout = () => {
     setShowConfirmLogout(true);
   };
 
   const confirmLogout = async () => {
-    const Documento = 'Documento';
-    const password = 'password';
+    const Documento = "Documento";
+    const password = "password";
 
     const body = { Documento, password };
-    const response = await api.post('/logout', body);
+    const response = await api.post("/logout", body);
     if (response.data) {
       signout();
-      Cookies.remove('token');
-      navigate('/');
-      setShowConfirmLogout(false); 
+      Cookies.remove("token");
+      navigate("/");
+      setShowConfirmLogout(false);
     }
   };
 
@@ -50,71 +45,88 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
   const handleCloseModals = () => {
     setIsModalOpen(false);
     setIsModalPerfilOpen(false);
-    setShowConfirmLogout(false); 
-    setIsNotificacionesOpen(false); // Cerrar el modal de notificaciones
+    setShowConfirmLogout(false);
+    setIsNotificacionesOpen(false);
   };
 
   return (
     <nav
       className={`bg-gray-200 shadow px-4 py-3 flex justify-between items-center fixed top-0 left-0 z-50 w-full transition-all duration-300`}
-      style={{ marginLeft: sidebarToggle ? '16rem' : '0', width: sidebarToggle ? 'calc(100% - 16rem)' : '100%' }}
+      style={{
+        marginLeft: sidebarToggle ? "16rem" : "0",
+        width: sidebarToggle ? "calc(100% - 16rem)" : "100%",
+      }}
     >
-      <div className='flex items-center text-xl'>
+      <div className="flex items-center text-xl">
         <FaBars
-          className='text-black mr-4 cursor-pointer'
+          className="text-black mr-4 cursor-pointer"
           onClick={() => setSidebarToggle(!sidebarToggle)}
         />
-        <span className='text-black font-semibold hidden md:inline'>
-          Bienvenido al inventario{' '}
+        <span className="text-black font-semibold hidden md:inline">
+          Bienvenido al inventario{" "}
         </span>
-        <span className='text-sena font-semibold mt-6 hidden md:inline'>
+        <span className="text-sena font-semibold mt-6 hidden md:inline">
           Mobiliario
         </span>
       </div>
-      <div className='flex justify-end w-full max-w-full'>
-        <div className='flex items-center gap-x-5'>
-          <div className='relative items-center md:w-65'>
-            <span className='relative md:absolute inside-y-0 left-0 flex items-center pl-40'>
-              <button className='p-2 focus:outline-none text-white md:text-black'>
+      <div className="flex justify-end w-full max-w-full">
+        <div className="flex items-center gap-x-5">
+          <div className="relative items-center md:w-65">
+            <span className="relative md:absolute inside-y-0 left-0 flex items-center pl-40">
+              <button className="p-2 focus:outline-none text-white md:text-black">
                 <FaSearch />
               </button>
             </span>
             <input
-              type='text'
-              placeholder='Buscar aquí'
-              className='w-full px-4 py-1 pl-22 rounded-lg shadow outline-none hidden md:block bg-gray-100'
+              type="text"
+              placeholder="Buscar aquí"
+              className="w-full px-4 py-1 pl-22 rounded-lg shadow outline-none hidden md:block bg-gray-100"
             />
           </div>
-          <div className='text-white'>
-            <FaBell className='w-6 h-6 text-black cursor-pointer' onClick={() => setIsNotificacionesOpen(true)} />
+          <div className="text-white">
+            <FaBell
+              className="w-6 h-6 text-black cursor-pointer"
+              onClick={() => setIsNotificacionesOpen(true)}
+            />
           </div>
           <div>
-            <button className='text-white group' onClick={() => setIsModalOpen(true)}>
-              <FaUserCircle className='text-black w-6 h-6 mt-1' />
+            <button
+              className="text-white group"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <FaUserCircle className="text-black w-6 h-6 mt-1" />
             </button>
           </div>
         </div>
       </div>
       <ModalCsesion isOpen={isModalOpen} onClose={handleCloseModals}>
-        <ul className='font-inter text-sm text-black font-bold'>
+        <ul className="font-inter text-sm text-black font-bold">
           <li>
-            <div className='bg-gray-100 text-center rounded-lg my-2' onClick={handleOpenModalPerfil}>
-              <span className='cursor-pointer block w-full text-center'>Editar perfil</span>
+            <div
+              className="bg-gray-100 text-center rounded-lg my-2"
+              onClick={handleOpenModalPerfil}
+            >
+              <span className="cursor-pointer block w-full text-center">
+                Editar perfil
+              </span>
             </div>
           </li>
           <li>
-            <div className='bg-gray-100 text-center rounded-lg my-4'>
-              <a href=''>Ayuda</a>
+            <div className="bg-gray-100 text-center rounded-lg my-4">
+              <a href="">Ayuda</a>
             </div>
           </li>
           <li>
-            <div className='bg-gray-100 text-center rounded-lg my-4'>
-              <a href=''>Configuración</a>
+            <div className="bg-gray-100 text-center rounded-lg my-4">
+              <a href="">Configuración</a>
             </div>
           </li>
           <li>
-            <div className='bg-gray-100 text-center rounded-lg my-4'>
-              <span onClick={handleLogout} className='cursor-pointer block w-full text-center'>
+            <div className="bg-gray-100 text-center rounded-lg my-4">
+              <span
+                onClick={handleLogout}
+                className="cursor-pointer block w-full text-center"
+              >
                 Cerrar Sesión
               </span>
             </div>
@@ -127,7 +139,11 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
         onClose={() => setShowConfirmLogout(false)}
         onConfirm={confirmLogout}
       />
-      <ModalNotificaciones isOpen={isNotificacionesOpen} onClose={handleCloseModals} notifications={notifications} />
+      <ModalNotificaciones
+        isOpen={isNotificacionesOpen}
+        onClose={handleCloseModals}
+        notifications={notifications}
+      />
     </nav>
   );
 };

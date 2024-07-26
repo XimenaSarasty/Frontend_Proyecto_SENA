@@ -1,47 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { api } from "../api/token";
-import { saveAs } from "file-saver";
-import { toast } from "react-toastify";
 import Sidebar from "../components/Sidebar";
 import Dashboard from "../components/Dashboard";
 import MUIDataTable from "mui-datatables";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
-import EditUserModal from "../components/EditUserModal";
-import AddUserModal from "../components/AddUserModal";
 import clsx from "clsx";
 import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AddSubcategoriaModal from "../components/AddSubcategoriaModal";
+import EditSubcategoriaModal from "../components/EditSubcategoriaModal";
 
-const Usuarios = () => {
+const Subcategorias = () => {
   const [sidebarToggle, setSidebarToggle] = useState(false);
   const [data, setData] = useState([]);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedSubcategoria, setSelectedSubcategoria] = useState(null);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
-    // console.time('fetchData');
     setLoading(true);
     try {
-      const response = await api.get("/usuarios", {
+      const response = await api.get("/subcategoria", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
-      const usuariosConRolesYEstados = response.data.map((usuario) => ({
-        ...usuario,
-        rolName: usuario.Rol ? usuario.Rol.rolName : "Desconocido",
-        estadoName: usuario.Estado ? usuario.Estado.estadoName : "Desconocido",
+      const subcategoriaConCategoriayEstado = response.data.map((subca) => ({
+        ...subca,
+        categoriaName: subca.Categorium
+          ? subca.Categorium.categoriaName
+          : "Desconocido",
+        estadoName: subca.Estado ? subca.Estado.estadoName : "Desconocido",
       }));
 
-      usuariosConRolesYEstados.sort((a, b) => a.id - b.id);
-      setData(usuariosConRolesYEstados);
+      subcategoriaConCategoriayEstado.sort((a, b) => a.id - b.id);
+      setData(subcategoriaConCategoriayEstado);
     } catch (error) {
-      console.error("Error fetching user data:", error);
-      toast.error("Error al cargar los datos de usuarios", {
+      console.error("Error fetching subcategoria data:", error);
+      toast.error("Error al cargar los datos de la  subcategoria", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -52,7 +53,6 @@ const Usuarios = () => {
       });
     }
     setLoading(false);
-    // console.timeEnd('fetchData');
   };
 
   useEffect(() => {
@@ -60,28 +60,25 @@ const Usuarios = () => {
   }, []);
 
   const handleEditClick = (rowIndex) => {
-    const user = data[rowIndex];
-    setSelectedUser(user);
+    const subcategoria = data[rowIndex];
+    setSelectedSubcategoria(subcategoria);
     setIsOpenEditModal(true);
   };
 
-  const handleCloseEditModal = (updatedUser) => {
-    if (updatedUser) {
+  const handleCloseAddModal = (newSubcategoria) => {
+    if (newSubcategoria) {
       fetchData();
     }
-    setIsOpenEditModal(false);
-    setSelectedUser(null);
-  };
-
-  const handleOpenAddModal = () => {
-    setIsOpenAddModal(true);
-  };
-
-  const handleCloseAddModal = (newUser) => {
-    if (newUser) {
-      fetchData();
-    }
+    setSelectedSubcategoria(null);
     setIsOpenAddModal(false);
+  };
+
+  const handleCloseEditModal = (updatedSubcategoria) => {
+    if (updatedSubcategoria) {
+      fetchData();
+    }
+    setSelectedSubcategoria(null);
+    setIsOpenEditModal(false);
   };
 
   const columns = [
@@ -93,29 +90,15 @@ const Usuarios = () => {
       },
     },
     {
-      name: "Documento",
-      label: "Documento",
+      name: "subcategoriaName",
+      label: "SUBCATEGORIA",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
-      name: "nombre",
-      label: "Nombre",
-      options: {
-        customBodyRender: (value) => <div className="text-center">{value}</div>,
-      },
-    },
-    {
-      name: "correo",
-      label: "Correo",
-      options: {
-        customBodyRender: (value) => <div className="text-center">{value}</div>,
-      },
-    },
-    {
-      name: "rolName",
-      label: "Rol",
+      name: "categoriaName",
+      label: "CATEGORIA",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
@@ -159,19 +142,19 @@ const Usuarios = () => {
   const handleCustomExport = (rows) => {
     const exportData = rows.map((row) => ({
       id: row.data[0],
-      Nombre: row.data[2],
-      Correo: row.data[3],
+      Subcategoria: row.data[1],
+      Categoria: row.data[2],
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Usuarios");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Subcategoria");
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
     const data = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(data, "Usuarios.xlsx");
+    saveAs(data, "Subcategoria.xlsx");
   };
 
   return (
@@ -187,17 +170,20 @@ const Usuarios = () => {
           setSidebarToggle={setSidebarToggle}
         />
         <div className="flex justify-end mt-2">
-          <button className="btn-primary" onClick={handleOpenAddModal}>
-            Agregar Usuario
+          <button
+            className="btn-primary"
+            onClick={() => setIsOpenAddModal(true)}
+          >
+            Agregar Subcategoria
           </button>
         </div>
         <div className="flex-grow flex items-center justify-center">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             {loading ? (
-              <div className="text-center">Cargando usuarios...</div>
+              <div className="text-center">Cargando Subcategoria...</div>
             ) : (
               <MUIDataTable
-                title={<span className="custom-title">USUARIOS</span>} 
+                title={<span className="custom-title">SUBCATEGORIAS</span>} 
                 data={data}
                 columns={columns}
                 options={{
@@ -254,16 +240,19 @@ const Usuarios = () => {
           </div>
         </div>
       </div>
-      {selectedUser && (
-        <EditUserModal
+      {selectedSubcategoria && (
+        <EditSubcategoriaModal
           isOpen={isOpenEditModal}
           onClose={handleCloseEditModal}
-          user={selectedUser}
+          subcategoria={selectedSubcategoria}
         />
       )}
-      <AddUserModal isOpen={isOpenAddModal} onClose={handleCloseAddModal} />
+      <AddSubcategoriaModal
+        isOpen={isOpenAddModal}
+        onClose={handleCloseAddModal}
+      />
     </div>
   );
 };
 
-export default Usuarios;
+export default Subcategorias;

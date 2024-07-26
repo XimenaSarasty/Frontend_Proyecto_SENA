@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const ConfirmLogoutModal = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
@@ -6,7 +6,9 @@ const ConfirmLogoutModal = ({ isOpen, onClose, onConfirm }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg p-6 w-80">
-        <h2 className="text-lg font-semibold mb-4">Confirmar Cierre de Sesión</h2>
+        <h2 className="text-lg font-semibold mb-4">
+          Confirmar Cierre de Sesión
+        </h2>
         <p className="mb-4">¿Seguro quieres cerrar la sesión?</p>
         <div className="flex justify-end">
           <button

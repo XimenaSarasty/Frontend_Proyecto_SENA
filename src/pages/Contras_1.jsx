@@ -1,42 +1,42 @@
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import fondo from '/logoSena.png';
-import { api } from '../api/token';
-import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import fondo from "/logoSena.png";
+import { api } from "../api/token";
+import Cookies from "js-cookie";
 
 const Contras_1 = () => {
   const navigate = useNavigate();
-  const [correo, setCorreo] = useState('');
+  const [correo, setCorreo] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const mensajeExito = () => {
-    toast.success('¡Código de recuperación enviado!', {
-      position: 'top-right',
-      autoClose: 2500,
+    toast.success("¡Código de recuperación enviado!", {
+      position: "top-right",
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: 'light',
+      theme: "light",
     });
-    setTimeout(() => navigate('/contras_2'), 3000);
+    setTimeout(() => navigate("/contras_2"), 2000);
   };
 
   const mensajeError = (mensaje) => {
     toast.error(mensaje, {
-      position: 'top-right',
-      autoClose: 2500,
+      position: "top-right",
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: 'light'
+      theme: "light",
     });
   };
 
@@ -44,23 +44,23 @@ const Contras_1 = () => {
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
       setIsLoading(true);
       try {
-        const response = await api.post('/crear-codigo', { correo });
+        const response = await api.post("/crear-codigo", { correo });
         if (response.status === 200) {
-          Cookies.set('recuperacion', response.data.recuperacion);
-          Cookies.set('correo', correo);
+          Cookies.set("recuperacion", response.data.recuperacion);
+          Cookies.set("correo", correo);
           mensajeExito();
         }
       } catch (error) {
         if (error.response && error.response.data.message) {
           mensajeError(error.response.data.message);
         } else {
-          mensajeError('Error al enviar el correo');
+          mensajeError("Error al enviar el correo");
         }
       } finally {
         setIsLoading(false);
       }
     } else {
-      mensajeError('¡Tienes que usar un correo válido!');
+      mensajeError("¡Tienes que usar un correo válido!");
     }
   };
 
@@ -69,40 +69,59 @@ const Contras_1 = () => {
   };
 
   return (
-    <div className='pagina flex flex-col md:flex-row h-screen bg-fondo'>
-      <div className='w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path md:clip-polygon h-full md:h-auto'>
-        <div className='main w-3/4 md:w-1/2 text-center text-lg'>
-          <div className='letras font-inter mb-10 md:mb-8'>
-            <h3 className='text-white font-normal text-3xl md:text-4xl mt-2'>¿Has olvidado</h3>
-            <h3 className='text-white font-normal text-3xl md:text-4xl md:mt-2'>tu contraseña?</h3>              
+    <div className="pagina flex flex-col md:flex-row h-screen bg-fondo">
+      <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path md:clip-polygon h-full md:h-auto">
+        <div className="main w-3/4 md:w-1/2 text-center text-lg">
+          <div className="letras font-inter mb-10 md:mb-8">
+            <h3 className="text-white font-normal text-3xl md:text-4xl mt-2">
+              ¿Has olvidado
+            </h3>
+            <h3 className="text-white font-normal text-3xl md:text-4xl md:mt-2">
+              tu contraseña?
+            </h3>
           </div>
-          <div className='space-y-6 text-center mb-16 mt-8'>
-              <h1 className='text-white font-normal text-xl md:text-2xl lg:text-2xl mt-2 md:mt-4'>Escriba su correo electrónico para recibir un código de
-               confirmación para establecer una nueva contraseña.</h1>
+          <div className="space-y-6 text-center mb-16 mt-8">
+            <h1 className="text-white font-normal text-xl md:text-2xl lg:text-2xl mt-2 md:mt-4">
+              Escriba su correo electrónico para recibir un código de
+              confirmación para establecer una nueva contraseña.
+            </h1>
           </div>
-          <div className='space-y-6 text-left'>
-            <div className='input w-full mb-4 relative'>
-              <label className='text-sm text-white block mb-1'>Correo electrónico</label>
-              <div className='flex items-center border-b-2 border-white'>
+          <div className="space-y-6 text-left">
+            <div className="input w-full mb-4 relative">
+              <label className="text-sm text-white block mb-1">
+                Correo electrónico
+              </label>
+              <div className="flex items-center border-b-2 border-white">
                 <input
-                  type='text'
-                  className='flex-1 p-2 bg-transparent text-white focus:outline-none pr-10'
+                  type="text"
+                  className="flex-1 p-2 bg-transparent text-white focus:outline-none pr-10"
                   value={correo}
                   onChange={handleEmailChange}
                   disabled={isLoading}
                 />
-                <FontAwesomeIcon icon={faEnvelope} className='absolute right-2 text-white ml-2'/>
+                <FontAwesomeIcon
+                  icon={faEnvelope}
+                  className="absolute right-2 text-white ml-2"
+                />
               </div>
             </div>
           </div>
-          <button className='btn-primary mt-16 mb-2' onClick={handleEmail} disabled={isLoading}>
-            {isLoading ? 'Enviando...' : 'Confirmar correo'}
+          <button
+            className="btn-primary mt-16 mb-2"
+            onClick={handleEmail}
+            disabled={isLoading}
+          >
+            {isLoading ? "Enviando..." : "Confirmar correo"}
           </button>
         </div>
       </div>
-      <div className='hidden md:flex items-center justify-center md:w-1/2 bg-fondo'>
-        <div className='w-1/2'>
-          <img className='w-2/3 h-auto object-cover' src={fondo} alt='logoSena' />
+      <div className="hidden md:flex items-center justify-center md:w-1/2 bg-fondo">
+        <div className="w-1/2">
+          <img
+            className="w-2/3 h-auto object-cover"
+            src={fondo}
+            alt="logoSena"
+          />
         </div>
       </div>
       <ToastContainer />
@@ -111,118 +130,3 @@ const Contras_1 = () => {
 };
 
 export default Contras_1;
-
-//CODIGO DE JOSE
-// import { useNavigate } from 'react-router-dom';
-// import React, { useState } from 'react';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import fondo from '/logoSena.png';
-// import { api } from '../api/token';
-// import Cookies from 'js-cookie';
-
-// const Contras_1 = () => {
-//   const navigate = useNavigate();
-//   const [correo, setCorreo] = useState('');
-//   const [isLoading, setIsLoading] = useState(false);
-
-//   const mensajeExito = () => {
-//     toast.success('¡Código de recuperación enviado!', {
-//       position: 'top-right',
-//       autoClose: 2500,
-//       hideProgressBar: false,
-//       closeOnClick: true,
-//       pauseOnHover: true,
-//       draggable: true,
-//       progress: undefined,
-//       theme: 'light',
-//     });
-//     setTimeout(() => navigate('/contras_2'), 3000);
-//   };
-
-//   const mensajeError = (mensaje) => {
-//     toast.error(mensaje, {
-//       position: 'top-right',
-//       autoClose: 2500,
-//       hideProgressBar: false,
-//       closeOnClick: true,
-//       pauseOnHover: true,
-//       draggable: true,
-//       progress: undefined,
-//       theme: 'light'
-//     });
-//   };
-
-//   const handleEmail = async () => {
-//     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
-//       setIsLoading(true);
-//       try {
-//         const response = await api.post('/crear-codigo', { correo });
-//         if (response.status === 200) {
-//           Cookies.set('recuperacion', response.data.recuperacion);
-//           Cookies.set('correo', correo);
-//           mensajeExito();
-//         }
-//       } catch (error) {
-//         if (error.response && error.response.data.message) {
-//           mensajeError(error.response.data.message);
-//         } else {
-//           mensajeError('Error al enviar el correo');
-//         }
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     } else {
-//       mensajeError('¡Tienes que usar un correo válido!');
-//     }
-//   };
-
-//   const handleEmailChange = (e) => {
-//     setCorreo(e.target.value);
-//   };
-
-//   return (
-//     <div className='pagina flex flex-col md:flex-row h-screen bg-fondo'>
-//       <div className='w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path md:clip-polygon h-full md:h-auto'>
-//         <div className='main w-3/4 md:w-1/2 text-center text-lg'>
-//           <div className='letras font-inter mb-10 md:mb-8'>
-//             <h3 className='text-white font-normal text-3xl md:text-4xl mt-2'>¿Has olvidado</h3>
-//             <h3 className='text-white font-normal text-3xl md:text-4xl md:mt-2'>tu contraseña?</h3>              
-//           </div>
-//           <div className='space-y-6 text-center mb-16 mt-8'>
-//               <h1 className='text-white font-normal text-xl md:text-2xl lg:text-2xl mt-2 md:mt-4'>Escriba su correo electrónico para recibir un código de
-//                 confirmación para establecer una nueva contraseña.</h1>
-//           </div>
-//           <div className='space-y-6 text-left'>
-//             <div className='input w-full mb-4 relative'>
-//               <label className='text-sm text-white block mb-1'>Correo electrónico</label>
-//               <div className='flex items-center border-b-2 border-white'>
-//                 <input
-//                   type='text'
-//                   className='flex-1 p-2 bg-transparent text-white focus:outline-none pr-10'
-//                   value={correo}
-//                   onChange={handleEmailChange}
-//                   disabled={isLoading}
-//                 />
-//                 <FontAwesomeIcon icon={faEnvelope} className='absolute right-2 text-white ml-2'/>
-//               </div>
-//             </div>
-//           </div>
-//           <button className='btn-primary mt-16 mb-2' onClick={handleEmail}>
-//             ENVIAR CORREO
-//           </button>
-//         </div>
-//       </div>
-//       <div className='hidden md:flex items-center justify-center md:w-1/2 bg-fondo'>
-//         <div className='w-1/2'>
-//           <img className='w-2/3 h-auto object-cover' src={fondo} alt='logoSena' />
-//         </div>
-//       </div>
-//       <ToastContainer />
-//     </div>
-//   );
-// };
-
-// export default Contras_1;

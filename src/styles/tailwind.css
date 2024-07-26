@@ -21,13 +21,37 @@
     @apply font-inter py-2 px-4 rounded bg-input rounded-lg;
 }
 
+  /* ELEMENTOS PARA LA TABLA PRODUCTOS */
+  .custom-table .MuiTableCell-root {
+    padding: 0px 0px; /* EL PADDING DE LOS DATOS DE LAS TABLAS */
+    font-size: 12px;/*EL TAMAÑO DE LOS DATOS DE LA TABLA PRODUCTOS*/
+    @apply font-inter;
+  }
+  .custom-tables .MuiTableCell-root {
+    padding: 2px 4px; /* EL PADDING DE LOS DATOS DEL RESTO DE LAS TABLAS */
+    font-size: 14px;/*EL TAMAÑO DE LOS DATOS DEL RESTO DE LAS TABLAS*/
+    @apply font-inter;
+  }
+
+/* ELEMENTOS PARA TODAS LAS TABLAS */
+  .tss-1akey0g-MUIDataTableHeadCell-data { 
+    font-size: 12px !important;   /*EL TAMAÑO DEL SUBTITULO DE LAS TABLAS*/
+    font-weight: bold;
+  }
+  .tss-1fbujeu-MUIDataTableHeadCell-toolButton {
+    padding: 2px 4px !important; /*EL PADDING DE LOS SUBTITULOS DE LAS TABLAS*/
+  }
+  .custom-title {
+    font-weight: bold; 
+    font-size: 24px; 
+  } 
+
 /* Media queries personalizadas */
 @media (min-width: 768px) {
     .md\:clip-path {
         clip-path: polygon(0 0, 80% 0, 100% 29%, 90% 100%, 0 100%);
     }
 }
-
 @media (min-width: 768px) and (max-width: 870px) {
     .btn-primary {
         @apply text-white text-sm font-inter font-bold py-1 px-4 rounded-lg bg-sena;
@@ -37,7 +61,6 @@
         @apply text-white text-sm font-inter font-bold py-1 px-4 rounded-lg bg-red-500;
     }
 }
-
 @media (max-height: 600px) {
     .pagina {
         height: auto;
@@ -66,9 +89,35 @@
         @apply text-white text-sm font-inter font-bold py-1 px-4 rounded-lg bg-red-500;
     }
 }
-
 @media (max-width: 345px) {
     .hidden-md {
         display: none;
     }
 }
+/*DISEÑO DE LA TABLA UNIDADES*/
+@layer components {
+    .table-container {
+      @apply flex justify-center my-5;
+    }
+    table {
+      @apply w-full border-collapse border border-grisClaro;
+    }
+    th, td {
+      @apply border border-gris p-2 text-center;
+    }
+    th {
+      @apply bg-sena text-white;
+    }
+    tr:nth-child(even) {
+      @apply bg-grisClaro;
+    }
+    tr:nth-child(odd) {
+      @apply bg-white;
+    }
+    td {
+      @apply p-3;
+    }
+  }
+
+  
+
