@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import Dashboard from '../components/Dashboard';
+import React, { useState } from "react";
+import Sidebar from "../components/Sidebar";
+import Dashboard from "../components/Dashboard";
 
 const Home = () => {
   const [sidebarToggle, setSidebarToggle] = useState(false);
@@ -8,12 +8,12 @@ const Home = () => {
   return (
     <>
       <Sidebar sidebarToggle={sidebarToggle} />
-      <Dashboard 
+      <Dashboard
         sidebarToggle={sidebarToggle}
-        setSidebarToggle={setSidebarToggle} 
+        setSidebarToggle={setSidebarToggle}
       />
     </>
   );
-}
+};
 
 export default Home;

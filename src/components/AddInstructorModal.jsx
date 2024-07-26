@@ -5,6 +5,10 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
+  const [usuario, setUsuario] = useState([]);
+  const [estados, setEstados] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     nombre: "",
     correo: "",
@@ -12,14 +16,10 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
     UsuarioId: "",
     EstadoId: "",
   });
-  const [usuario, setUsuario] = useState([]);
-  const [estados, setEstados] = useState([]);
-  const [formErrors, setFormErrors] = useState({});
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (isOpen) {
-      fetchUserProfile();
+      setLoading(true);
     }
   }, [isOpen]);
 
@@ -53,35 +53,9 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
         showToastError("Error al cargar los estados");
       }
     };
-
     fetchusuario();
     fetchStates();
   }, []);
-
-  const fetchUserProfile = async () => {
-    setLoading(true);
-    try {
-      const token = document.cookie.replace(
-        /(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/,
-        "$1"
-      );
-      const response = await api.get("/perfil", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.status === 200) {
-        setFormErrors({});
-      } else {
-        setFormErrors({ fetch: response.data.message });
-      }
-    } catch (error) {
-      setFormErrors({ fetch: "Error al cargar la información del usuario." });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const validateInput = (name, value) => {
     let errorMessage = "";
@@ -121,12 +95,22 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
   const showToastError = (message) => {
     toast.error(message, {
       position: "top-right",
-      autoClose: 2500,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
+    });
+  };
+
+  const resetForm = () => {
+    setFormData({
+      nombre: "",
+      correo: "",
+      celular: "",
+      UsuarioId: "",
+      EstadoId: "",
     });
   };
 
@@ -171,6 +155,7 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
           draggable: true,
           progress: undefined,
         });
+        resetForm();
         setTimeout(() => {}, 2000);
       } else {
         showToastError(
@@ -200,133 +185,127 @@ const AddInstructorModal = ({ isOpen, onClose, instructor }) => {
         </div>
         <div className="flex items-center justify-center space-y-4 md:space-y-0 mb-4">
           <div className="w-full md:w-3/4">
-            {loading ? (
-              <p>Cargando información...</p>
-            ) : formErrors.fetch ? (
-              <p className="text-red-500">{formErrors.fetch}</p>
-            ) : (
-              <div className="font-inter ml-2">
-                <div className="space-y-2 md:space-y-2 text-left">
-                  <h6 className="font-bold text-center text-2xl mb-2">
-                    Registro Intructor
-                  </h6>
+            <div className="font-inter ml-2">
+              <div className="space-y-2 md:space-y-2 text-left">
+                <h6 className="font-bold text-center text-2xl mb-2">
+                  Registro Intructor
+                </h6>
 
-                  <div className="flex flex-col">
-                    <label className="mb-1 font-bold text-sm">
-                      Nombres y Apellidos *
-                    </label>
-                    <input
-                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                      type="text"
-                      name="nombre"
-                      value={formData.nombre}
-                      onChange={handleInputChange}
-                      onKeyPress={(e) => {
-                        if (/\d/.test(e.key)) {
-                          e.preventDefault();
-                        }
-                      }}
-                    />
-                    {formErrors.nombre && (
-                      <div className="text-red-400 text-sm mt-1 px-2">
-                        {formErrors.nombre}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="mb-1 font-bold text-sm">Correo *</label>
-                    <input
-                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                      type="text"
-                      name="correo"
-                      value={formData.correo}
-                      onChange={handleInputChange}
-                    />
-                    {formErrors.correo && (
-                      <div className="text-red-400 text-sm mt-1">
-                        {formErrors.correo}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="mb-1 font-bold text-sm">Telefono *</label>
-                    <input
-                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                      type="text"
-                      name="celular"
-                      value={formData.celular}
-                      onChange={handleInputChange}
-                      onKeyPress={(e) => {
-                        if (!/[0-9]/.test(e.key)) {
-                          e.preventDefault();
-                        }
-                      }}
-                      maxLength={10}
-                    />
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="mb-1 font-bold text-sm">Usuario *</label>
-                    <select
-                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                      name="UsuarioId"
-                      value={formData.UsuarioId}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">Seleccionar Usuario</option>
-                      {usuario.map((usuario) => (
-                        <option key={usuario.id} value={usuario.id}>
-                          {usuario.nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="mb-1 font-bold text-sm">Estado *</label>
-                    <select
-                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                      name="EstadoId"
-                      value={formData.EstadoId}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">Seleccione un estado</option>
-                      {estados.map((estado) => (
-                        <option
-                          key={estado.id}
-                          value={estado.id}
-                          style={{
-                            color:
-                              estado.estadoName === "ACTIVO"
-                                ? "green"
-                                : estado.estadoName === "INACTIVO"
-                                ? "red"
-                                : "inherit",
-                          }}
-                        >
-                          {estado.estadoName}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="flex flex-col">
+                  <label className="mb-1 font-bold text-sm">
+                    Nombres y Apellidos *
+                  </label>
+                  <input
+                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    type="text"
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleInputChange}
+                    onKeyPress={(e) => {
+                      if (/\d/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
+                  />
+                  {formErrors.nombre && (
+                    <div className="text-red-400 text-sm mt-1 px-2">
+                      {formErrors.nombre}
+                    </div>
+                  )}
                 </div>
-                <div className="sm:w-full md:w-full flex flex-col justify-end">
-                  <div className="flex justify-center mt-4 mb-4 mx-2">
-                    <button className="btn-danger2 mx-2" onClick={onClose}>
-                      Cancelar
-                    </button>
-                    <button
-                      className="btn-primary2 mx-2"
-                      onClick={handleCreateInstructor}
-                    >
-                      Agregar
-                    </button>
-                  </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-1 font-bold text-sm">Correo *</label>
+                  <input
+                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    type="text"
+                    name="correo"
+                    value={formData.correo}
+                    onChange={handleInputChange}
+                  />
+                  {formErrors.correo && (
+                    <div className="text-red-400 text-sm mt-1">
+                      {formErrors.correo}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-1 font-bold text-sm">Telefono *</label>
+                  <input
+                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    type="text"
+                    name="celular"
+                    value={formData.celular}
+                    onChange={handleInputChange}
+                    onKeyPress={(e) => {
+                      if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
+                    maxLength={10}
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-1 font-bold text-sm">Usuario *</label>
+                  <select
+                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    name="UsuarioId"
+                    value={formData.UsuarioId}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Seleccionar Usuario</option>
+                    {usuario.map((usuario) => (
+                      <option key={usuario.id} value={usuario.id}>
+                        {usuario.nombre}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mb-1 font-bold text-sm">Estado *</label>
+                  <select
+                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    name="EstadoId"
+                    value={formData.EstadoId}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Seleccione un estado</option>
+                    {estados.map((estado) => (
+                      <option
+                        key={estado.id}
+                        value={estado.id}
+                        style={{
+                          color:
+                            estado.estadoName === "ACTIVO"
+                              ? "green"
+                              : estado.estadoName === "INACTIVO"
+                              ? "red"
+                              : "inherit",
+                        }}
+                      >
+                        {estado.estadoName}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
-            )}
+              <div className="sm:w-full md:w-full flex flex-col justify-end">
+                <div className="flex justify-center mt-4 mb-4 mx-2">
+                  <button className="btn-danger2 mx-2" onClick={onClose}>
+                    Cancelar
+                  </button>
+                  <button
+                    className="btn-primary2 mx-2"
+                    onClick={handleCreateInstructor}
+                  >
+                    Agregar
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

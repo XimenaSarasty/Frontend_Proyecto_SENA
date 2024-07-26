@@ -21,7 +21,39 @@ const Instructores = () => {
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // CODIGO USANDO INDICES, AUN NO SE PUEDE SIN TENER EL NUEVO BACK END.
+  //   const fetchData = async () => {
+  //     console.time('fetchData');
+  //     setLoading(true);
+  //     try {
+  //       const response = await api.get('/Instructor', {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //         },
+  //       });
+
+  //       const InstructoresConUsuariosyEstados = response.data.map(instructor => ({
+  //         ...instructor,
+  //       nombre: instructor.Usuario ? instructor.Usuario.nombre : 'Desconocido',
+  //       estadoName: instructor.Estado ? instructor.Estado.estadoName : 'Desconocido',
+  //       }));
+
+  //       InstructoresConUsuariosyEstados.sort((a, b) => a.id - b.id);
+  //       setData(InstructoresConUsuariosyEstados);
+
+  //     } catch (error) {
+  //         console.error('Error fetching categoria data:', error);
+  //     }
+  //     setLoading(false);
+  //     console.timeEnd('fetchData');
+  // };
+
+  // useEffect(() => {
+  //     fetchData();
+  // }, []);
+
   const fetchData = async () => {
+    //  console.time('fetchData');
     setLoading(true);
     try {
       const response = await api.get("/Instructor", {
@@ -61,6 +93,7 @@ const Instructores = () => {
         progress: undefined,
       });
     }
+    // console.timeEnd('fetchData');
     setLoading(false);
   };
 
@@ -207,7 +240,7 @@ const Instructores = () => {
               <div className="text-center">Cargando Instructores...</div>
             ) : (
               <MUIDataTable
-                title={"Instructores"}
+                title={<span className="custom-title">INSTRUCTORES</span>} 
                 data={data}
                 columns={columsInstructor}
                 options={{
@@ -216,9 +249,9 @@ const Instructores = () => {
                   download: true,
                   rowsPerPage: 5,
                   rowsPerPageOptions: [5, 10, 15],
-                  setRowProps: (row, dataIndex, rowIndex) => {
+                  setTableProps: () => {
                     return {
-                      style: { padding: "2px 0" },
+                      className: "custom-tables",
                     };
                   },
                   onDownload: (buildHead, buildBody, columns, data) => {
