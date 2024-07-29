@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
-import Dashboard from "../components/Dashboard";
+import Home from "../components/Home";
 import { FaBeer, FaWeight, FaRuler } from "react-icons/fa";
 
 const UnidadMedida = () => {
@@ -10,13 +10,13 @@ const UnidadMedida = () => {
     <div className="flex min-h-screen bg-fondo">
       <Sidebar sidebarToggle={sidebarToggle} />
       <div className={`flex-1 px-32 ${sidebarToggle ? "ml-custom" : ""}`}>
-        <Dashboard
+        <Home
           sidebarToggle={sidebarToggle}
           setSidebarToggle={setSidebarToggle}
         />
 
         <header className="mb-6 mt-24 text-center bg-fondo p-5 rounded-lg">
-          <h1 className="text-3xl font-bold mb-4 text-sena">
+          <h1 className="text-3xl font-bold mb-4 text-negro">
             Unidades de Medida
           </h1>
           <p className="text-negro mb-4">
@@ -32,8 +32,42 @@ const UnidadMedida = () => {
           </p>
         </header>
 
+        <section>
+          <div className="flex space-x-4 justify-start mb-6">
+            <div className="w-1/3 bg-white p-4 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
+              <FaBeer className="text-4xl text-sena mb-2" />
+              <h3 className="text-xl font-semibold mb-2">Volumen</h3>
+              <p>
+                El volumen mide el espacio que ocupa un objeto o sustancia en
+                tres dimensiones, y se utiliza para cuantificar líquidos,
+                sólidos y gases. Las unidades de medida incluyen litros (L),
+                mililitros (ml) y metros cúbicos (m³).
+              </p>
+            </div>
+            <div className="w-1/3 bg-white p-4 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
+              <FaWeight className="text-4xl text-sena mb-2" />
+              <h3 className="text-xl font-semibold mb-2">Peso</h3>
+              <p>
+                El peso mide la fuerza con la que la gravedad atrae un objeto, y
+                se utiliza para cuantificar la masa de sólidos, líquidos y
+                gases. Las unidades de medida incluyen kilogramos (kg), gramos
+                (g) y toneladas (t).
+              </p>
+            </div>
+            <div className="w-1/3 bg-white p-4 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
+              <FaRuler className="text-4xl text-sena mb-2" />
+              <h3 className="text-xl font-semibold mb-2">Longitud</h3>
+              <p>
+                La longitud mide la distancia entre dos puntos y se utiliza para
+                cuantificar el tamaño de objetos y espacios. Las unidades de
+                medida incluyen metros (m), centímetros (cm) y kilómetros (km).
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-4 text-left text-sena">
+          <h2 className="text-2xl font-semibold mb-4 text-left text-negro">
             Unidades de Medidas Utilizadas
           </h2>
           <div className="overflow-x-auto flex justify-center items-center">
@@ -217,40 +251,6 @@ const UnidadMedida = () => {
                 </tr>
               </tbody>
             </table>
-          </div>
-        </section>
-
-        <section>
-          <div className="flex space-x-4 justify-start">
-            <div className="w-1/3 bg-white p-4 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
-              <FaBeer className="text-4xl text-sena mb-2" />
-              <h3 className="text-xl font-semibold mb-2">Volumen</h3>
-              <p>
-                El volumen mide el espacio que ocupa un objeto o sustancia en
-                tres dimensiones, y se utiliza para cuantificar líquidos,
-                sólidos y gases. Las unidades de medida incluyen litros (L),
-                mililitros (ml) y metros cúbicos (m³).
-              </p>
-            </div>
-            <div className="w-1/3 bg-white p-4 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
-              <FaWeight className="text-4xl text-sena mb-2" />
-              <h3 className="text-xl font-semibold mb-2">Peso</h3>
-              <p>
-                El peso mide la fuerza con la que la gravedad atrae un objeto, y
-                se utiliza para cuantificar la masa de sólidos, líquidos y
-                gases. Las unidades de medida incluyen kilogramos (kg), gramos
-                (g) y toneladas (t).
-              </p>
-            </div>
-            <div className="w-1/3 bg-white p-4 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
-              <FaRuler className="text-4xl text-sena mb-2" />
-              <h3 className="text-xl font-semibold mb-2">Longitud</h3>
-              <p>
-                La longitud mide la distancia entre dos puntos y se utiliza para
-                cuantificar el tamaño de objetos y espacios. Las unidades de
-                medida incluyen metros (m), centímetros (cm) y kilómetros (km).
-              </p>
-            </div>
           </div>
         </section>
       </div>

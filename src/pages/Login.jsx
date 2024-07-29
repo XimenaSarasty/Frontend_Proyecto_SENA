@@ -119,7 +119,7 @@ const Login = () => {
             progress: undefined,
           });
           setTimeout(() => {
-            navigate("/home");
+            navigate("/dashboard");
           }, 2000);
         }
       } catch (error) {

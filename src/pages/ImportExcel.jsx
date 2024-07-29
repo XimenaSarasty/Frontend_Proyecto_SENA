@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
-import Dashboard from "../components/Dashboard";
+import Home from "../components/Home";
 import MUIDataTable from "mui-datatables";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -136,7 +136,7 @@ const ImportExcel = () => {
           sidebarToggle ? "ml-64" : ""
         } mt-16`}
       >
-        <Dashboard
+        <Home
           sidebarToggle={sidebarToggle}
           setSidebarToggle={setSidebarToggle}
         />
@@ -189,7 +189,7 @@ const ImportExcel = () => {
           <div className="w-1/2 pl-2 h-full flex justify-center items-center">
             <div className="flex justify-center p-2">
               <div
-                className="border border-sena shadow-lg p-2 overflow-auto"
+                className=" text-center border border-sena shadow-lg p-2 overflow-auto"
                 style={{
                   maxHeight: "600px",
                   maxWidth: "600px",
