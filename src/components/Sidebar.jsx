@@ -10,6 +10,8 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { LiaDropbox } from "react-icons/lia";
 import { FiTool } from "react-icons/fi";
+import { MdAssignmentReturned } from "react-icons/md";
+import { FaClipboardList } from "react-icons/fa6";
 import fondo from "/logoSena.png";
 
 const Sidebar = ({ sidebarToggle }) => {
@@ -90,6 +92,18 @@ const Sidebar = ({ sidebarToggle }) => {
           <a href="/herramientas" className="px-3">
             <FiTool className="inline-block w-6 h-6 mr-2 -mt-2"></FiTool>
             Herramientas
+          </a>
+        </li>
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+          <a href="/prestamos" className="px-3">
+            <MdAssignmentReturned className="inline-block w-6 h-6 mr-2 -mt-2"></MdAssignmentReturned>
+            Préstamos
+          </a>
+        </li>
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+          <a href="/pedidos" className="px-3">
+            <FaClipboardList className="inline-block w-6 h-6 mr-2 -mt-2"></FaClipboardList>
+            Pedidos
           </a>
         </li>
         <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">

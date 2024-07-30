@@ -4,10 +4,16 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#01AF08", // Usa el color 'sena' de Tailwind
+      main: "#01AF08",
     },
     secondary: {
-      main: "#fd7e14", // Usa el color 'naranja' de Tailwind (o cualquier otro color que desees)
+      main: "#fd7e14", 
+    },
+    grisClaro: {
+      main: "#D9D9D9",
+    },
+    correo: {
+      main: "#7BA3DF",
     },
   },
 });

@@ -16,6 +16,8 @@ import UnidadMedida from "./pages/UnidadMedida.jsx";
 import Productos from "./pages/Productos.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Herramientas from "./pages/Herramientas.jsx";
+import Prestamos from "./pages/Prestamos.jsx";
+import Pedidos from "./pages/Pedidos.jsx";
 
 function App() {
   return (
@@ -35,7 +37,9 @@ function App() {
           <Route path="/excel" element={<ImportExcel />} />
           <Route path="/unidadmedida" element={<UnidadMedida />} />
           <Route path='/productos' element={<Productos/>}/> 
-          <Route path='/herramientas' element={<Herramientas/>}/> 
+          <Route path='/herramientas' element={<Herramientas/>}/>
+          <Route path='/prestamos' element={<Prestamos/>}/>  
+          <Route path='/pedidos' element={<Pedidos/>}/>
 
           {/* <Route element={<ProtectedRoute />}> */}
           <Route path="/dashboard" element={<Dashboard />} />
