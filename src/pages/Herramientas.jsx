@@ -1,122 +1,100 @@
-import React, { useState, useEffect } from "react";
-import { api } from "../api/token";
-import Sidebar from "../components/Sidebar";
-import Home from "../components/Home";
+import React, { useState } from "react";
 import MUIDataTable from "mui-datatables";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
+import AddHerramientaModal from "../components/AddHerramientaModal";
+import EditHerramientaModal from "../components/EditHerramientaModal";
+import Sidebar from "../components/Sidebar";
+import Home from "../components/Home";
 import clsx from "clsx";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AddSubcategoriaModal from "../components/AddSubcategoriaModal";
-import EditSubcategoriaModal from "../components/EditSubcategoriaModal";
 
-const Subcategorias = () => {
+
+const Herramientas = () => {
   const [sidebarToggle, setSidebarToggle] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([
+    {
+      Código: "",
+      Nombre: "",
+      "Fecha de Ingreso": "",
+      Marca: "",
+      Condición: "",
+      Descripción: "",
+    },
+  ]);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-  const [selectedSubcategoria, setSelectedSubcategoria] = useState(null);
+  const [selectedHerramienta, setSelectedHerramienta] = useState(null);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await api.get("/subcategoria", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      const subcategoriaConCategoriayEstado = response.data.map((subca) => ({
-        ...subca,
-        categoriaName: subca.Categorium
-          ? subca.Categorium.categoriaName
-          : "Desconocido",
-        estadoName: subca.Estado ? subca.Estado.estadoName : "Desconocido",
-      }));
-
-      subcategoriaConCategoriayEstado.sort((a, b) => a.id - b.id);
-      setData(subcategoriaConCategoriayEstado);
-    } catch (error) {
-      console.error("Error fetching subcategoria data:", error);
-      toast.error("Error al cargar los datos de la  subcategoria", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const [loading, setLoading] = useState(false);
 
   const handleEditClick = (rowIndex) => {
-    const subcategoria = data[rowIndex];
-    setSelectedSubcategoria(subcategoria);
+    const herramienta = data[rowIndex];
+    setSelectedHerramienta(herramienta);
     setIsOpenEditModal(true);
   };
 
-  const handleCloseAddModal = (newSubcategoria) => {
-    if (newSubcategoria) {
-      fetchData();
+  const handleCloseEditModal = (updatedHerramienta) => {
+    if (updatedHerramienta) {
+      // Update data logic here
     }
-    setSelectedSubcategoria(null);
-    setIsOpenAddModal(false);
+    setIsOpenEditModal(false);
+    setSelectedHerramienta(null);
   };
 
-  const handleCloseEditModal = (updatedSubcategoria) => {
-    if (updatedSubcategoria) {
-      fetchData();
+  const handleOpenAddModal = () => {
+    setIsOpenAddModal(true);
+  };
+
+  const handleCloseAddModal = (newHerramienta) => {
+    if (newHerramienta) {
+      // Add new data logic here
     }
-    setSelectedSubcategoria(null);
-    setIsOpenEditModal(false);
+    setIsOpenAddModal(false);
   };
 
   const columns = [
     {
-      name: "id",
-      label: "ID",
+      name: "Código",
+      label: "Código",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
-      name: "subcategoriaName",
-      label: "SUBCATEGORIA",
+      name: "Nombre",
+      label: "Nombre",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
-      name: "categoriaName",
-      label: "CATEGORIA",
+      name: "Fecha de Ingreso",
+      label: "Fecha de Ingreso",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
-      name: "estadoName",
-      label: "Estado",
+      name: "Marca",
+      label: "Marca",
       options: {
-        customBodyRender: (value) => (
-          <div
-            className={clsx("text-center", {
-              "text-green-500": value === "ACTIVO",
-              "text-red-500": value === "INACTIVO",
-            })}
-          >
-            {value}
-          </div>
-        ),
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "Condición",
+      label: "Condición",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "Descripción",
+      label: "Descripción",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
@@ -141,20 +119,23 @@ const Subcategorias = () => {
 
   const handleCustomExport = (rows) => {
     const exportData = rows.map((row) => ({
-      id: row.data[0],
-      Subcategoria: row.data[1],
-      Categoria: row.data[2],
+      Código: row.data[0],
+      Nombre: row.data[1],
+      "Fecha de Ingreso": row.data[2],
+      Marca: row.data[3],
+      Condición: row.data[4],
+      Descripción: row.data[5],
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Subcategoria");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Herramientas");
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
     const data = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(data, "Subcategoria.xlsx");
+    saveAs(data, "Herramientas.xlsx");
   };
 
   return (
@@ -170,20 +151,17 @@ const Subcategorias = () => {
           setSidebarToggle={setSidebarToggle}
         />
         <div className="flex justify-end mt-2">
-          <button
-            className="btn-primary"
-            onClick={() => setIsOpenAddModal(true)}
-          >
-            Agregar Subcategoria
+          <button className="btn-primary" onClick={handleOpenAddModal}>
+            Agregar Herramienta
           </button>
         </div>
         <div className="flex-grow flex items-center justify-center">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             {loading ? (
-              <div className="text-center">Cargando Subcategoria...</div>
+              <div className="text-center">Cargando herramientas...</div>
             ) : (
               <MUIDataTable
-                title={<span className="custom-title">SUBCATEGORIAS</span>} 
+                title={<span className="custom-title">HERRAMIENTAS</span>}
                 data={data}
                 columns={columns}
                 options={{
@@ -240,19 +218,16 @@ const Subcategorias = () => {
           </div>
         </div>
       </div>
-      {selectedSubcategoria && (
-        <EditSubcategoriaModal
+      {selectedHerramienta && (
+        <EditHerramientaModal
           isOpen={isOpenEditModal}
           onClose={handleCloseEditModal}
-          subcategoria={selectedSubcategoria}
+          herramienta={selectedHerramienta}
         />
       )}
-      <AddSubcategoriaModal
-        isOpen={isOpenAddModal}
-        onClose={handleCloseAddModal}
-      />
+      <AddHerramientaModal isOpen={isOpenAddModal} onClose={handleCloseAddModal} />
     </div>
   );
 };
 
-export default Subcategorias;
+export default Herramientas;

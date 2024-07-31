@@ -3,7 +3,7 @@ import { api } from "../api/token";
 import { saveAs } from "file-saver";
 import { toast } from "react-toastify";
 import Sidebar from "../components/Sidebar";
-import Dashboard from "../components/Dashboard";
+import Home from "../components/Home";
 import MUIDataTable from "mui-datatables";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
@@ -182,7 +182,7 @@ const Usuarios = () => {
           sidebarToggle ? "ml-64" : ""
         } mt-16`}
       >
-        <Dashboard
+        <Home
           sidebarToggle={sidebarToggle}
           setSidebarToggle={setSidebarToggle}
         />

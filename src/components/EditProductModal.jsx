@@ -23,13 +23,11 @@ const EditProductModal = ({ isOpen, onClose, product }) => {
     nombre: "",
     codigo: "",
   });
-
   useEffect(() => {
     if (isOpen && product) {
       fetchProductDetails(product.id);
     }
   }, [isOpen, product]);
-
   useEffect(() => {
     const fetchEstados = async () => {
       try {
@@ -39,7 +37,6 @@ const EditProductModal = ({ isOpen, onClose, product }) => {
         toast.error("Error al cargar los estados", { position: "top-right" });
       }
     };
-
     const fetchMedidas = async () => {
       try {
         const response = await api.get("/medidas");
@@ -50,11 +47,9 @@ const EditProductModal = ({ isOpen, onClose, product }) => {
         });
       }
     };
-
     fetchEstados();
     fetchMedidas();
   }, []);
-
   const fetchProductDetails = async (productId) => {
     setLoading(true);
     try {
@@ -100,7 +95,6 @@ const EditProductModal = ({ isOpen, onClose, product }) => {
       setLoading(false);
     }
   };
-
   const validateInput = (name, value) => {
     let errorMessage = "";
     if (name === "nombre" || name === "descripcion") {
@@ -114,7 +108,6 @@ const EditProductModal = ({ isOpen, onClose, product }) => {
     }
     return errorMessage;
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const errorMessage = validateInput(name, value);
@@ -127,7 +120,6 @@ const EditProductModal = ({ isOpen, onClose, product }) => {
       [name]: value,
     }));
   };
-
   const handleUpdate = async () => {
     const {
       marca,
@@ -141,7 +133,6 @@ const EditProductModal = ({ isOpen, onClose, product }) => {
       nombre,
       codigo,
     } = formData;
-
     if (
       !marca ||
       !cantidad_actual ||
@@ -159,15 +150,12 @@ const EditProductModal = ({ isOpen, onClose, product }) => {
       });
       return;
     }
-
     setLoading(true);
     try {
       const response = await api.put(
         `/productos/${product.id}`,
         {
-          marca,
-          cantidad_actual,
-          cantidad_entrada,
+          marca,cantidad_actual, cantidad_entrada,
           descripcion,
           UnidadmedidaId: unidadmedidaId,
           subcategoriaId: subcategoriaId,
@@ -182,7 +170,6 @@ const EditProductModal = ({ isOpen, onClose, product }) => {
           },
         }
       );
-
       if (response.status === 200) {
         toast.success("Producto actualizado exitosamente", {
           position: "top-right",
@@ -217,217 +204,220 @@ const EditProductModal = ({ isOpen, onClose, product }) => {
       setLoading(false);
     }
   };
-
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-fondo bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg sm:w-full md:w-1/2 lg:w-1/3 mt-4 max-h-screen overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-lg sm:w-full md:w-1/4 mt-4 max-h-screen overflow-y-auto">
         <div className="flex justify-end p-2">
           <button onClick={onClose}>
-            <FaTimes className="text-black w-4 h-4" />
+            <FaTimes className="text-black w-3 h-3" />
           </button>
         </div>
-        <div className="px-6 py-4">
-          <h6 className="font-bold text-center text-2xl mb-4">
-            Editar Producto
-          </h6>
-          {loading ? (
-            <p className="text-center">Cargando información...</p>
-          ) : (
-            <div>
-              <div className="space-y-4">
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Marca *</label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-3 py-2"
-                    type="text"
-                    name="marca"
-                    value={formData.marca}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.marca && (
-                    <div className="text-red-400 text-sm mt-1">
-                      {formErrors.marca}
+        <div className="flex items-center justify-center space-y-2 md:space-y-0 mb-2">
+          <div className="w-full md:w-3/4">
+            <div className="font-inter ml-1">
+              <div className="space-y-1 md:space-y-1 text-left">
+                <h6 className="font-bold text-center text-lg mb-1">
+                  Editar Producto
+                </h6>
+                {loading ? (
+                  <p className="text-center text-xs">Cargando información...</p>
+                ) : (
+                  <div className="space-y-1">
+                    <div className="flex flex-col">
+                      <label className="mb-0.5 font-bold text-xs">Marca *</label>
+                      <input
+                        className="bg-grisClaro text-xs rounded-lg px-1 py-1"
+                        type="text"
+                        name="marca"
+                        value={formData.marca}
+                        onChange={handleInputChange}
+                      />
+                      {formErrors.marca && (
+                        <div className="text-red-400 text-xs mt-0.5">
+                          {formErrors.marca}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Cantidad Actual *
-                  </label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-3 py-2"
-                    type="number"
-                    name="cantidad_actual"
-                    value={formData.cantidad_actual}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.cantidad_actual && (
-                    <div className="text-red-400 text-sm mt-1">
-                      {formErrors.cantidad_actual}
+                    <div className="flex flex-col">
+                      <label className="mb-0.5 font-bold text-xs">
+                        Cantidad Actual *
+                      </label>
+                      <input
+                        className="bg-grisClaro text-xs rounded-lg px-1 py-1"
+                        type="number"
+                        name="cantidad_actual"
+                        value={formData.cantidad_actual}
+                        onChange={handleInputChange}
+                      />
+                      {formErrors.cantidad_actual && (
+                        <div className="text-red-400 text-xs mt-0.5">
+                          {formErrors.cantidad_actual}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Cantidad de Entrada *
-                  </label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-3 py-2"
-                    type="number"
-                    name="cantidad_entrada"
-                    value={formData.cantidad_entrada}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.cantidad_entrada && (
-                    <div className="text-red-400 text-sm mt-1">
-                      {formErrors.cantidad_entrada}
+                    <div className="flex flex-col">
+                      <label className="mb-0.5 font-bold text-xs">
+                        Cantidad de Entrada *
+                      </label>
+                      <input
+                        className="bg-grisClaro text-xs rounded-lg px-1 py-1"
+                        type="number"
+                        name="cantidad_entrada"
+                        value={formData.cantidad_entrada}
+                        onChange={handleInputChange}
+                      />
+                      {formErrors.cantidad_entrada && (
+                        <div className="text-red-400 text-xs mt-0.5">
+                          {formErrors.cantidad_entrada}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Descripción *
-                  </label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-3 py-2"
-                    type="text"
-                    name="descripcion"
-                    value={formData.descripcion}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.descripcion && (
-                    <div className="text-red-400 text-sm mt-1">
-                      {formErrors.descripcion}
+                    <div className="flex flex-col">
+                      <label className="mb-0.5 font-bold text-xs">
+                        Descripción *
+                      </label>
+                      <input
+                        className="bg-grisClaro text-xs rounded-lg px-1 py-1"
+                        type="text"
+                        name="descripcion"
+                        value={formData.descripcion}
+                        onChange={handleInputChange}
+                      />
+                      {formErrors.descripcion && (
+                        <div className="text-red-400 text-xs mt-0.5">
+                          {formErrors.descripcion}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Unidad de Medida *
-                  </label>
-                  <select
-                    className="bg-grisClaro text-sm rounded-lg px-3 py-2"
-                    name="unidadmedidaId"
-                    value={formData.unidadmedidaId}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Seleccionar</option>
-                    {medidas.map((medida) => (
-                      <option key={medida.id} value={medida.id}>
-                        {medida.nombre}
-                      </option>
-                    ))}
-                  </select>
-                  {formErrors.unidadmedidaId && (
-                    <div className="text-red-400 text-sm mt-1">
-                      {formErrors.unidadmedidaId}
+                    <div className="flex flex-col">
+                      <label className="mb-0.5 font-bold text-xs">
+                        Unidad de Medida *
+                      </label>
+                      <select
+                        className="bg-grisClaro text-xs rounded-lg px-1 py-1"
+                        name="unidadmedidaId"
+                        value={formData.unidadmedidaId}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Seleccionar</option>
+                        {medidas.map((medida) => (
+                          <option key={medida.id} value={medida.id}>
+                            {medida.nombre}
+                          </option>
+                        ))}
+                      </select>
+                      {formErrors.unidadmedidaId && (
+                        <div className="text-red-400 text-xs mt-0.5">
+                          {formErrors.unidadmedidaId}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Subcategoría *
-                  </label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-3 py-2"
-                    type="number"
-                    name="subcategoriaId"
-                    value={formData.subcategoriaId}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.subcategoriaId && (
-                    <div className="text-red-400 text-sm mt-1">
-                      {formErrors.subcategoriaId}
+                    <div className="flex flex-col">
+                      <label className="mb-0.5 font-bold text-xs">
+                        Subcategoría *
+                      </label>
+                      <input
+                        className="bg-grisClaro text-xs rounded-lg px-1 py-1"
+                        type="number"
+                        name="subcategoriaId"
+                        value={formData.subcategoriaId}
+                        onChange={handleInputChange}
+                      />
+                      {formErrors.subcategoriaId && (
+                        <div className="text-red-400 text-xs mt-0.5">
+                          {formErrors.subcategoriaId}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Estado *</label>
-                  <select
-                    className="bg-grisClaro text-sm rounded-lg px-3 py-2"
-                    name="estadoId"
-                    value={formData.estadoId}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Seleccionar</option>
-                    {estados.map((estado) => (
-                      <option key={estado.id} value={estado.id}>
-                        {estado.nombre}
-                      </option>
-                    ))}
-                  </select>
-                  {formErrors.estadoId && (
-                    <div className="text-red-400 text-sm mt-1">
-                      {formErrors.estadoId}
+                    <div className="flex flex-col">
+                      <label className="mb-0.5 font-bold text-xs">Estado *</label>
+                      <select
+                        className="bg-grisClaro text-xs rounded-lg px-1 py-1"
+                        name="estadoId"
+                        value={formData.estadoId}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Seleccionar</option>
+                        {estados.map((estado) => (
+                          <option key={estado.id} value={estado.id}>
+                            {estado.nombre}
+                          </option>
+                        ))}
+                      </select>
+                      {formErrors.estadoId && (
+                        <div className="text-red-400 text-xs mt-0.5">
+                          {formErrors.estadoId}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Cantidad de Salida *
-                  </label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-3 py-2"
-                    type="number"
-                    name="cantidad_salida"
-                    value={formData.cantidad_salida}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.cantidad_salida && (
-                    <div className="text-red-400 text-sm mt-1">
-                      {formErrors.cantidad_salida}
+                    <div className="flex flex-col">
+                      <label className="mb-0.5 font-bold text-xs">
+                        Cantidad de Salida *
+                      </label>
+                      <input
+                        className="bg-grisClaro text-xs rounded-lg px-1 py-1"
+                        type="number"
+                        name="cantidad_salida"
+                        value={formData.cantidad_salida}
+                        onChange={handleInputChange}
+                      />
+                      {formErrors.cantidad_salida && (
+                        <div className="text-red-400 text-xs mt-0.5">
+                          {formErrors.cantidad_salida}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Nombre *</label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-3 py-2"
-                    type="text"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.nombre && (
-                    <div className="text-red-400 text-sm mt-1">
-                      {formErrors.nombre}
+                    <div className="flex flex-col">
+                      <label className="mb-0.5 font-bold text-xs">Nombre *</label>
+                      <input
+                        className="bg-grisClaro text-xs rounded-lg px-1 py-1"
+                        type="text"
+                        name="nombre"
+                        value={formData.nombre}
+                        onChange={handleInputChange}
+                      />
+                      {formErrors.nombre && (
+                        <div className="text-red-400 text-xs mt-0.5">
+                          {formErrors.nombre}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Código *</label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-3 py-2"
-                    type="text"
-                    name="codigo"
-                    value={formData.codigo}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.codigo && (
-                    <div className="text-red-400 text-sm mt-1">
-                      {formErrors.codigo}
+                    <div className="flex flex-col">
+                      <label className="mb-0.5 font-bold text-xs">Código *</label>
+                      <input
+                        className="bg-grisClaro text-xs rounded-lg px-1 py-1"
+                        type="text"
+                        name="codigo"
+                        value={formData.codigo}
+                        onChange={handleInputChange}
+                      />
+                      {formErrors.codigo && (
+                        <div className="text-red-400 text-xs mt-0.5">
+                          {formErrors.codigo}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-
-                <div className="flex justify-center">
-                  <button
-                    className="btn-primary2"
-                    onClick={handleUpdate}
-                  >
-                    {loading ? "Actualizando..." : "Actualizar"}
-                  </button>
-                </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </div>
-        <ToastContainer />
+        <div className="sm:w-full md:w-full flex flex-col justify-end">
+          <div className="flex justify-center mb-2 mx-1">
+            <button className="btn-danger2 mx-1 text-xs" onClick={onClose}>
+              Cancelar
+            </button>
+            <button className="btn-primary2 mx-1 text-xs" onClick={handleUpdate}>
+              Actualizar
+            </button>
+          </div>
+        </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
-
 export default EditProductModal;

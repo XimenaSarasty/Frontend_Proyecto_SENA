@@ -1,48 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { api } from "../api/token";
-import Sidebar from "../components/Sidebar";
-import Home from "../components/Home";
 import MUIDataTable from "mui-datatables";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
-import clsx from "clsx";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import Sidebar from "../components/Sidebar";
+import Home from "../components/Home";
+import EditPedidoModal from "../components/EditPedidoModal";
+import AddPedidoModal from "../components/AddPedidoModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AddSubcategoriaModal from "../components/AddSubcategoriaModal";
-import EditSubcategoriaModal from "../components/EditSubcategoriaModal";
 
-const Subcategorias = () => {
+const Pedidos = () => {
   const [sidebarToggle, setSidebarToggle] = useState(false);
   const [data, setData] = useState([]);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-  const [selectedSubcategoria, setSelectedSubcategoria] = useState(null);
+  const [selectedPedido, setSelectedPedido] = useState(null);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await api.get("/subcategoria", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      const response = [
+        {
+          FechaPedido: "",
+          CantidadEntregada: "",
+          IDUsuario: "",
+          IDFicha: "",
+          Id: "",
+          CantidadSolicitada: "",
+          Codigo: "",
+          IDProducto: "",
+          IDInstructor: "",
         },
-      });
+      ];
 
-      const subcategoriaConCategoriayEstado = response.data.map((subca) => ({
-        ...subca,
-        categoriaName: subca.Categorium
-          ? subca.Categorium.categoriaName
-          : "Desconocido",
-        estadoName: subca.Estado ? subca.Estado.estadoName : "Desconocido",
-      }));
-
-      subcategoriaConCategoriayEstado.sort((a, b) => a.id - b.id);
-      setData(subcategoriaConCategoriayEstado);
+      setData(response);
     } catch (error) {
-      console.error("Error fetching subcategoria data:", error);
-      toast.error("Error al cargar los datos de la  subcategoria", {
+      console.error("Error fetching loan data:", error);
+      toast.error("Error al cargar los datos de pedidos", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -60,63 +57,92 @@ const Subcategorias = () => {
   }, []);
 
   const handleEditClick = (rowIndex) => {
-    const subcategoria = data[rowIndex];
-    setSelectedSubcategoria(subcategoria);
+    const pedido = data[rowIndex];
+    setSelectedPedido(pedido);
     setIsOpenEditModal(true);
   };
 
-  const handleCloseAddModal = (newSubcategoria) => {
-    if (newSubcategoria) {
+  const handleCloseEditModal = (updatedPedido) => {
+    if (updatedPedido) {
       fetchData();
     }
-    setSelectedSubcategoria(null);
-    setIsOpenAddModal(false);
+    setIsOpenEditModal(false);
+    setSelectedPedido(null);
   };
 
-  const handleCloseEditModal = (updatedSubcategoria) => {
-    if (updatedSubcategoria) {
+  const handleOpenAddModal = () => {
+    setIsOpenAddModal(true);
+  };
+
+  const handleCloseAddModal = (newPedido) => {
+    if (newPedido) {
       fetchData();
     }
-    setSelectedSubcategoria(null);
-    setIsOpenEditModal(false);
+    setIsOpenAddModal(false);
   };
 
   const columns = [
     {
-      name: "id",
+      name: "FechaPedido",
+      label: "Fecha Pedido",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "CantidadEntregada",
+      label: "Cantidad Entregada",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "IDUsuario",
+      label: "ID-Usuario",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "IDFicha",
+      label: "ID-Ficha",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "Id",
       label: "ID",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
-      name: "subcategoriaName",
-      label: "SUBCATEGORIA",
+      name: "CantidadSolicitada",
+      label: "Cantidad Solicitada",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
-      name: "categoriaName",
-      label: "CATEGORIA",
+      name: "Codigo",
+      label: "Código",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
-      name: "estadoName",
-      label: "Estado",
+      name: "IDProducto",
+      label: "ID-Producto",
       options: {
-        customBodyRender: (value) => (
-          <div
-            className={clsx("text-center", {
-              "text-green-500": value === "ACTIVO",
-              "text-red-500": value === "INACTIVO",
-            })}
-          >
-            {value}
-          </div>
-        ),
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "IDInstructor",
+      label: "ID-Instructor",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
@@ -141,20 +167,25 @@ const Subcategorias = () => {
 
   const handleCustomExport = (rows) => {
     const exportData = rows.map((row) => ({
-      id: row.data[0],
-      Subcategoria: row.data[1],
-      Categoria: row.data[2],
+      FechaPedido: row.data[0],
+      CantidadEntregada: row.data[1],
+      IDUsuario: row.data[2],
+      IDFicha: row.data[3],
+      Id: row.data[4],
+      CantidadSolicitada: row.data[5],
+      Codigo: row.data[6],
+      IDProducto: row.data[7],
+      IDInstructor: row.data[8],
     }));
-
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Subcategoria");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Pedidos");
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
     const data = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(data, "Subcategoria.xlsx");
+    saveAs(data, "Pedidos.xlsx");
   };
 
   return (
@@ -170,31 +201,32 @@ const Subcategorias = () => {
           setSidebarToggle={setSidebarToggle}
         />
         <div className="flex justify-end mt-2">
-          <button
-            className="btn-primary"
-            onClick={() => setIsOpenAddModal(true)}
-          >
-            Agregar Subcategoria
+          <button className="btn-primary" onClick={handleOpenAddModal}>
+            Agregar Pedido
           </button>
         </div>
         <div className="flex-grow flex items-center justify-center">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-9xl mx-auto">
             {loading ? (
-              <div className="text-center">Cargando Subcategoria...</div>
+              <div className="text-center">Cargando pedidos...</div>
             ) : (
               <MUIDataTable
-                title={<span className="custom-title">SUBCATEGORIAS</span>} 
+                title={<span className="custom-title">PEDIDOS</span>}
                 data={data}
                 columns={columns}
                 options={{
                   responsive: "standard",
                   selectableRows: "none",
                   download: true,
+                  print: true,
+                  viewColumns: true,
+                  filter: true,
+                  search: true,
                   rowsPerPage: 5,
                   rowsPerPageOptions: [5, 10, 15],
                   setTableProps: () => {
                     return {
-                      className: "custom-tables",
+                      className: "custom-table",
                     };
                   },
                   onDownload: (buildHead, buildBody, columns, data) => {
@@ -209,29 +241,29 @@ const Subcategorias = () => {
                     pagination: {
                       next: "Siguiente",
                       previous: "Anterior",
-                      rowsPerPage: "Filas por página",
+                      rowsPerPage: "Filas por página:",
                       displayRows: "de",
                     },
                     toolbar: {
                       search: "Buscar",
                       downloadCsv: "Descargar CSV",
                       print: "Imprimir",
-                      viewColumns: "Mostrar columnas",
-                      filterTable: "Filtrar tabla",
+                      viewColumns: "Mostrar Columnas",
+                      filterTable: "Filtrar Tabla",
                     },
                     filter: {
-                      all: "Todos",
+                      all: "Todo",
                       title: "FILTROS",
                       reset: "REINICIAR",
                     },
                     viewColumns: {
-                      title: "Mostrar columnas",
+                      title: "Mostrar Columnas",
                       titleAria: "Mostrar/Ocultar Columnas",
                     },
                     selectedRows: {
                       text: "fila(s) seleccionada(s)",
                       delete: "Eliminar",
-                      deleteAria: "Eliminar fila seleccionada",
+                      deleteAria: "Eliminar filas seleccionadas",
                     },
                   },
                 }}
@@ -240,19 +272,16 @@ const Subcategorias = () => {
           </div>
         </div>
       </div>
-      {selectedSubcategoria && (
-        <EditSubcategoriaModal
+      {selectedPedido && (
+        <EditPedidoModal
           isOpen={isOpenEditModal}
           onClose={handleCloseEditModal}
-          subcategoria={selectedSubcategoria}
+          pedido={selectedPedido}
         />
       )}
-      <AddSubcategoriaModal
-        isOpen={isOpenAddModal}
-        onClose={handleCloseAddModal}
-      />
+      <AddPedidoModal isOpen={isOpenAddModal} onClose={handleCloseAddModal}/>
     </div>
   );
 };
 
-export default Subcategorias;
+export default Pedidos;

@@ -6,7 +6,7 @@ import clsx from "clsx";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import Sidebar from "../components/Sidebar";
-import Dashboard from "../components/Dashboard";
+import Home from "../components/Home";
 import EditProductModal from "../components/EditProductModal";
 import AddProductModal from "../components/AddProductModal";
 import { toast } from "react-toastify";
@@ -20,7 +20,6 @@ const Productos = () => {
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Mock function to fetch data, replace with real API call when backend is ready
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -283,7 +282,7 @@ const Productos = () => {
           sidebarToggle ? "ml-64" : ""
         } mt-16`}
       >
-        <Dashboard
+        <Home
           sidebarToggle={sidebarToggle}
           setSidebarToggle={setSidebarToggle}
         />
@@ -372,67 +371,3 @@ const Productos = () => {
 };
 
 export default Productos;
-
-//COPIA POR SI LA EMBARRO
-{/* <MUIDataTable
-                data={data}
-                columns={columns}
-                options={{
-                  responsive: "standard",
-                  selectableRows: "none",
-                  download: true,
-                  print: true,
-                  viewColumns: true,
-                  filter: true,
-                  search: true,
-                  rowsPerPage: 5,
-                  rowsPerPageOptions: [5, 10, 15],
-                  setRowProps: (row, dataIndex, rowIndex) => {
-                    return {
-                      style: { padding: "2px 0" },
-                      fontSize: "10px", // Reducir tamaño de la letra
-                    };
-                  },
-                  setTableProps: () => {
-                    return {
-                      className: "custom-table",
-                    };
-                  },
-                  setCellProps: () => ({
-                    className: "custom-cell",
-                  }),
-                  textLabels: {
-                    body: {
-                      noMatch: "No se encontraron registros",
-                      toolTip: "Ordenar",
-                    },
-                    pagination: {
-                      next: "Siguiente Página",
-                      previous: "Página Anterior",
-                      rowsPerPage: "Filas por página:",
-                      displayRows: "de",
-                    },
-                    toolbar: {
-                      search: "Buscar",
-                      downloadCsv: "Descargar CSV",
-                      print: "Imprimir",
-                      viewColumns: "Ver Columnas",
-                      filterTable: "Filtrar Tabla",
-                    },
-                    filter: {
-                      all: "Todo",
-                      title: "FILTROS",
-                      reset: "REINICIAR",
-                    },
-                    viewColumns: {
-                      title: "Mostrar Columnas",
-                      titleAria: "Mostrar/Ocultar Columnas",
-                    },
-                    selectedRows: {
-                      text: "fila(s) seleccionada(s)",
-                      delete: "Borrar",
-                      deleteAria: "Borrar filas seleccionadas",
-                    },
-                  },
-                }}
-              /> */}

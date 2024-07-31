@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { api } from "../api/token";
 import Sidebar from "../components/Sidebar";
-import Dashboard from "../components/Dashboard";
+import Home from "../components/Home";
 import MUIDataTable from "mui-datatables";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
@@ -178,7 +178,7 @@ const Fichas = () => {
           sidebarToggle ? "ml-64" : ""
         } mt-16`}
       >
-        <Dashboard
+        <Home
           sidebarToggle={sidebarToggle}
           setSidebarToggle={setSidebarToggle}
         />

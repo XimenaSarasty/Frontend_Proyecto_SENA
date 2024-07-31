@@ -1,48 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { api } from "../api/token";
-import Sidebar from "../components/Sidebar";
-import Home from "../components/Home";
 import MUIDataTable from "mui-datatables";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import clsx from "clsx";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import Sidebar from "../components/Sidebar";
+import Home from "../components/Home";
+import EditPrestamoModal from "../components/EditPrestamoModal";
+import AddPrestamoModal from "../components/AddPrestamoModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AddSubcategoriaModal from "../components/AddSubcategoriaModal";
-import EditSubcategoriaModal from "../components/EditSubcategoriaModal";
 
-const Subcategorias = () => {
+const Prestamos = () => {
   const [sidebarToggle, setSidebarToggle] = useState(false);
   const [data, setData] = useState([]);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-  const [selectedSubcategoria, setSelectedSubcategoria] = useState(null);
+  const [selectedPrestamo, setSelectedPrestamo] = useState(null);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await api.get("/subcategoria", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      const response = [
+        {
+          Codigo: "",
+          Id: "",
+          IdFicha: "",
+          IDUsuario: "",
+          IDInstructor: "",
+          IDHerramienta: "",
+          Cantidad: "",
+          FechaPrestamo: "",
+          FechaDevolucion: "",
+          Estado: "",
+          Observaciones: "",
         },
-      });
+      ];
 
-      const subcategoriaConCategoriayEstado = response.data.map((subca) => ({
-        ...subca,
-        categoriaName: subca.Categorium
-          ? subca.Categorium.categoriaName
-          : "Desconocido",
-        estadoName: subca.Estado ? subca.Estado.estadoName : "Desconocido",
-      }));
-
-      subcategoriaConCategoriayEstado.sort((a, b) => a.id - b.id);
-      setData(subcategoriaConCategoriayEstado);
+      setData(response);
     } catch (error) {
-      console.error("Error fetching subcategoria data:", error);
-      toast.error("Error al cargar los datos de la  subcategoria", {
+      console.error("Error fetching loan data:", error);
+      toast.error("Error al cargar los datos de préstamos", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -54,69 +54,106 @@ const Subcategorias = () => {
     }
     setLoading(false);
   };
-
   useEffect(() => {
     fetchData();
   }, []);
-
   const handleEditClick = (rowIndex) => {
-    const subcategoria = data[rowIndex];
-    setSelectedSubcategoria(subcategoria);
+    const prestamo = data[rowIndex];
+    setSelectedPrestamo(prestamo);
     setIsOpenEditModal(true);
   };
-
-  const handleCloseAddModal = (newSubcategoria) => {
-    if (newSubcategoria) {
+  const handleCloseEditModal = (updatedPrestamo) => {
+    if (updatedPrestamo) {
       fetchData();
     }
-    setSelectedSubcategoria(null);
+    setIsOpenEditModal(false);
+    setSelectedPrestamo(null);
+  };
+  const handleOpenAddModal = () => {
+    setIsOpenAddModal(true);
+  };
+  const handleCloseAddModal = (newPrestamo) => {
+    if (newPrestamo) {
+      fetchData();
+    }
     setIsOpenAddModal(false);
   };
-
-  const handleCloseEditModal = (updatedSubcategoria) => {
-    if (updatedSubcategoria) {
-      fetchData();
-    }
-    setSelectedSubcategoria(null);
-    setIsOpenEditModal(false);
-  };
-
   const columns = [
     {
-      name: "id",
+      name: "Codigo",
+      label: "Código",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "Id",
       label: "ID",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
-      name: "subcategoriaName",
-      label: "SUBCATEGORIA",
+      name: "IdFicha",
+      label: "ID-Ficha",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
-      name: "categoriaName",
-      label: "CATEGORIA",
+      name: "IDUsuario",
+      label: "ID-Usuario",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
-      name: "estadoName",
+      name: "IDInstructor",
+      label: "ID-Instructor",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "IDHerramienta",
+      label: "ID-Herramienta",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "Cantidad",
+      label: "Cantidad",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "FechaPrestamo",
+      label: "Fecha de Préstamo",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "FechaDevolucion",
+      label: "Fecha de Devolución",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "Estado",
       label: "Estado",
       options: {
-        customBodyRender: (value) => (
-          <div
-            className={clsx("text-center", {
-              "text-green-500": value === "ACTIVO",
-              "text-red-500": value === "INACTIVO",
-            })}
-          >
-            {value}
-          </div>
-        ),
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
+    },
+    {
+      name: "Observaciones",
+      label: "Observaciones",
+      options: {
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
@@ -138,23 +175,29 @@ const Subcategorias = () => {
       },
     },
   ];
-
   const handleCustomExport = (rows) => {
     const exportData = rows.map((row) => ({
-      id: row.data[0],
-      Subcategoria: row.data[1],
-      Categoria: row.data[2],
+      Codigo: row.data[0],
+      Id: row.data[1],
+      IdFicha: row.data[2],
+      IDUsuario: row.data[3],
+      IDInstructor: row.data[4],
+      IDHerramienta: row.data[5],
+      Cantidad: row.data[6],
+      FechaPrestamo: row.data[7],
+      FechaDevolucion: row.data[8],
+      Estado: row.data[9],
+      Observaciones: row.data[10],
     }));
-
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Subcategoria");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Prestamos");
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
     const data = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(data, "Subcategoria.xlsx");
+    saveAs(data, "Prestamos.xlsx");
   };
 
   return (
@@ -170,31 +213,32 @@ const Subcategorias = () => {
           setSidebarToggle={setSidebarToggle}
         />
         <div className="flex justify-end mt-2">
-          <button
-            className="btn-primary"
-            onClick={() => setIsOpenAddModal(true)}
-          >
-            Agregar Subcategoria
+          <button className="btn-primary" onClick={handleOpenAddModal}>
+            Agregar Préstamo
           </button>
         </div>
         <div className="flex-grow flex items-center justify-center">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-9xl mx-auto">
             {loading ? (
-              <div className="text-center">Cargando Subcategoria...</div>
+              <div className="text-center">Cargando préstamos...</div>
             ) : (
               <MUIDataTable
-                title={<span className="custom-title">SUBCATEGORIAS</span>} 
+                title={<span className="custom-title">PRÉSTAMOS</span>}
                 data={data}
                 columns={columns}
                 options={{
                   responsive: "standard",
                   selectableRows: "none",
                   download: true,
+                  print: true,
+                  viewColumns: true,
+                  filter: true,
+                  search: true,
                   rowsPerPage: 5,
                   rowsPerPageOptions: [5, 10, 15],
                   setTableProps: () => {
                     return {
-                      className: "custom-tables",
+                      className: "custom-table",
                     };
                   },
                   onDownload: (buildHead, buildBody, columns, data) => {
@@ -209,15 +253,15 @@ const Subcategorias = () => {
                     pagination: {
                       next: "Siguiente",
                       previous: "Anterior",
-                      rowsPerPage: "Filas por página",
+                      rowsPerPage: "Filas por página:",
                       displayRows: "de",
                     },
                     toolbar: {
                       search: "Buscar",
                       downloadCsv: "Descargar CSV",
                       print: "Imprimir",
-                      viewColumns: "Mostrar columnas",
-                      filterTable: "Filtrar tabla",
+                      viewColumns: "Ver Columnas",
+                      filterTable: "Filtrar Tabla",
                     },
                     filter: {
                       all: "Todos",
@@ -225,13 +269,13 @@ const Subcategorias = () => {
                       reset: "REINICIAR",
                     },
                     viewColumns: {
-                      title: "Mostrar columnas",
+                      title: "Mostrar Columnas",
                       titleAria: "Mostrar/Ocultar Columnas",
                     },
                     selectedRows: {
                       text: "fila(s) seleccionada(s)",
                       delete: "Eliminar",
-                      deleteAria: "Eliminar fila seleccionada",
+                      deleteAria: "Eliminar filas seleccionadas",
                     },
                   },
                 }}
@@ -240,19 +284,15 @@ const Subcategorias = () => {
           </div>
         </div>
       </div>
-      {selectedSubcategoria && (
-        <EditSubcategoriaModal
+      {selectedPrestamo && (
+        <EditPrestamoModal
           isOpen={isOpenEditModal}
           onClose={handleCloseEditModal}
-          subcategoria={selectedSubcategoria}
+          prestamo={selectedPrestamo}
         />
       )}
-      <AddSubcategoriaModal
-        isOpen={isOpenAddModal}
-        onClose={handleCloseAddModal}
-      />
+      <AddPrestamoModal isOpen={isOpenAddModal} onClose={handleCloseAddModal}/>
     </div>
   );
 };
-
-export default Subcategorias;
+export default Prestamos;

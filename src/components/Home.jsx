@@ -1,7 +1,7 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "./Navbar";
 
-const Dashboard = ({ sidebarToggle, setSidebarToggle }) => {
+const Home = ({ sidebarToggle, setSidebarToggle }) => {
   return (
     <div className={`flex flex-col flex-grow ${sidebarToggle ? "" : "ml-64"}`}>
       <Navbar
@@ -12,4 +12,4 @@ const Dashboard = ({ sidebarToggle, setSidebarToggle }) => {
   );
 };
 
-export default Dashboard;
+export default Home;

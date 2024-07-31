@@ -9,13 +9,16 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { LiaDropbox } from "react-icons/lia";
+import { FiTool } from "react-icons/fi";
+import { MdAssignmentReturned } from "react-icons/md";
+import { FaClipboardList } from "react-icons/fa6";
 import fondo from "/logoSena.png";
 
 const Sidebar = ({ sidebarToggle }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/home");
+    navigate("/dashboard");
   };
   return (
     <motion.div
@@ -38,7 +41,7 @@ const Sidebar = ({ sidebarToggle }) => {
       <hr />
       <ul className="mt-3 text-white font-bold font-inter">
         <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
-          <a href="/home" className="px-3">
+          <a href="/dashboard" className="px-3">
             <FaHome className="inline-block w-6 h-6 mr-2 -mt-2"></FaHome>
             Dashboard
           </a>
@@ -86,6 +89,24 @@ const Sidebar = ({ sidebarToggle }) => {
           </a>
         </li>
         <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+          <a href="/herramientas" className="px-3">
+            <FiTool className="inline-block w-6 h-6 mr-2 -mt-2"></FiTool>
+            Herramientas
+          </a>
+        </li>
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+          <a href="/prestamos" className="px-3">
+            <MdAssignmentReturned className="inline-block w-6 h-6 mr-2 -mt-2"></MdAssignmentReturned>
+            Préstamos
+          </a>
+        </li>
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+          <a href="/pedidos" className="px-3">
+            <FaClipboardList className="inline-block w-6 h-6 mr-2 -mt-2"></FaClipboardList>
+            Pedidos
+          </a>
+        </li>
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
           <a href="/excel" className="px-3">
             <FaRegFileExcel className="inline-block w-6 h-6 mr-2 -mt-2"></FaRegFileExcel>
             Importar Excel
@@ -100,7 +121,7 @@ const Sidebar = ({ sidebarToggle }) => {
 
         {/* 
         <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
-          <a href='/home' className='px-3'>
+          <a href='/dashboard' className='px-3'>
             <IoBarChartSharp className='inline-block w-6 h-6 mr-2 -mt-2'></IoBarChartSharp>
             Charts
           </a>

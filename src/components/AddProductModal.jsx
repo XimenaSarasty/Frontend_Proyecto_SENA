@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { api } from "../api/token"; // Usa el módulo api para las llamadas a la API
+import { api } from "../api/token"; 
 import { FaTimes } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,7 +31,6 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       resetForm();
     }
   }, [isOpen]);
-
   useEffect(() => {
     if (product) {
       setFormData({
@@ -49,30 +48,26 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       });
     }
   }, [product]);
-
   useEffect(() => {
     const fetchEstados = async () => {
       try {
-        const response = await api.get("/estados"); // Usa la API para obtener los estados
+        const response = await api.get("/estados"); 
         setEstados(response.data);
       } catch (error) {
         showToastError("Error al cargar los estados");
       }
     };
-
     const fetchRoles = async () => {
       try {
-        const response = await api.get("/roles"); // Usa la API para obtener los roles
+        const response = await api.get("/roles"); 
         setRoles(response.data);
       } catch (error) {
         showToastError("Error al cargar los roles");
       }
     };
-
     fetchEstados();
     fetchRoles();
   }, []);
-
   const fetchProductProfile = async () => {
     setLoading(true);
     try {
@@ -87,7 +82,6 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       });
 
       if (response.status === 200) {
-        // Manejar datos si es necesario
       } else {
         setFormErrors({ fetch: response.data.message });
       }
@@ -97,7 +91,6 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       setLoading(false);
     }
   };
-
   const validateInput = (name, value) => {
     let errorMessage = "";
     if (name === "nombre") {
@@ -106,10 +99,8 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
         errorMessage = "El nombre no puede contener caracteres especiales.";
       }
     }
-    // Añadir otras validaciones si es necesario
     return errorMessage;
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const errorMessage = validateInput(name, value);
@@ -117,13 +108,11 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       ...prevErrors,
       [name]: errorMessage,
     }));
-
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-
   const showToastError = (message) => {
     toast.error(message, {
       position: "top-right",
@@ -135,7 +124,6 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       progress: undefined,
     });
   };
-
   const handleCreate = async () => {
     const {
       usuarioId,
@@ -150,7 +138,6 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       nombre,
       codigo,
     } = formData;
-
     const nombreError = validateInput("nombre", nombre);
     if (nombreError) {
       setFormErrors((prevErrors) => ({
@@ -160,7 +147,6 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       showToastError("Por favor, corrige los errores antes de agregar.");
       return;
     }
-
     if (
       !usuarioId ||
       !marca ||
@@ -177,19 +163,16 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       showToastError("Todos los campos son obligatorios.");
       return;
     }
-
     setLoading(true);
     try {
       const token = document.cookie.replace(
-        /(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/,
-        "$1"
+        /(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/,"$1"
       );
       const response = await api.post("/productos", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (response.status === 201) {
         setFormSubmitted(true);
         toast.success("Producto agregado exitosamente", {
@@ -203,7 +186,7 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
         });
         setTimeout(() => {
           resetForm();
-          onClose(); // Cerrar el modal después de una operación exitosa
+          onClose(); 
         }, 2000);
       } else {
         showToastError(
@@ -218,7 +201,6 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       setLoading(false);
     }
   };
-
   const resetForm = () => {
     setFormData({
       usuarioId: "",
@@ -236,7 +218,6 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
     setFormErrors({});
     setFormSubmitted(false);
   };
-
   return (
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center bg-fondo bg-opacity-50 ${
@@ -244,86 +225,72 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
       }`}
     >
       <div className="bg-white rounded-lg shadow-lg sm:w-full md:w-1/4 mt-4 max-h-screen overflow-y-auto">
-        <div className="flex justify-end p-2">
+        <div className="flex justify-end p-1">
           <button onClick={onClose}>
-            <FaTimes className="text-black w-4 h-4" />
+            <FaTimes className="text-black w-3 h-3" />
           </button>
         </div>
-        <div className="flex items-center justify-center space-y-4 md:space-y-0 mb-4">
+        <div className="flex items-center justify-center space-y-1 md:space-y-0 mb-2">
           <div className="w-full md:w-3/4">
-            <div className="font-inter ml-2">
-              <div className="space-y-2 md:space-y-2 text-left">
-                <h6 className="font-bold text-center text-2xl mb-2">
+            <div className="font-inter ml-1">
+              <div className="space-y-1 md:space-y-0.5 text-left">
+                <h6 className="font-bold text-center text-lg mb-1">
                   Registro Producto
                 </h6>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Usuario ID *</label>
+                  <label className="mb-0.5 font-bold text-xs">Usuario ID *</label>
                   <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     type="text"
                     name="usuarioId"
                     value={formData.usuarioId}
                     onChange={handleInputChange}
                   />
                 </div>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Marca *</label>
+                  <label className="mb-0.5 font-bold text-xs">Marca *</label>
                   <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     type="text"
                     name="marca"
                     value={formData.marca}
                     onChange={handleInputChange}
                   />
                 </div>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Cantidad Actual *
-                  </label>
+                  <label className="mb-0.5 font-bold text-xs">Cantidad Actual *</label>
                   <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     type="number"
                     name="cantidad_actual"
                     value={formData.cantidad_actual}
                     onChange={handleInputChange}
                   />
                 </div>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Cantidad Entrada *
-                  </label>
+                  <label className="mb-0.5 font-bold text-xs">Cantidad Entrada *</label>
                   <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     type="number"
                     name="cantidad_entrada"
                     value={formData.cantidad_entrada}
                     onChange={handleInputChange}
                   />
                 </div>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Descripción *
-                  </label>
+                  <label className="mb-0.5 font-bold text-xs">Descripción *</label>
                   <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     type="text"
                     name="descripcion"
                     value={formData.descripcion}
                     onChange={handleInputChange}
                   />
                 </div>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Unidad de Medida *
-                  </label>
+                  <label className="mb-0.5 font-bold text-xs">Unidad de Medida *</label>
                   <select
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     name="unidadmedidaId"
                     value={formData.unidadmedidaId}
                     onChange={handleInputChange}
@@ -336,13 +303,10 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
                     ))}
                   </select>
                 </div>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Subcategoría *
-                  </label>
+                  <label className="mb-0.5 font-bold text-xs">Subcategoría *</label>
                   <select
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     name="subcategoriaId"
                     value={formData.subcategoriaId}
                     onChange={handleInputChange}
@@ -355,11 +319,10 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
                     ))}
                   </select>
                 </div>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Estado *</label>
+                  <label className="mb-0.5 font-bold text-xs">Estado *</label>
                   <select
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     name="estadoId"
                     value={formData.estadoId}
                     onChange={handleInputChange}
@@ -372,52 +335,52 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
                     ))}
                   </select>
                 </div>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Cantidad Salida *
-                  </label>
+                  <label className="mb-0.5 font-bold text-xs">Cantidad Salida *</label>
                   <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     type="number"
                     name="cantidad_salida"
                     value={formData.cantidad_salida}
                     onChange={handleInputChange}
                   />
                 </div>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Nombre *</label>
+                  <label className="mb-0.5 font-bold text-xs">Nombre *</label>
                   <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     type="text"
                     name="nombre"
                     value={formData.nombre}
                     onChange={handleInputChange}
                   />
                   {formErrors.nombre && (
-                    <p className="text-red-500 text-xs">{formErrors.nombre}</p>
+                    <p className="text-red-400 text-xs">{formErrors.nombre}</p>
                   )}
                 </div>
-
                 <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Código *</label>
+                  <label className="mb-0.5 font-bold text-xs">Código *</label>
                   <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                    className="bg-grisClaro text-xs rounded-lg px-2 py-1"
                     type="text"
                     name="codigo"
                     value={formData.codigo}
                     onChange={handleInputChange}
                   />
                 </div>
-
-                <div className="flex justify-center mt-4">
+                <div className="flex justify-center mt-2 mb-2">
                   <button
-                    className="btn-primary2"
+                    className="btn-danger2 mx-2 text-xs py-2 px-4 rounded"
+                    onClick={onClose}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    className="btn-primary2 mx-2 text-xs py-2 px-4 rounded"
                     onClick={handleCreate}
                     disabled={loading}
                   >
-                    {loading ? "Cargando..." : "Agregar Producto"}
+                    {loading ? "Cargando..." : "Agregar"}
                   </button>
                 </div>
               </div>
@@ -429,5 +392,4 @@ const AddProductModal = ({ isOpen, onClose, product }) => {
     </div>
   );
 };
-
 export default AddProductModal;

@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Contras_1 from "./pages/Contras_1.jsx";
 import Contras_2 from "./pages/Contras_2.jsx";
@@ -15,6 +14,11 @@ import ImportExcel from "./pages/ImportExcel.jsx";
 import Subcategorias from "./pages/Subcategorias.jsx";
 import UnidadMedida from "./pages/UnidadMedida.jsx";
 import Productos from "./pages/Productos.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Herramientas from "./pages/Herramientas.jsx";
+import Prestamos from "./pages/Prestamos.jsx";
+import Pedidos from "./pages/Pedidos.jsx";
+import HistorialIF from "./pages/HistorialIF.jsx";
 
 function App() {
   return (
@@ -34,9 +38,13 @@ function App() {
           <Route path="/excel" element={<ImportExcel />} />
           <Route path="/unidadmedida" element={<UnidadMedida />} />
           <Route path='/productos' element={<Productos/>}/> 
+          <Route path='/herramientas' element={<Herramientas/>}/>
+          <Route path='/prestamos' element={<Prestamos/>}/>  
+          <Route path='/pedidos' element={<Pedidos/>}/>
+          <Route path='/historialif' element={<HistorialIF/>}/>
 
           {/* <Route element={<ProtectedRoute />}> */}
-          <Route path="/home" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           {/* </Route> */}
         </Routes>
       </BrowserRouter>
