@@ -1208,6 +1208,11 @@ td{
   background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
+.bg-gray-900{
+  --tw-bg-opacity: 1;
+  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+}
+
 .bg-gris{
   --tw-bg-opacity: 1;
   background-color: rgb(147 139 139 / var(--tw-bg-opacity));
@@ -1240,11 +1245,6 @@ td{
 .bg-white{
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-.bg-gray-900{
-  --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-50{
@@ -1320,6 +1320,11 @@ td{
   padding-bottom: 0.75rem;
 }
 
+.px-8{
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 .pl-2{
   padding-left: 0.5rem;
 }
@@ -1334,6 +1339,10 @@ td{
 
 .pr-2{
   padding-right: 0.5rem;
+}
+
+.pb-6{
+  padding-bottom: 1.5rem;
 }
 
 .text-left{
@@ -1470,6 +1479,11 @@ td{
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-gray-800{
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity));
+}
+
 .shadow{
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
@@ -1552,6 +1566,13 @@ td{
   }
 }
 
+.btn-primary:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 100 0 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
 .btn-primary2{
   border-radius: 0.5rem;
   --tw-bg-opacity: 1;
@@ -1573,6 +1594,13 @@ td{
     margin-top: 1rem;
     font-size: 1.7rem;
   }
+}
+
+.btn-primary2:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 100 0 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .btn-danger{
@@ -1598,6 +1626,13 @@ td{
   }
 }
 
+.btn-danger:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(178 34 34 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
 .btn-danger2{
   border-radius: 0.5rem;
   --tw-bg-opacity: 1;
@@ -1619,6 +1654,13 @@ td{
     margin-top: 1rem;
     font-size: 1.7rem;
   }
+}
+
+.btn-danger2:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(178 34 34 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .input{

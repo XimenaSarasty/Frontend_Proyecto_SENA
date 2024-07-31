@@ -18,6 +18,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Herramientas from "./pages/Herramientas.jsx";
 import Prestamos from "./pages/Prestamos.jsx";
 import Pedidos from "./pages/Pedidos.jsx";
+import HistorialIF from "./pages/HistorialIF.jsx";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path='/herramientas' element={<Herramientas/>}/>
           <Route path='/prestamos' element={<Prestamos/>}/>  
           <Route path='/pedidos' element={<Pedidos/>}/>
+          <Route path='/historialif' element={<HistorialIF/>}/>
 
           {/* <Route element={<ProtectedRoute />}> */}
           <Route path="/dashboard" element={<Dashboard />} />

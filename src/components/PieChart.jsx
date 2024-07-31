@@ -74,17 +74,17 @@ const PieChart = () => {
       legends={[
         {
           anchor: "bottom",
-          direction: "row",
+          direction: "column",
           justify: false,
-          translateX: 0,
-          translateY: 56,
+          translateX: 90,
+          translateY: 85,
           itemsSpacing: 0,
-          itemWidth: 100,
+          itemWidth: 40,
           itemHeight: 18,
           itemTextColor: grey[900], 
           itemDirection: "left-to-right",
           itemOpacity: 1,
-          symbolSize: 18,
+          symbolSize: 12,
           symbolShape: "circle",
           effects: [
             {

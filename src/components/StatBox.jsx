@@ -3,14 +3,14 @@ import { Box, Typography } from "@mui/material";
 import ProgressCircle from "./ProgressCircle";
 import { green, grey } from "@mui/material/colors";
 
-const StatBox = ({ title, subtitle, icon, progress, increase }) => {
+const StatBox = ({ cantidad, producto, icon, progress, disponible }) => {
   return (
     <Box width="100%" m="0 30px">
       <Box display="flex" justifyContent="space-between">
         <Box>
           {icon}
           <Typography variant="h6" fontWeight="bold" sx={{ color: grey[900] }}>
-            {title}
+            {cantidad}
           </Typography>
         </Box>
         <Box>
@@ -19,10 +19,10 @@ const StatBox = ({ title, subtitle, icon, progress, increase }) => {
       </Box>
       <Box display="flex" justifyContent="space-between" mt="2px">
         <Typography variant="h" sx={{ color: green[500] }}>
-          {subtitle}
+          {producto}
         </Typography>
         <Typography variant="h" sx={{ color: green[500] }}>
-          {increase}
+          {disponible}
         </Typography>
       </Box>
     </Box>
@@ -37,7 +37,7 @@ export default StatBox;
 // import ProgressCircle from "./ProgressCircle";
 // import { green, grey } from "@mui/material/colors";
 
-// const StatBox = ({ title, subtitle, icon, progress, increase }) => {
+// const StatBox = ({ title, subtitle, icon, progress, disponible }) => {
 //   return (
 //     <Box width="100%" m="0 30px">
 //       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -56,7 +56,7 @@ export default StatBox;
 //       <Box display="flex" justifyContent="space-between" alignItems="center" mt="10px">
 //         <ProgressCircle progress={progress} />
 //         <Typography variant="h5" sx={{ color: green[500] }}>
-//           {increase}
+//           {disponible}
 //         </Typography>
 //       </Box>
 //     </Box>

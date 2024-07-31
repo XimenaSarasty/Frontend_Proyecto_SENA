@@ -41,7 +41,7 @@ const BarChart = () => {
           },
         },
       }}
-      keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
+      keys={["2568405", "2568506", "2568607", "2569617", "2567618"]}
       indexBy="country"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
@@ -66,20 +66,6 @@ const BarChart = () => {
           rotation: -45,
           lineWidth: 6,
           spacing: 10,
-        },
-      ]}
-      fill={[
-        {
-          match: {
-            id: "fries",
-          },
-          id: "dots",
-        },
-        {
-          match: {
-            id: "sandwich",
-          },
-          id: "lines",
         },
       ]}
       borderColor={{

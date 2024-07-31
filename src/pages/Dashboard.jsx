@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom'; 
 import Sidebar from "../components/Sidebar";
 import Home from "../components/Home";
 import { Box, Button, CardHeader, IconButton, Typography } from "@mui/material";
 import DownloadIcon from '@mui/icons-material/Download';
-import EmailIcon from "@mui/icons-material/Email";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import TrafficIcon from "@mui/icons-material/Traffic";
+import ForestIcon from '@mui/icons-material/Forest';
+import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
+import HardwareIcon from '@mui/icons-material/Hardware';
+import DoorFrontIcon from '@mui/icons-material/DoorFront';
 import LineChart from "../components/LineChart";
 import ProgressCircle from './../components/ProgressCircle';
 import { green, grey } from "@mui/material/colors";
@@ -47,10 +48,11 @@ const Dashboard = () => {
           sx={{
             backgroundColor: 'primary.main',
             color: "white",
-            fontSize: "12px",
+            fontSize: "16px",
             fontWeight: "bold",
             borderRadius: "8px",
             padding: "10px 20px",
+            textTransform: "none",
             '&:hover': {
               backgroundColor: 'primary.dark',
               color: "white"
@@ -87,12 +89,12 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="12,361"
-            subtitle="Emails Sent"
+            cantidad="190"
+            producto="Madera"
             progress="0.75"
-            increase="+14%"
+            disponible="Disp: 75%"
             icon={
-              <EmailIcon
+              <ForestIcon
                 sx={{ color: green[600], fontSize: "26px" }}
               />
             }
@@ -106,12 +108,12 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="431,225"
-            subtitle="Sales Obtained"
+            cantidad="1,225"
+            producto="Pintura"
             progress="0.50"
-            increase="+21%"
+            disponible="Disp: 50%"
             icon={
-              <PointOfSaleIcon
+              <FormatColorFillIcon
                 sx={{ color: green[600], fontSize: "26px" }}
               />
             }
@@ -125,12 +127,12 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="32,441"
-            subtitle="New Clients"
+            cantidad="12,441"
+            producto="Puntillas"
             progress="0.30"
-            increase="+5%"
+            disponible="Disp: 30%"
             icon={
-              <PersonAddIcon
+              <HardwareIcon
                 sx={{ color: green[600], fontSize: "26px" }}
               />
             }
@@ -144,12 +146,12 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="1,325,134"
-            subtitle="Traffic Received"
+            cantidad="134"
+            producto="Bisagras"
             progress="0.80"
-            increase="+43%"
+            disponible="Disp: 80%"
             icon={
-              <TrafficIcon
+              <DoorFrontIcon
                 sx={{ color: green[600], fontSize: "26px" }}
               />
             }
@@ -175,14 +177,14 @@ const Dashboard = () => {
                 fontWeight="600"
                 color={grey[900]}
               >
-                Revenue Generated
+                Pedidos realizados por instructores en el 2024 
               </Typography>
               <Typography
                 variant="h5"
                 fontWeight="bold"
                 color={green[500]}
               >
-                $59,342.32
+                480
               </Typography>
             </Box>
             <Box>
@@ -213,12 +215,12 @@ const Dashboard = () => {
             p="15px"
           >
             <Typography color={grey[900]} variant="h" fontWeight="600">
-              Recent Transactions
+              Historial de Transacciones
             </Typography>
           </Box>
           {mockTransactions.map((transaction, i) => (
             <Box
-              key={`${transaction.txId}-${i}`}
+              key={`${transaction.accion}-${i}`}
               display="flex"
               justifyContent="space-between"
               alignItems="center"
@@ -231,30 +233,32 @@ const Dashboard = () => {
                 variant="h"
                 fontWeight="400"
               >
-                {transaction.txId}
+                {transaction.accion}
               </Typography>
               <Typography
                 color={grey[900]}
                 variant="h"
                 fontWeight="200"
               >
-                {transaction.user}
+                {transaction.usuario}
               </Typography>
-            </Box>
-            
+            </Box>            
               <Box color={grey[900]}
                   variant="h6"
                   fontWeight="200"
-              >{transaction.date}</Box>
-              <Box
-                backgroundColor={green[500]}
-                p="5px 10px"
-                borderRadius="4px"
-                variant="h6"
-                fontWeight="200"
-              >
-                ${transaction.cost}
-              </Box>
+              >{transaction.fecha}</Box>
+
+              <Link to="/historialif"> 
+                <Box
+                  backgroundColor={green[500]}
+                  p="5px 10px"
+                  borderRadius="4px"
+                  variant="h6"
+                  fontWeight="200"
+                >
+                  {transaction.estado}
+                </Box>
+              </Link>
             </Box>
           ))}
         </Box>
@@ -267,7 +271,7 @@ const Dashboard = () => {
           p="30px"
         >
           <Typography variant="h" fontWeight="600">
-            Campaign
+            Herramientas en buen estado
           </Typography>
           <Box
             display="flex"
@@ -281,9 +285,9 @@ const Dashboard = () => {
               color={green[500]}
               sx={{ mt: "15px" }}
             >
-              $48,352 revenue generated
+              256 Herramientas en buen estado
             </Typography>
-            <Typography variant="h">Includes extra misc expenditures and costs</Typography>
+            <Typography variant="h">Con gestión constante para el incremento </Typography>
           </Box>
         </Box>
 
@@ -298,7 +302,7 @@ const Dashboard = () => {
             fontWeight="600"
             sx={{ padding: "30px 30px 0 30px" }}
           >
-            Sales Quantity
+            Pedidos por instructor y fichas
           </Typography>
           <Box height="250px" mt="-20px">
             <BarChart isDashboard={true} />
@@ -308,14 +312,16 @@ const Dashboard = () => {
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor='grisClaro.main'
-          padding="30px"
+          paddingTop="30px"
+          paddingLeft="30px"
+          paddingRight="30px"
         >
           <Typography
             variant="h"
             fontWeight="600"
             sx={{ marginBottom: "15px" }}
           >
-            Pie Chart
+            Consumo de productos por fichas
           </Typography>
           <Box height="200px">
             <PieChart isDashboard={true} />

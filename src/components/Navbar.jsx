@@ -111,7 +111,7 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
               </span>
             </div>
           </li>
-          <li>
+          {/* <li>
             <div className="bg-gray-100 text-center rounded-lg my-4">
               <a href="">Ayuda</a>
             </div>
@@ -120,7 +120,7 @@ const Navbar = ({ sidebarToggle, setSidebarToggle }) => {
             <div className="bg-gray-100 text-center rounded-lg my-4">
               <a href="">Configuración</a>
             </div>
-          </li>
+          </li> */}
           <li>
             <div className="bg-gray-100 text-center rounded-lg my-4">
               <span

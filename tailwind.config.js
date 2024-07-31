@@ -17,6 +17,8 @@ export default {
         grisClaro: "#D9D9D9",
         noEdit: "#A59C9C",
         naranja: "#fd7e14",
+        primaryDark: '#006400', // Ajusta el color según sea necesario
+        red700: '#B22222',      // Ajusta el color según sea necesario
       },
       margin: {
         custom: "20rem",

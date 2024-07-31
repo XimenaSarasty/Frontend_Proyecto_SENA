@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import { blue, green, grey } from "@mui/material/colors";
+import { green, grey, red } from "@mui/material/colors";
 
 const ProgressCircle = ({ progress = "0.75", size = "40" }) => {
   const angle = progress * 360;
@@ -9,7 +9,7 @@ const ProgressCircle = ({ progress = "0.75", size = "40" }) => {
     <Box
       sx={{
         background: `radial-gradient(${grey[300]} 55%, transparent 56%),
-            conic-gradient(transparent 0deg ${angle}deg, ${blue[500]} ${angle}deg 360deg),
+            conic-gradient(transparent 0deg ${angle}deg, ${red[500]} ${angle}deg 360deg),
             ${green[500]}`,
         borderRadius: "50%",
         width: `${size}px`,
