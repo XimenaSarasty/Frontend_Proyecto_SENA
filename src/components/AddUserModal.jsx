@@ -3,12 +3,21 @@ import { api } from "../api/token";
 import { FaTimes } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const AddUserModal = ({ isOpen, onClose, user }) => {
   const [roles, setRoles] = useState([]);
   const [estados, setEstados] = useState([]);
   const [formErrors, setFormErrors] = useState({});
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
     Documento: "",
@@ -16,6 +25,11 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
     password: "",
     RolId: "",
     EstadoId: "",
+  });
+  const [permissions, setPermissions] = useState({
+    admin: { option1: false, option2: false, option3: false },
+    usuario: { option1: false, option2: false, option3: false },
+    coordinador: { option1: false, option2: false, option3: false },
   });
 
   useEffect(() => {
@@ -109,6 +123,34 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
     });
   };
 
+  const handleAccordionChange = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
+
+  const handleCheckboxChange = (panel) => (e) => {
+    const { name, checked } = e.target;
+    setPermissions((prevPermissions) => ({
+      ...prevPermissions,
+      [panel]: { ...prevPermissions[panel], [name]: checked },
+    }));
+  };
+
+  const handleSelectAllChange = (panel) => (e) => {
+    const { checked } = e.target;
+    setPermissions((prevPermissions) => ({
+      ...prevPermissions,
+      [panel]: Object.fromEntries(
+        Object.keys(prevPermissions[panel]).map((key) => [key, checked])
+      ),
+    }));
+  };
+
+  const isAllSelected = (panel) =>
+    Object.values(permissions[panel]).every((value) => value);
+  const isIndeterminate = (panel) =>
+    Object.values(permissions[panel]).some((value) => value) &&
+    !isAllSelected(panel);
+
   const resetForm = () => {
     setFormData({
       nombre: "",
@@ -118,8 +160,10 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
       RolId: "",
       EstadoId: "",
     });
+    setAdminPermissions({
+      addProducts: false,
+    });
   };
-
 
   const handleCreate = async () => {
     const { nombre, correo, password, Documento, RolId, EstadoId } = formData;
@@ -186,7 +230,7 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
         isOpen ? "" : "hidden"
       }`}
     >
-      <div className="bg-white rounded-lg shadow-lg sm:w-full md:w-1/4 mt-4 max-h-screen overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-lg sm:w-full md:w-1/2 mt-4 max-h-screen overflow-y-auto">
         <div className="flex justify-end p-2">
           <button onClick={onClose}>
             <FaTimes className="text-black w-4 h-4" />
@@ -200,122 +244,368 @@ const AddUserModal = ({ isOpen, onClose, user }) => {
                   Registro Usuario
                 </h6>
 
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">
-                    Nombres y Apellidos *
-                  </label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                    type="text"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleInputChange}
-                    onKeyPress={(e) => {
-                      if (/\d/.test(e.key)) {
-                        e.preventDefault();
-                      }
+                <div className="flex flex-row justify-between gap-x-4">
+                  <div className="flex flex-col min-w-[200px] w-1/2">
+                    <label className="mb-1 font-bold text-sm">
+                      Nombre Completo *
+                    </label>
+                    <input
+                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                      type="text"
+                      name="nombre"
+                      value={formData.nombre}
+                      onChange={handleInputChange}
+                      onKeyPress={(e) => {
+                        if (/\d/.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                    {formErrors.nombre && (
+                      <div className="text-red-400 text-sm mt-1 px-2 min-w-[200px]">
+                        {formErrors.nombre}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col min-w-[200px] w-1/2">
+                    <label className="mb-1 font-bold text-sm">
+                      Documento *
+                    </label>
+                    <input
+                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                      type="text"
+                      name="Documento"
+                      value={formData.Documento}
+                      onChange={handleInputChange}
+                      onKeyPress={(e) => {
+                        if (!/[0-9]/.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                      maxLength={10}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-row justify-between gap-x-4">
+                  <div className="flex flex-col min-w-[200px] w-1/2">
+                    <label className="mb-1 font-bold text-sm">Correo *</label>
+                    <input
+                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                      type="text"
+                      name="correo"
+                      value={formData.correo}
+                      onChange={handleInputChange}
+                    />
+                    {formErrors.correo && (
+                      <div className="text-red-400 text-sm mt-1 px-2">
+                        {formErrors.correo}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col min-w-[200px] w-1/2">
+                    <label className="mb-1 font-bold text-sm">
+                      Contraseña *
+                    </label>
+                    <input
+                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                    />
+                    {formErrors.password && (
+                      <div className="text-red-400 text-sm mt-1 px-2">
+                        {formErrors.password}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex flex-row justify-between gap-x-4">
+                  <div className="flex flex-col min-w-[200px] w-1/2">
+                    <label className="mb-1 font-bold text-sm">Rol *</label>
+                    <select
+                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                      name="RolId"
+                      value={formData.RolId}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Seleccione un rol</option>
+                      {roles.map((rol) => (
+                        <option key={rol.id} value={rol.id}>
+                          {rol.rolName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col min-w-[200px] w-1/2 mb-4">
+                    <label className="mb-1 font-bold text-sm">Estado *</label>
+                    <select
+                      className="bg-grisClaro text-sm rounded-lg px-2 h-8"
+                      name="EstadoId"
+                      value={formData.EstadoId}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Seleccione un estado</option>
+                      {estados.map((estado) => (
+                        <option
+                          key={estado.id}
+                          value={estado.id}
+                          style={{
+                            color:
+                              estado.estadoName === "ACTIVO"
+                                ? "green"
+                                : estado.estadoName === "INACTIVO"
+                                ? "red"
+                                : "inherit",
+                          }}
+                        >
+                          {estado.estadoName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <h6 className="font-bold text-center text-xl mb-2">Permisos</h6>
+                <Accordion
+                  expanded={expanded === "panel1"}
+                  onChange={handleAccordionChange("panel1")}
+                  sx={{
+                    "&:before": { display: "none" },
+                    boxShadow: "none",
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    className="font-bold text-sm"
+                    sx={{
+                      backgroundColor: "grisClaro.main",
+                      borderRadius: "0.5rem",
+                      minHeight: "unset",
+                      "&.Mui-expanded": { minHeight: "unset" },
+                      "& .MuiAccordionSummary-content": {
+                        margin: "6px",
+                        "&.Mui-expanded": { margin: "6px" },
+                      },
                     }}
-                  />
-                  {formErrors.nombre && (
-                    <div className="text-red-400 text-sm mt-1 px-2">
-                      {formErrors.nombre}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Documento *</label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                    type="text"
-                    name="Documento"
-                    value={formData.Documento}
-                    onChange={handleInputChange}
-                    onKeyPress={(e) => {
-                      if (!/[0-9]/.test(e.key)) {
-                        e.preventDefault();
-                      }
-                    }}
-                    maxLength={10}
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Correo *</label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                    type="text"
-                    name="correo"
-                    value={formData.correo}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.correo && (
-                    <div className="text-red-400 text-sm mt-1 px-2">
-                      {formErrors.correo}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Contraseña *</label>
-                  <input
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.password && (
-                    <div className="text-red-400 text-sm mt-1 px-2">
-                      {formErrors.password}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Rol *</label>
-                  <select
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                    name="RolId"
-                    value={formData.RolId}
-                    onChange={handleInputChange}
                   >
-                    <option value="">Seleccione un rol</option>
-                    {roles.map((rol) => (
-                      <option key={rol.id} value={rol.id}>
-                        {rol.rolName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="mb-1 font-bold text-sm">Estado *</label>
-                  <select
-                    className="bg-grisClaro text-sm rounded-lg px-2 h-8"
-                    name="EstadoId"
-                    value={formData.EstadoId}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Seleccione un estado</option>
-                    {estados.map((estado) => (
-                      <option
-                        key={estado.id}
-                        value={estado.id}
-                        style={{
-                          color:
-                            estado.estadoName === "ACTIVO"
-                              ? "green"
-                              : estado.estadoName === "INACTIVO"
-                              ? "red"
-                              : "inherit",
+                    Admin
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <div className="text-center">
+                      <FormControlLabel
+                        sx={{
+                          "& .MuiFormControlLabel-label": {
+                            fontSize: "0.775rem",
+                            fontWeight: "bold",
+                          },
                         }}
-                      >
-                        {estado.estadoName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                        control={
+                          <Checkbox
+                            checked={isAllSelected("admin")}
+                            indeterminate={isIndeterminate("admin")}
+                            onChange={handleSelectAllChange("admin")}
+                          />
+                        }
+                        label="Seleccionar todos"
+                      />
+                    </div>
+                    <div>
+                      <FormControlLabel
+                        sx={{
+                          "& .MuiFormControlLabel-label": {
+                            fontSize: "0.675rem",
+                          },
+                        }}
+                        control={
+                          <Checkbox
+                            checked={permissions.admin.option1}
+                            onChange={handleCheckboxChange("admin")}
+                            name="option1"
+                          />
+                        }
+                        label="Agregar usuarios"
+                      />
+                      <FormControlLabel
+                        sx={{
+                          "& .MuiFormControlLabel-label": {
+                            fontSize: "0.675rem",
+                          },
+                        }}
+                        control={
+                          <Checkbox
+                            checked={permissions.admin.option2}
+                            onChange={handleCheckboxChange("admin")}
+                            name="option2"
+                          />
+                        }
+                        label="Editar usuarios"
+                      />
+                      <FormControlLabel
+                        sx={{
+                          "& .MuiFormControlLabel-label": {
+                            fontSize: "0.675rem",
+                          },
+                        }}
+                        control={
+                          <Checkbox
+                            checked={permissions.admin.option3}
+                            onChange={handleCheckboxChange("admin")}
+                            name="option3"
+                          />
+                        }
+                        label="Agregar productos"
+                      />
+                    </div>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion
+                  expanded={expanded === "panel2"}
+                  onChange={handleAccordionChange("panel2")}
+                  sx={{
+                    "&:before": { display: "none" },
+                    boxShadow: "none",
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    className="font-bold text-sm"
+                    sx={{
+                      backgroundColor: "grisClaro.main",
+                      borderRadius: "0.5rem",
+                      minHeight: "unset",
+                      "&.Mui-expanded": { minHeight: "unset" },
+                      "& .MuiAccordionSummary-content": {
+                        margin: "6px",
+                        "&.Mui-expanded": { margin: "6px" },
+                      },
+                    }}
+                  >
+                    Usuario
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <div className="text-center">
+                      <FormControlLabel
+                        sx={{
+                          "& .MuiFormControlLabel-label": {
+                            fontSize: "0.775rem",
+                            fontWeight: "bold",
+                          },
+                        }}
+                        control={
+                          <Checkbox
+                            checked={isAllSelected("usuario")}
+                            indeterminate={isIndeterminate("usuario")}
+                            onChange={handleSelectAllChange("usuario")}
+                          />
+                        }
+                        label="Seleccionar todos"
+                      />
+                    </div>
+                    <div>
+                      <FormControlLabel
+                        sx={{
+                          "& .MuiFormControlLabel-label": {
+                            fontSize: "0.675rem",
+                          },
+                        }}
+                        control={
+                          <Checkbox
+                            checked={permissions.usuario.option1}
+                            onChange={handleCheckboxChange("usuario")}
+                            name="option1"
+                          />
+                        }
+                        label="Editar su perfil"
+                      />
+                    </div>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion
+                  expanded={expanded === "panel3"}
+                  onChange={handleAccordionChange("panel3")}
+                  sx={{
+                    "&:before": { display: "none" },
+                    boxShadow: "none",
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    className="font-bold text-sm"
+                    sx={{
+                      backgroundColor: "grisClaro.main",
+                      borderRadius: "0.5rem",
+                      minHeight: "unset",
+                      "&.Mui-expanded": { minHeight: "unset" },
+                      "& .MuiAccordionSummary-content": {
+                        margin: "6px",
+                        "&.Mui-expanded": { margin: "6px" },
+                      },
+                    }}
+                  >
+                    Coordinador
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <div className="text-center">
+                      <FormControlLabel
+                        sx={{
+                          "& .MuiFormControlLabel-label": {
+                            fontSize: "0.775rem",
+                            fontWeight: "bold",
+                          },
+                        }}
+                        control={
+                          <Checkbox
+                            checked={isAllSelected("coordinador")}
+                            indeterminate={isIndeterminate("coordinador")}
+                            onChange={handleSelectAllChange("coordinador")}
+                          />
+                        }
+                        label="Seleccionar todos"
+                      />
+                    </div>
+                    <div>
+                      <FormControlLabel
+                        sx={{
+                          "& .MuiFormControlLabel-label": {
+                            fontSize: "0.675rem",
+                          },
+                        }}
+                        control={
+                          <Checkbox
+                            checked={permissions.coordinador.option1}
+                            onChange={handleCheckboxChange("coordinador")}
+                            name="option1"
+                          />
+                        }
+                        label="Agregar usuarios"
+                      />
+                      <FormControlLabel
+                        sx={{
+                          "& .MuiFormControlLabel-label": {
+                            fontSize: "0.675rem",
+                          },
+                        }}
+                        control={
+                          <Checkbox
+                            checked={permissions.coordinador.option2}
+                            onChange={handleCheckboxChange("coordinador")}
+                            name="option2"
+                          />
+                        }
+                        label="Editar usuarios"
+                      />
+                    </div>
+                  </AccordionDetails>
+                </Accordion>
+
                 <div className="sm:w-full md:w-full flex flex-col justify-end">
                   <div className="flex justify-center mt-4 mb-4 mx-2">
                     <button className="btn-danger2 mx-2" onClick={onClose}>

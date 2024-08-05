@@ -90,39 +90,44 @@ const Usuarios = () => {
       label: "ID",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
+        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
       },
     },
     {
       name: "Documento",
-      label: "Documento",
+      label: "DOCUMENTO",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
+        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
       },
     },
     {
       name: "nombre",
-      label: "Nombre",
+      label: "NOMBRE",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
+        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
       },
     },
     {
       name: "correo",
-      label: "Correo",
+      label: "CORREO",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
+        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
       },
     },
     {
       name: "rolName",
-      label: "Rol",
+      label: "ROL",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
+        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
       },
     },
     {
       name: "estadoName",
-      label: "Estado",
+      label: "ESTADO",
       options: {
         customBodyRender: (value) => (
           <div
@@ -134,11 +139,12 @@ const Usuarios = () => {
             {value}
           </div>
         ),
+        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
       },
     },
     {
       name: "edit",
-      label: "Editar",
+      label: "EDITAR",
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => (
@@ -152,6 +158,7 @@ const Usuarios = () => {
             </IconButton>
           </div>
         ),
+        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
       },
     },
   ];

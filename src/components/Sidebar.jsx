@@ -1,25 +1,28 @@
-import React from "react";
-import { FaHome, FaUsers, FaRegFileExcel, FaUnity } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaHome, FaUsers, FaRegFileExcel, FaUnity, FaClipboardList } from "react-icons/fa";
 import { FaUserLarge } from "react-icons/fa6";
-import { IoBarChartSharp } from "react-icons/io5";
 import { PiChalkboardTeacher } from "react-icons/pi";
 import { TbCategory } from "react-icons/tb";
-import { MdOutlineCategory } from "react-icons/md";
+import { MdOutlineCategory, MdAssignmentReturned } from "react-icons/md";
 import { SiGoogleclassroom } from "react-icons/si";
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { LiaDropbox } from "react-icons/lia";
 import { FiTool } from "react-icons/fi";
-import { MdAssignmentReturned } from "react-icons/md";
-import { FaClipboardList } from "react-icons/fa6";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import fondo from "/logoSena.png";
 
 const Sidebar = ({ sidebarToggle }) => {
   const navigate = useNavigate();
+  const [expanded, setExpanded] = useState(null);
 
   const handleClick = () => {
     navigate("/dashboard");
   };
+
+  const handleToggle = (panel) => {
+    setExpanded(expanded === panel ? null : panel);
+  };
+
   return (
     <motion.div
       initial={{ x: "-100%" }}
@@ -40,92 +43,140 @@ const Sidebar = ({ sidebarToggle }) => {
       </div>
       <hr />
       <ul className="mt-3 text-white font-bold font-inter">
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-700 py-2">
           <a href="/dashboard" className="px-3">
             <FaHome className="inline-block w-6 h-6 mr-2 -mt-2"></FaHome>
             Dashboard
           </a>
         </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
-          <a href="/Usuarios" className="px-3">
-            <FaUserLarge className="inline-block w-6 h-6 mr-2 -mt-2"></FaUserLarge>
-            Usuarios
-          </a>
+
+        {/* Usuarios */}
+        <li className="mb-2">
+          <div
+            className="flex items-center justify-between px-3 py-2 rounded hover:shadow hover:bg-gray-700 cursor-pointer"
+            onClick={() => handleToggle("usuarios")}
+          >
+            <div className="flex items-center">
+              <FaUserLarge className="inline-block w-6 h-6 mr-2 -mt-2" />
+              Usuarios
+            </div>
+            <span>{expanded === "usuarios" ? "-" : "+"}</span>
+          </div>
+          {expanded === "usuarios" && (
+            <ul className="bg-black text-center text-white text-sm">
+              <li className="py-1 hover:bg-gray-700 rounded mx-4">
+                <a href="/Usuarios" className="px-3 flex items-center">
+                <FaUserLarge className="inline-block w-4 h-4 mr-2 -mt-1"></FaUserLarge>
+                Usuarios
+                </a>
+              </li>
+              <li className="py-1 hover:bg-gray-700 rounded mx-4">
+                <a href="/roles" className="px-3 flex items-center">
+                <FaUsers className="inline-block w-4 h-4 mr-2 -mt-1"></FaUsers>
+                Roles
+                </a>
+              </li>
+            </ul>
+          )}
         </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
-          <a href="/roles" className="px-3">
-            <FaUsers className="inline-block w-6 h-6 mr-2 -mt-2"></FaUsers>
-            Roles
-          </a>
+
+        {/* Formación */}
+        <li className="mb-2">
+          <div
+            className="flex items-center justify-between px-3 py-2 rounded hover:shadow hover:bg-gray-700 cursor-pointer"
+            onClick={() => handleToggle("formacion")}
+          >
+            <div className="flex items-center">
+              <SiGoogleclassroom className="inline-block w-6 h-6 mr-2 -mt-2" />
+              Formación
+            </div>
+            <span>{expanded === "formacion" ? "-" : "+"}</span>
+          </div>
+          {expanded === "formacion" && (
+            <ul className="bg-black text-center text-white text-sm">
+              <li className="py-1 hover:bg-gray-700 rounded mx-4">
+                <a href="/fichas" className="px-3 flex items-center">
+                <SiGoogleclassroom className="inline-block w-4 h-4 mr-2 -mt-1"></SiGoogleclassroom>
+                Fichas
+                </a>
+              </li>
+              <li className="py-1 hover:bg-gray-700 rounded mx-4">
+                <a href="/instructores" className="px-3 flex items-center">
+                <PiChalkboardTeacher className="inline-block w-4 h-4 mr-2 -mt-1"></PiChalkboardTeacher>
+                Instructores
+                </a>
+              </li>
+            </ul>
+          )}
         </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
-          <a href="/instructores" className="px-3">
-            <PiChalkboardTeacher className="inline-block w-6 h-6 mr-2 -mt-2"></PiChalkboardTeacher>
-            Instructores
-          </a>
+
+        {/* Categorías */}
+        <li className="mb-2">
+          <div
+            className="flex items-center justify-between px-3 py-2 rounded hover:shadow hover:bg-gray-700 cursor-pointer"
+            onClick={() => handleToggle("categorias")}
+          >
+            <div className="flex items-center">
+              <TbCategory className="inline-block w-6 h-6 mr-2 -mt-2" />
+              Categorías
+            </div>
+            <span>{expanded === "categorias" ? "-" : "+"}</span>
+          </div>
+          {expanded === "categorias" && (
+            <ul className="bg-black text-center text-white text-sm">
+              <li className="py-1 hover:bg-gray-700 rounded mx-4">
+                <a href="/categorias" className="px-3 flex items-center">
+                <TbCategory className="inline-block w-4 h-4 mr-2 -mt-1"></TbCategory>
+                Categorías
+                </a>
+              </li>
+              <li className="py-1 hover:bg-gray-700 rounded mx-4">
+                <a href="/subcategorias" className="px-3 flex items-center">
+                <MdOutlineCategory className="inline-block w-4 h-4 mr-2 -mt-1"></MdOutlineCategory>
+                Subcategorías
+                </a>
+              </li>
+            </ul>
+          )}
         </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
-          <a href="/fichas" className="px-3">
-            <SiGoogleclassroom className="inline-block w-6 h-6 mr-2 -mt-2"></SiGoogleclassroom>
-            Fichas
-          </a>
-        </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
-          <a href="/categorias" className="px-3">
-            <TbCategory className="inline-block w-6 h-6 mr-2 -mt-2"></TbCategory>
-            Categorias
-          </a>
-        </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
-          <a href="/subcategorias" className="px-3">
-            <MdOutlineCategory className="inline-block w-6 h-6 mr-2 -mt-2"></MdOutlineCategory>
-            Subcategorias
-          </a>
-        </li>
-        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
-          <a href='/productos' className='px-3'>
-            <LiaDropbox className='inline-block w-6 h-6 mr-2 -mt-2'></LiaDropbox>
+
+        {/* Otros enlaces */}
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-700 py-2">
+          <a href="/productos" className="px-3">
+            <LiaDropbox className="inline-block w-6 h-6 mr-2 -mt-2"></LiaDropbox>
             Productos
           </a>
         </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-700 py-2">
           <a href="/herramientas" className="px-3">
             <FiTool className="inline-block w-6 h-6 mr-2 -mt-2"></FiTool>
             Herramientas
           </a>
         </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-700 py-2">
           <a href="/prestamos" className="px-3">
             <MdAssignmentReturned className="inline-block w-6 h-6 mr-2 -mt-2"></MdAssignmentReturned>
             Préstamos
           </a>
         </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-700 py-2">
           <a href="/pedidos" className="px-3">
             <FaClipboardList className="inline-block w-6 h-6 mr-2 -mt-2"></FaClipboardList>
             Pedidos
           </a>
         </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-700 py-2">
           <a href="/excel" className="px-3">
             <FaRegFileExcel className="inline-block w-6 h-6 mr-2 -mt-2"></FaRegFileExcel>
             Importar Excel
           </a>
         </li>
-        <li className="mb-2 rounded hover:shadow hover:bg-gray-200 py-2">
+        <li className="mb-2 rounded hover:shadow hover:bg-gray-700 py-2">
           <a href="/unidadmedida" className="px-3">
             <FaUnity className="inline-block w-6 h-6 mr-2 -mt-2"></FaUnity>
             Unidad de Medida
           </a>
         </li>
-
-        {/* 
-        <li className='mb-2 rounded hover:shadow hover:bg-gray-200 py-2'>
-          <a href='/dashboard' className='px-3'>
-            <IoBarChartSharp className='inline-block w-6 h-6 mr-2 -mt-2'></IoBarChartSharp>
-            Charts
-          </a>
-        </li> */}
       </ul>
     </motion.div>
   );

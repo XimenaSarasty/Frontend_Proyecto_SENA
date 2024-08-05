@@ -248,7 +248,7 @@ const Dashboard = () => {
                   fontWeight="200"
               >{transaction.fecha}</Box>
 
-              <Link to="/historialif"> 
+              <Link to="/historial"> 
                 <Box
                   backgroundColor={green[500]}
                   p="5px 10px"

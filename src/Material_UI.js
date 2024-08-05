@@ -15,6 +15,12 @@ const theme = createTheme({
     correo: {
       main: "#7BA3DF",
     },
+    grisClaro: {
+      main: "#D9D9D9",
+    },
+    black: {
+      main: "#000000",
+    },
   },
 });
 

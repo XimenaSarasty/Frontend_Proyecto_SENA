@@ -35,24 +35,31 @@
     padding: 0px 0px; /* EL PADDING DE LOS DATOS DE LAS TABLAS */
     font-size: 12px;/*EL TAMAÑO DE LOS DATOS DE LA TABLA PRODUCTOS*/
     @apply font-inter;
+    justify-content: center;
   }
   .custom-tables .MuiTableCell-root {
     padding: 2px 4px; /* EL PADDING DE LOS DATOS DEL RESTO DE LAS TABLAS */
     font-size: 14px;/*EL TAMAÑO DE LOS DATOS DEL RESTO DE LAS TABLAS*/
     @apply font-inter;
+    justify-content: center;
   }
 
 /* ELEMENTOS PARA TODAS LAS TABLAS */
   .tss-1akey0g-MUIDataTableHeadCell-data { 
     font-size: 12px !important;   /*EL TAMAÑO DEL SUBTITULO DE LAS TABLAS*/
     font-weight: bold;
+    justify-content: center;
   }
   .tss-1fbujeu-MUIDataTableHeadCell-toolButton {
     padding: 2px 4px !important; /*EL PADDING DE LOS SUBTITULOS DE LAS TABLAS*/
+    justify-content: center;
   }
   .custom-title {
     font-weight: bold; 
     font-size: 24px; 
+  } 
+  .custom-header {
+    text-align: center !important;
   } 
 
 /* Media queries personalizadas */
