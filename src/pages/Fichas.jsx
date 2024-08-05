@@ -84,6 +84,9 @@ const Fichas = () => {
       name: "id",
       label: "ID",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
@@ -91,6 +94,9 @@ const Fichas = () => {
       name: "NumeroFicha",
       label: "FICHA",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
@@ -98,6 +104,9 @@ const Fichas = () => {
       name: "Programa",
       label: "PROGRAMA",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
@@ -105,6 +114,9 @@ const Fichas = () => {
       name: "Jornada",
       label: "JORNADA",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
@@ -112,13 +124,19 @@ const Fichas = () => {
       name: "nombre",
       label: "USUARIO",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "estadoName",
-      label: "Estado",
+      label: "ESTADO",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => (
           <div
             className={clsx("text-center", {
@@ -133,9 +151,12 @@ const Fichas = () => {
     },
     {
       name: "edit",
-      label: "Editar",
+      label: "EDITAR",
       options: {
         filter: false,
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value, tableMeta, updateValue) => (
           <div className="flex items-center justify-center">
             <IconButton

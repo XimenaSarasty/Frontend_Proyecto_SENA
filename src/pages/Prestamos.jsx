@@ -81,8 +81,11 @@ const Prestamos = () => {
   const columns = [
     {
       name: "Codigo",
-      label: "Código",
+      label: "CÓDIGO",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
@@ -90,77 +93,110 @@ const Prestamos = () => {
       name: "Id",
       label: "ID",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "IdFicha",
-      label: "ID-Ficha",
+      label: "FICHA",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "IDUsuario",
-      label: "ID-Usuario",
+      label: "USUARIO",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "IDInstructor",
-      label: "ID-Instructor",
+      label: "INSTRUCTOR",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "IDHerramienta",
-      label: "ID-Herramienta",
+      label: "HERRAMIENTA",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "Cantidad",
-      label: "Cantidad",
+      label: "CANTIDAD",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "FechaPrestamo",
-      label: "Fecha de Préstamo",
+      label: "FECHA DE PRÉSTAMO",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "FechaDevolucion",
-      label: "Fecha de Devolución",
+      label: "FECHA DE DEVOLUCIÓN",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "Estado",
-      label: "Estado",
+      label: "ESTADO",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "Observaciones",
-      label: "Observaciones",
+      label: "OBSERVACIONES",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "edit",
-      label: "Editar",
+      label: "EDITAR",
       options: {
         filter: false,
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value, tableMeta, updateValue) => (
           <div className="flex items-center justify-center">
             <IconButton

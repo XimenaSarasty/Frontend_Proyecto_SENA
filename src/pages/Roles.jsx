@@ -59,23 +59,32 @@ const Roles = () => {
   const columns = [
     {
       name: "id",
-      label: "Id",
+      label: "ID",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "rolName",
-      label: "Rol",
+      label: "ROL",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "edit",
-      label: "Editar",
+      label: "EDITAR",
       options: {
         filter: false,
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value, tableMeta, updateValue) => (
           <div className="flex items-center justify-center">
             <IconButton

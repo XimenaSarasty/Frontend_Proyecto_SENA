@@ -90,7 +90,9 @@ const Usuarios = () => {
       label: "ID",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
-        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        )
       },
     },
     {
@@ -98,7 +100,9 @@ const Usuarios = () => {
       label: "DOCUMENTO",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
-        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
       },
     },
     {
@@ -106,7 +110,9 @@ const Usuarios = () => {
       label: "NOMBRE",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
-        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
       },
     },
     {
@@ -114,7 +120,9 @@ const Usuarios = () => {
       label: "CORREO",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
-        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
       },
     },
     {
@@ -122,13 +130,18 @@ const Usuarios = () => {
       label: "ROL",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
-        setCellHeaderProps: () => ({ style: { textAlign: 'center' } }),
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
       },
     },
     {
       name: "estadoName",
       label: "ESTADO",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => (
           <div
             className={clsx("text-center", {
@@ -147,6 +160,9 @@ const Usuarios = () => {
       label: "EDITAR",
       options: {
         filter: false,
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value, tableMeta, updateValue) => (
           <div className="flex items-center justify-center">
             <IconButton

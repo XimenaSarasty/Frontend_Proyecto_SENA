@@ -76,22 +76,37 @@ const ImportExcel = () => {
     {
       name: "ID",
       label: "ID",
+      options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
     },
     {
       name: "name",
-      label: "Nombre",
+      label: "NOMBRE",
+      options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
+        customBodyRender: (value) => <div className="text-center">{value}</div>,
+      },
     },
     {
       name: "preview",
-      label: "Vista previa",
+      label: "VISTA PREVIA",
       options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return (
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => (
+          <div className="flex items-center justify-center">
             <IconButton onClick={() => handlePreviewClick(tableMeta.rowData)}>
               <VisibilityIcon />
             </IconButton>
-          );
-        },
+            </div>
+        ),
       },
     },
   ];

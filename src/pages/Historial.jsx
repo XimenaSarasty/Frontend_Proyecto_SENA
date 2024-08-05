@@ -69,7 +69,9 @@ const Historial = () => {
       label: "TIPO DE EVENTO",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
-        setCellHeaderProps: () => ({ className: 'custom-header' }),
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
       },
     },
     {
@@ -77,7 +79,9 @@ const Historial = () => {
       label: "USUARIO",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
-        setCellHeaderProps: () => ({ className: 'custom-header' }),
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
       },
     },
     {
@@ -85,7 +89,9 @@ const Historial = () => {
       label: "FECHA",
       options: {
         customBodyRender: (value) => <div className="text-center">{value}</div>,
-        setCellHeaderProps: () => ({ className: 'custom-header' }),
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
       },
     },
     {
@@ -95,7 +101,9 @@ const Historial = () => {
         customBodyRender: (value) => (
           <div className="text-center">{value}</div>
         ),
-        setCellHeaderProps: () => ({ className: 'custom-header' }),
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         setCellProps: () => ({
           className: "custom-table-cell",
           style: { padding: '12px', fontSize: '14px' },
