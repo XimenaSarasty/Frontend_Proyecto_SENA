@@ -1,5 +1,5 @@
-import axios from "axios";
-import { URL_api } from "./variables";
+import axios from 'axios';
+import { URL_api } from './variables';
 
 const getToken = () => {
     const token = localStorage.getItem('token');
@@ -13,7 +13,7 @@ const api = axios.create({
 api.interceptors.request.use((request) => {
   const token = getToken();
   request.headers.Authorization = token;
-  return request;
+  return request;  
 });
 
 export { getToken, api };

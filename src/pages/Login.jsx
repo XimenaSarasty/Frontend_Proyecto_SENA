@@ -1,22 +1,43 @@
-import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
-import { ToastContainer, toast } from 'react-toastify';
-import { useAuth } from '../context/AuthContext';
-import fondo from '/logoSena.png';
-import { api } from '../api/token';
-import Cookies from 'js-cookie';
-import 'react-toastify/dist/ReactToastify.css';
-
+import React, { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faKey } from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer, toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
+import fondo from "/logoSena.png";
+import { api } from "../api/token";
+import Cookies from "js-cookie";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [Documento, setDocumento] = useState("");
   const [password, setPassword] = useState("");
   const [rolName, setRolName] = useState("");
+  const [roles, setRoles] = useState([]);
   const [passwordError, setPasswordError] = useState("");
   const { signin } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await api.get("/roles");
+        setRoles(response.data);
+      } catch (error) {
+        toast.error("Error al cargar roles", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    };
+
+    fetchRoles();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -24,7 +45,7 @@ const Login = () => {
     if (!Documento) {
       toast.error("El documento es requerido", {
         position: "top-right",
-        autoClose: 2500,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -37,7 +58,7 @@ const Login = () => {
     if (!password) {
       toast.error("La contraseña es requerida", {
         position: "top-right",
-        autoClose: 2500,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -50,7 +71,7 @@ const Login = () => {
     if (!rolName) {
       toast.error("El rol es requerido", {
         position: "top-right",
-        autoClose: 2500,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -72,15 +93,18 @@ const Login = () => {
           Cookies.set("token", token);
 
           if (role !== rolName) {
-            toast.error("Acceso denegado. El rol seleccionado no coincide.", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+            toast.error(
+              "Acceso denegado. El rol seleccionado no es correcto.",
+              {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              }
+            );
             return;
           }
 
@@ -95,7 +119,7 @@ const Login = () => {
             progress: undefined,
           });
           setTimeout(() => {
-            navigate("/home");
+            navigate("/dashboard");
           }, 2000);
         }
       } catch (error) {
@@ -118,28 +142,33 @@ const Login = () => {
       setDocumento(value);
     }
   };
+
   const handlePasswordChange = (e) => {
     const value = e.target.value;
-  
     if (value.length <= 20) {
       setPassword(value);
-  
       const errors = [];
-      
       if (value.length < 6) {
         errors.push("La contraseña debe tener mínimo 6 caracteres");
-      } else if (value.length > 20) {
+      }
+      if (value.length > 20) {
         errors.push("La contraseña debe tener máximo 20 caracteres");
       }
-  
       if (!/[\W_]/.test(value)) {
-        errors.push("La contraseña debe contener al menos un carácter especial");
+        errors.push(
+          "La contraseña debe tener un carácter especial"
+        );
       }
-  
-      if (!/[a-z]/.test(value) || !/[A-Z]/.test(value)) {
-        errors.push("La contraseña debe contener al menos una letra minúscula y una mayúscula");
+      if (!/[a-z]/.test(value)) {
+        errors.push(
+          "La contraseña debe tener una letra minúscula"
+        );
       }
-  
+      if (!/[A-Z]/.test(value)) {
+        errors.push(
+          "La contraseña debe tener una letra mayúscula"
+        );
+      }
       if (errors.length > 0) {
         setPasswordError(errors[0]);
       } else {
@@ -149,17 +178,25 @@ const Login = () => {
   };
 
   return (
-    <div className="pagina flex flex-col md:flex-row h-screen bg-fondo">
+    <div className="flex flex-col md:flex-row h-screen bg-fondo">
       <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path h-full md:h-auto">
         <div className="main w-3/4 md:w-1/2 text-center text-lg">
           <div className="letras font-inter mb-4 md:mb-8">
-            <h1 className="text-white font-normal text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">Bienvenido a</h1>
-            <h1 className="text-white font-semibold text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">inventario del</h1>
-            <h1 className="text-sena font-semibold text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">Mobiliario</h1>
+            <h1 className="text-white font-normal text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">
+              Bienvenido a
+            </h1>
+            <h1 className="text-white font-semibold text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">
+              inventario del
+            </h1>
+            <h1 className="text-sena font-semibold text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">
+              Mobiliario
+            </h1>
           </div>
-          <div className="space-y-4 md:space-y-6 text-left">
-            <div className="input w-full mb-2 relative">
-              <label className="text-sm text-white block mb-1">Identificación</label>
+          <form onSubmit={handleLogin} className="space-y-2 md:space-y-4 text-left">
+            <div className="input w-full mb-1 relative">
+              <label className="text-sm text-white block mb-1">
+                Identificación
+              </label>
               <div className="flex items-center border-b-2 border-white">
                 <input
                   type="text"
@@ -167,11 +204,16 @@ const Login = () => {
                   value={Documento}
                   onChange={handleDocumentoChange}
                 />
-                <FontAwesomeIcon icon={faUser} className="absolute right-2 text-white ml-2" />
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="absolute right-2 text-white ml-2"
+                />
               </div>
             </div>
-            <div className="input w-full mb-2 relative">
-              <label className="text-sm text-white block mb-1">Contraseña</label>
+            <div className="input w-full mb-1 relative">
+              <label className="text-sm text-white block mb-1">
+                Contraseña
+              </label>
               <div className="flex items-center border-b-2 border-white">
                 <input
                   type="password"
@@ -179,13 +221,16 @@ const Login = () => {
                   value={password}
                   onChange={handlePasswordChange}
                 />
-                <FontAwesomeIcon icon={faKey} className="absolute right-2 text-white ml-2" />
+                <FontAwesomeIcon
+                  icon={faKey}
+                  className="absolute right-2 text-white ml-2"
+                />
               </div>
               {passwordError && (
                 <div className="text-red-400 text-sm mt-1">{passwordError}</div>
               )}
             </div>
-            <div className="input w-full mb-2 relative ">
+            <div className="input w-full mb-2 relative">
               <label className="text-sm text-white block mb-1">Rol</label>
               <div className="flex items-start border-b-2 border-white">
                 <select
@@ -194,16 +239,31 @@ const Login = () => {
                   onChange={(e) => setRolName(e.target.value)}
                 >
                   <option value="">Seleccione su rol</option>
-                  <option value="ADMIN">Administrador</option>
-                  <option value="USUARIO">Usuario</option>
+                  {roles.map((role) => (
+                    <option key={role.id} value={role.rolName}>
+                      {role.rolName}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
-          </div>
-          <button className="btn-primary mt-2 md:mt-8" onClick={handleLogin}>Iniciar sesión</button>
-          <div className="mt-2">
-            <NavLink to={'/contras_1'} className="text-white text-sm md:text-lg mt-4">Olvidé mi contraseña</NavLink>
-          </div>
+            <div className="flex justify-center mt-2 md:mt-6">
+              <button
+                type="submit"
+                className="btn-primary"
+              >
+                Iniciar sesión
+              </button>
+            </div>
+            <div className="mt-2 text-center">
+              <NavLink
+                to={"/contras_1"}
+                className="text-white text-sm md:text-lg -mt-2"
+              >
+                Olvidé mi contraseña
+              </NavLink>
+            </div>
+          </form>
         </div>
       </div>
 
