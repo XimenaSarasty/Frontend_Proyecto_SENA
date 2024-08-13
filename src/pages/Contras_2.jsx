@@ -113,31 +113,33 @@ const Contras_2 = () => {
   };
 
   return (
-    <div className="pagina flex flex-col md:flex-row h-screen bg-fondo">
+    <div className="flex flex-col md:flex-row h-screen bg-fondo">
       <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path h-full">
-        <div className="main w-3/4 md:w-1/2 text-center">
-          <div className="letras font-inter mb-4 md:mb-10">
-            <h3 className="text-white font-normal text-2xl md:text-4xl lg:text-4xl">
+        <div className="main w-3/4 md:w-1/2 text-center text-sm md:text-lg">
+          <div className="letras font-inter mb-4 md:mb-6">
+            <h3 className="text-white font-normal text-xl md:text-4xl lg:text-4xl mt-2 md:mt-4">
               Confirme su dirección
             </h3>
-            <h3 className="text-white font-normal text-2xl md:text-4xl lg:text-4xl md:mt-2">
+            <h3 className="text-white font-normal text-xl md:text-4xl lg:text-4xl md:mt-2">
               de correo electrónico
             </h3>
           </div>
-          <div className="space-y-6 text-center mb-16 mt-8">
-            <h1 className="text-white font-normal text-xl md:text-2xl lg:text-2xl mt-2 md:mt-4">
+          <div className="space-y-4 text-center mb-6 mt-4">
+            <h1 className="text-white font-normal text-xs md:text-lg lg:text-lg mt-2 md:mt-4">
               Código de verificación enviado a:
             </h1>
-            <h1 className="text-correo font-normal text-xl md:text-2xl lg:text-2xl mt-2 md:mt-4">
+            <h1 className="text-correo font-normal text-xs md:text-lg lg:text-lg mt-2 md:mt-4">
               {correo}
             </h1>
           </div>
-          <div className="mt-4 mb-10 px-2 w-full mx-auto flex justify-center">
+          <div className="mt-4 mb-8 px-2 w-full mx-auto flex justify-center">
             {code.map((char, index) => (
               <input
                 key={index}
                 ref={(el) => (inputRefs.current[index] = el)}
-                className="input text-lg text-white block p-3 w-12 text-center mx-1 focus:outline-none"
+                className={`input text-lg text-white block p-3 w-12 text-center mx-1 focus:outline-none bg-transparent border-b-2 ${
+                  char ? "border-white" : "border-transparent"
+                }`}
                 maxLength="1"
                 value={char}
                 onChange={(e) => handleChange(e, index)}
@@ -145,12 +147,12 @@ const Contras_2 = () => {
               />
             ))}
           </div>
-          <div className="space-y-6 text-center mb-16 mt-8">
-            <h1 className="text-white font-normal text-sm md:text-xl lg:text-2xl mt-2 md:mt-4">
+          <div className="space-y-4 text-center mb-6 mt-4">
+            <h1 className="text-white font-normal text-sm md:text-lg lg:text-xl mt-2 md:mt-4">
               Intentos: {intentos}/3
             </h1>
           </div>
-          <button className="btn-primary mt-6 mb-3" onClick={handleLogin}>
+          <button className="btn-primary mt-8 mb-2" onClick={handleLogin}>
             Confirmar correo
           </button>
         </div>

@@ -19,7 +19,7 @@ import Herramientas from "./pages/Herramientas.jsx";
 import Prestamos from "./pages/Prestamos.jsx";
 import Pedidos from "./pages/Pedidos.jsx";
 import Historial from "./pages/Historial.jsx";
-
+import Formularios from "./pages/Formularios.jsx";
 
 function App() {
   return (
@@ -30,6 +30,7 @@ function App() {
           <Route path="/contras_1" element={<Contras_1 />} />
           <Route path="/contras_2" element={<Contras_2 />} />
           <Route path="/contras_3" element={<Contra_3 />} />
+          <Route path="/formularios" element={<Formularios />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
