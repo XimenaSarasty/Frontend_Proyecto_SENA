@@ -14,12 +14,31 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
-      setIsAuthenticated(true);
+      api.get("/perfil", {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(response => {
+        setUser(response.data.perfil);
+        setIsAuthenticated(true);
+      })
+      .catch(error => {
+        console.error("Error fetching profile or invalid token:", error);
+        localStorage.removeItem("token");
+        setIsAuthenticated(false);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    } else {
+      setIsAuthenticated(false);
+      setLoading(false);
     }
   }, []);
 
@@ -27,10 +46,15 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post("/login", { Documento, password });
       const { token } = response.data;
-      setUser({ Documento });
-      setIsAuthenticated(true);
       localStorage.setItem("token", token);
+
+      const perfilResponse = await api.get("/perfil", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUser(perfilResponse.data.perfil);
+      setIsAuthenticated(true);
     } catch (error) {
+      console.error("Login failed:", error.response?.data || error.message);
       setErrors(error.response?.data || ["Error de autenticación"]);
     }
   };
@@ -43,7 +67,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ signin, signout, user, isAuthenticated, errors }}
+      value={{ signin, signout, user, isAuthenticated, loading, errors }}
     >
       {children}
     </AuthContext.Provider>

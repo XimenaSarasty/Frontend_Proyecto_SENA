@@ -119,44 +119,48 @@ const Contras_3 = () => {
   };
 
   return (
-    <div className="pagina flex flex-col md:flex-row h-screen bg-fondo">
-      <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path h-full md:h-auto">
-        <div className="main w-3/4 md:w-1/2 text-center text-lg">
-          <div className="letras-3 font-inter mb-20 md:mb-8">
-            <h6 className="text-white font-normal text-4xl md:text-5xl mt-4">
+    <div className="flex flex-col md:flex-row h-screen bg-fondo">
+      <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path md:clip-polygon h-full md:h-auto">
+        <div className="main w-3/4 md:w-1/2 text-center text-sm md:text-lg">
+          <div className="letras font-inter mb-4 md:mb-6">
+            <h3 className="text-white font-normal text-xl md:text-4xl lg:text-4xl mt-2 md:mt-4">
               Nueva contraseña
-            </h6>
+            </h3>
           </div>
-          <div className="space-y-6 md_space-y-6 text-center">
-            <h1 className="text-white font-normal text-xl md:text-2xl mb-10">
+          <div className="space-y-4 text-center mb-6 mt-4">
+            <h1 className="text-white font-normal text-xs md:text-lg lg:text-lg mt-2 md:mt-4">
               Por favor escriba su nueva contraseña.
             </h1>
           </div>
-          <div className="space-y-6 text-left">
-            <div className="input w-full mb- relative">
-              <label className="text-sm text-white block">
+          <div className="space-y-4 text-left">
+            <div className="input w-full mb-4 relative">
+              <label className="text-xs text-white block mb-1">
                 Correo electrónico
               </label>
-              <div className="flex items-center border-b-2 border-white">
+              <div className="relative flex items-center border-b-2 border-white">
                 <input
                   type="text"
-                  className="flex-1 p-2 bg-transparent text-white focus:outline-none pr-10"
+                  className="flex-1 p-2 bg-transparent text-white focus:outline-none pr-10 text-sm w-full min-w-0 overflow-x-auto"
                   value={correo}
                   readOnly
                   onChange={handleEmailChange}
                 />
                 <FontAwesomeIcon
                   icon={faEnvelope}
-                  className="absolute right-2 text-white ml-2"
+                  className={`absolute right-2 text-white ml-2 transition-opacity duration-300 ${
+                    correo ? "opacity-0" : "opacity-100"
+                  }`}
                 />
               </div>
             </div>
-            <div className="input w-full mb-2 relative">
-              <label className="text-sm text-white block">Contraseña</label>
+            <div className="input w-full mb-4 relative">
+              <label className="text-xs text-white block mb-1">
+                Contraseña
+              </label>
               <div className="flex items-center border-b-2 border-white">
                 <input
                   type="password"
-                  className="flex-1 p-2 bg-transparent text-white focus:outline-none pr-10"
+                  className="flex-1 p-2 bg-transparent text-white focus:outline-none pr-10 text-sm"
                   value={password}
                   onChange={handlePasswordChange}
                 />
@@ -166,24 +170,18 @@ const Contras_3 = () => {
                 />
               </div>
               {passwordError && (
-                <div className="text-red-400 text-sm mt-1">{passwordError}</div>
+                <div className="text-red-400 text-xs mt-1">{passwordError}</div>
               )}
             </div>
           </div>
-          <div className="mb-2">
-            <button className="btn-primary mt-20" onClick={handleLogin}>
-              Confirmar contraseña
-            </button>
-          </div>
+          <button className="btn-primary mt-8 mb-2" onClick={handleLogin}>
+            Confirmar contraseña
+          </button>
         </div>
       </div>
       <div className="hidden md:flex items-center justify-center md:w-1/2 bg-fondo">
-        <div className="w-1/2">
-          <img
-            className="w-2/3 h-auto object-cover"
-            src={fondo}
-            alt="logoSena"
-          />
+        <div className="w-3/4">
+          <img className="w-80 h-80 object-cover" src={fondo} alt="logoSena" />
         </div>
       </div>
       <ToastContainer />

@@ -18,7 +18,8 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Herramientas from "./pages/Herramientas.jsx";
 import Prestamos from "./pages/Prestamos.jsx";
 import Pedidos from "./pages/Pedidos.jsx";
-import HistorialIF from "./pages/HistorialIF.jsx";
+import Historial from "./pages/Historial.jsx";
+import Formularios from "./pages/Formularios.jsx";
 
 function App() {
   return (
@@ -29,27 +30,29 @@ function App() {
           <Route path="/contras_1" element={<Contras_1 />} />
           <Route path="/contras_2" element={<Contras_2 />} />
           <Route path="/contras_3" element={<Contra_3 />} />
-          <Route path="/usuarios" element={<Usuarios />} />
-          <Route path="/roles" element={<Roles />} />
-          <Route path="/categorias" element={<Categorias />} />
-          <Route path="/subcategorias" element={<Subcategorias />} />
-          <Route path="/instructores" element={<Instructores />} />
-          <Route path="/fichas" element={<Fichas />} />
-          <Route path="/excel" element={<ImportExcel />} />
-          <Route path="/unidadmedida" element={<UnidadMedida />} />
-          <Route path='/productos' element={<Productos/>}/> 
-          <Route path='/herramientas' element={<Herramientas/>}/>
-          <Route path='/prestamos' element={<Prestamos/>}/>  
-          <Route path='/pedidos' element={<Pedidos/>}/>
-          <Route path='/historialif' element={<HistorialIF/>}/>
+          <Route path="/formularios" element={<Formularios />} />
 
-          {/* <Route element={<ProtectedRoute />}> */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          {/* </Route> */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/usuarios" element={<Usuarios />} />
+            <Route path="/roles" element={<Roles />} />
+            <Route path="/categorias" element={<Categorias />} />
+            <Route path="/subcategorias" element={<Subcategorias />} />
+            <Route path="/instructores" element={<Instructores />} />
+            <Route path="/fichas" element={<Fichas />} />
+            <Route path="/excel" element={<ImportExcel />} />
+            <Route path="/unidadmedida" element={<UnidadMedida />} />
+            <Route path='/productos' element={<Productos/>}/> 
+            <Route path='/herramientas' element={<Herramientas/>}/>
+            <Route path='/prestamos' element={<Prestamos/>}/>  
+            <Route path='/pedidos' element={<Pedidos/>}/>
+            <Route path='/historial' element={<Historial/>}/>
+          </Route>
+          
         </Routes>
       </BrowserRouter>
     </AuthProvider>
   );
-}
+};
 
 export default App;

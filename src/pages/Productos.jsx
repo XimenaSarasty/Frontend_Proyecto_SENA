@@ -148,91 +148,130 @@ const Productos = () => {
       name: "id",
       label: "ID",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "UsuarioId",
-      label: "ID-Usuario",
+      label: "USUARIO",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "marca",
-      label: "Marca",
+      label: "MARCA",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "cantidad_actual",
-      label: "Cantidad Actual",
+      label: "CANTIDAD ACTUAL",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "cantidad_entrada",
-      label: "Cantidad de Entrada",
+      label: "CANTIDAD DE ENTRADA",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "descripcion",
-      label: "Descripción",
+      label: "DESCRIPCIÓN",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "unidadmedidaId",
-      label: "Unidad de Medida",
+      label: "UNIDAD DE MEDIDA",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "subcategoriaId",
-      label: "ID-Subcategoría",
+      label: "SUBCATEGORIA",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "estadoId",
-      label: "ID-Estado",
+      label: "ESTADO",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "cantidad_salida",
-      label: "Cantidad de Salida",
+      label: "CANTIDAD DE SALIDA",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "nombre",
-      label: "Nombre",
+      label: "NOMBRE",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "codigo",
-      label: "Código",
+      label: "CODIGO",
       options: {
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value) => <div className="text-center">{value}</div>,
       },
     },
     {
       name: "edit",
-      label: "Editar",
+      label: "EDITAR",
       options: {
         filter: false,
+        customHeadRender: (columnMeta) => (
+          <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
+        ),
         customBodyRender: (value, tableMeta, updateValue) => (
           <div className="flex items-center justify-center">
             <IconButton

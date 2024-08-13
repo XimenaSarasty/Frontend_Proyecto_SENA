@@ -156,12 +156,17 @@ const Login = () => {
       }
       if (!/[\W_]/.test(value)) {
         errors.push(
-          "La contraseña debe contener al menos un carácter especial"
+          "La contraseña debe tener un carácter especial"
         );
       }
-      if (!/[a-z]/.test(value) || !/[A-Z]/.test(value)) {
+      if (!/[a-z]/.test(value)) {
         errors.push(
-          "La contraseña debe contener al menos una letra minúscula y una mayúscula"
+          "La contraseña debe tener una letra minúscula"
+        );
+      }
+      if (!/[A-Z]/.test(value)) {
+        errors.push(
+          "La contraseña debe tener una letra mayúscula"
         );
       }
       if (errors.length > 0) {
@@ -173,7 +178,7 @@ const Login = () => {
   };
 
   return (
-    <div className="pagina flex flex-col md:flex-row h-screen bg-fondo">
+    <div className="flex flex-col md:flex-row h-screen bg-fondo">
       <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path h-full md:h-auto">
         <div className="main w-3/4 md:w-1/2 text-center text-lg">
           <div className="letras font-inter mb-4 md:mb-8">
@@ -187,8 +192,8 @@ const Login = () => {
               Mobiliario
             </h1>
           </div>
-          <div className="space-y-4 md:space-y-6 text-left">
-            <div className="input w-full mb-2 relative">
+          <form onSubmit={handleLogin} className="space-y-2 md:space-y-4 text-left">
+            <div className="input w-full mb-1 relative">
               <label className="text-sm text-white block mb-1">
                 Identificación
               </label>
@@ -205,7 +210,7 @@ const Login = () => {
                 />
               </div>
             </div>
-            <div className="input w-full mb-2 relative">
+            <div className="input w-full mb-1 relative">
               <label className="text-sm text-white block mb-1">
                 Contraseña
               </label>
@@ -242,18 +247,23 @@ const Login = () => {
                 </select>
               </div>
             </div>
-          </div>
-          <button className="btn-primary mt-2 md:mt-8" onClick={handleLogin}>
-            Iniciar sesión
-          </button>
-          <div className="mt-2">
-            <NavLink
-              to={"/contras_1"}
-              className="text-white text-sm md:text-lg mt-4"
-            >
-              Olvidé mi contraseña
-            </NavLink>
-          </div>
+            <div className="flex justify-center mt-2 md:mt-6">
+              <button
+                type="submit"
+                className="btn-primary"
+              >
+                Iniciar sesión
+              </button>
+            </div>
+            <div className="mt-2 text-center">
+              <NavLink
+                to={"/contras_1"}
+                className="text-white text-sm md:text-lg -mt-2"
+              >
+                Olvidé mi contraseña
+              </NavLink>
+            </div>
+          </form>
         </div>
       </div>
 
