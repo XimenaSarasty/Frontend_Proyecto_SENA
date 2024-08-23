@@ -3,13 +3,7 @@ import { api } from "../api/token";
 import { FaTimes } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, FormControlLabel, Checkbox } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const AddUserModal = ({ isOpen, onClose, user }) => {

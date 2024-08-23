@@ -9,6 +9,7 @@ import Sidebar from "../components/Sidebar";
 import Home from "../components/Home";
 import EditProductModal from "../components/EditProductModal";
 import AddProductModal from "../components/AddProductModal";
+import EditCantidadEntradaModal from "../components/EditCantidadEntradaModal"; 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,6 +17,7 @@ const Productos = () => {
   const [sidebarToggle, setSidebarToggle] = useState(false);
   const [data, setData] = useState([]);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [isOpenEditCantidadEntradaModal, setIsOpenEditCantidadEntradaModal] = useState(false); 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -40,62 +42,19 @@ const Productos = () => {
           codigo: "COD123",
         },
         {
-          id: 1,
-          UsuarioId: 101,
-          marca: "Marca A",
-          cantidad_actual: 50,
-          cantidad_entrada: 10,
-          descripcion: "Descripción del producto A",
-          unidadmedidaId: 5,
-          subcategoriaId: 3,
-          estadoId: 2,
-          cantidad_salida: 5,
-          nombre: "Producto A",
-          codigo: "COD123",
-        },
-        {
-          id: 1,
-          UsuarioId: 101,
-          marca: "Marca A",
-          cantidad_actual: 50,
-          cantidad_entrada: 10,
-          descripcion: "Descripción del producto A",
-          unidadmedidaId: 5,
-          subcategoriaId: 3,
-          estadoId: 2,
-          cantidad_salida: 5,
-          nombre: "Producto A",
-          codigo: "COD123",
-        },
-        {
-          id: 1,
-          UsuarioId: 101,
-          marca: "Marca A",
-          cantidad_actual: 50,
-          cantidad_entrada: 10,
-          descripcion: "Descripción del producto A",
-          unidadmedidaId: 5,
-          subcategoriaId: 3,
-          estadoId: 2,
-          cantidad_salida: 5,
-          nombre: "Producto A",
-          codigo: "COD123",
-        },
-        {
-          id: 1,
-          UsuarioId: 101,
-          marca: "Marca A",
-          cantidad_actual: 50,
-          cantidad_entrada: 10,
-          descripcion: "Descripción del producto A",
-          unidadmedidaId: 5,
-          subcategoriaId: 3,
-          estadoId: 2,
-          cantidad_salida: 5,
-          nombre: "Producto A",
-          codigo: "COD123",
-        },
-        // Add more mock data as needed
+            id: 1,
+            UsuarioId: 101,
+            marca: "Marca A",
+            cantidad_actual: 50,
+            cantidad_entrada: 10,
+            descripcion: "Descripción del producto A",
+            unidadmedidaId: 5,
+            subcategoriaId: 3,
+            estadoId: 2,
+            cantidad_salida: 5,
+            nombre: "Producto A",
+            codigo: "COD123",
+          },
       ];
 
       setData(response);
@@ -124,11 +83,25 @@ const Productos = () => {
     setIsOpenEditModal(true);
   };
 
+  const handleEditCantidadEntradaClick = (rowIndex) => {
+    const product = data[rowIndex];
+    setSelectedProduct(product);
+    setIsOpenEditCantidadEntradaModal(true);
+  };
+
   const handleCloseEditModal = (updatedProduct) => {
     if (updatedProduct) {
       fetchData();
     }
     setIsOpenEditModal(false);
+    setSelectedProduct(null);
+  };
+
+  const handleCloseEditCantidadEntradaModal = (updatedProduct) => {
+    if (updatedProduct) {
+      fetchData();
+    }
+    setIsOpenEditCantidadEntradaModal(false);
     setSelectedProduct(null);
   };
 
@@ -191,7 +164,19 @@ const Productos = () => {
         customHeadRender: (columnMeta) => (
           <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
         ),
-        customBodyRender: (value) => <div className="text-center">{value}</div>,
+        customBodyRender: (value, tableMeta) => (
+          <div className="flex items-center justify-center">
+            <span>{value}</span>
+            <IconButton
+              onClick={() => handleEditCantidadEntradaClick(tableMeta.rowIndex)}
+              color="primary"
+              aria-label="edit cantidad entrada"
+              size="small"
+            >
+              <EditIcon />
+            </IconButton>
+          </div>
+        ),
       },
     },
     {
@@ -272,7 +257,7 @@ const Productos = () => {
         customHeadRender: (columnMeta) => (
           <th className="text-center bg-white text-black uppercase text-xs font-bold">{columnMeta.label}</th>
         ),
-        customBodyRender: (value, tableMeta, updateValue) => (
+        customBodyRender: (value, tableMeta) => (
           <div className="flex items-center justify-center">
             <IconButton
               onClick={() => handleEditClick(tableMeta.rowIndex)}
@@ -335,8 +320,8 @@ const Productos = () => {
             {loading ? (
               <div className="text-center">Cargando productos...</div>
             ) : (
-                <MUIDataTable
-                title={<span className="custom-title">PRODUCTOS</span>} 
+              <MUIDataTable
+                title={<span className="custom-title">PRODUCTOS</span>}
                 data={data}
                 columns={columns}
                 options={{
@@ -401,6 +386,13 @@ const Productos = () => {
         <EditProductModal
           isOpen={isOpenEditModal}
           onClose={handleCloseEditModal}
+          product={selectedProduct}
+        />
+      )}
+      {selectedProduct && (
+        <EditCantidadEntradaModal
+          isOpen={isOpenEditCantidadEntradaModal}
+          onClose={handleCloseEditCantidadEntradaModal}
           product={selectedProduct}
         />
       )}

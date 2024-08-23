@@ -25,7 +25,11 @@ export const AuthProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(response => {
-        setUser(response.data.perfil);
+        const perfil = response.data.perfil;
+        setUser({
+          ...perfil,
+          RolId: perfil.RolId
+        });
         setIsAuthenticated(true);
       })
       .catch(error => {
@@ -51,7 +55,11 @@ export const AuthProvider = ({ children }) => {
       const perfilResponse = await api.get("/perfil", {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setUser(perfilResponse.data.perfil);
+      const perfil = perfilResponse.data.perfil;
+      setUser({
+        ...perfil,
+        RolId: perfil.RolId
+      });
       setIsAuthenticated(true);
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);

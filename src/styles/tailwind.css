@@ -26,6 +26,14 @@
     @apply text-white text-sm font-inter font-bold py-1 px-2 rounded-lg bg-red-500;
     @apply hover:bg-red700 hover:text-white;
 }
+.btn-black {
+  @apply text-white text-lg font-inter font-bold py-2 px-8 rounded-lg bg-black;
+  @apply hover:bg-gray-700 hover:text-white;
+}
+.btn-black2{
+  @apply text-white text-sm font-inter font-bold py-1 px-2 rounded-lg bg-black;
+  @apply hover:bg-gray-700 hover:text-white;
+}
 .input {
     @apply font-inter py-2 px-4 rounded bg-input rounded-lg;
 }
@@ -67,6 +75,9 @@
     .md\:clip-path {
         clip-path: polygon(0 0, 80% 0, 100% 29%, 90% 100%, 0 100%);
     }
+    .md\:clip-path2 {
+      clip-path: polygon(20% 0, 100% 0, 100% 100%, 10% 100%, 0 29%);
+  }
 }
 @media (min-width: 768px) and (max-width: 870px) {
     .btn-primary {

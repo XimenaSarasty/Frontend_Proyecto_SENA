@@ -177,6 +177,10 @@ const Login = () => {
     }
   };
 
+  const handleNavigate = () => {
+    navigate('/pedInstructores'); 
+  };
+
   return (
     <div className="flex flex-col md:flex-row h-screen bg-fondo">
       <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path h-full md:h-auto">
@@ -270,6 +274,13 @@ const Login = () => {
       <div className="hidden md:flex items-center justify-center md:w-1/2 bg-fondo">
         <div className="w-3/4">
           <img className="w-80 h-80 object-cover" src={fondo} alt="logoSena" />
+          <div className="w-80 h-20">
+            <div className="flex justify-center mt-10">
+              <button className="btn-black" onClick={handleNavigate}>
+                Pedidos
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <ToastContainer />

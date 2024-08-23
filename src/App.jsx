@@ -20,6 +20,10 @@ import Prestamos from "./pages/Prestamos.jsx";
 import Pedidos from "./pages/Pedidos.jsx";
 import Historial from "./pages/Historial.jsx";
 import Formularios from "./pages/Formularios.jsx";
+import PedidosIntructores from "./pages/PedidosIntructores.jsx";
+import FirmaPedidos from "./pages/FirmaPedidos.jsx";
+import FormatoHerram from "./pages/FormatoHerram.jsx";
+
 
 function App() {
   return (
@@ -31,6 +35,8 @@ function App() {
           <Route path="/contras_2" element={<Contras_2 />} />
           <Route path="/contras_3" element={<Contra_3 />} />
           <Route path="/formularios" element={<Formularios />} />
+          <Route path="/pedInstructores" element={<PedidosIntructores />} />
+          <Route path="/formatoHerramientas" element={<FormatoHerram />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -47,6 +53,11 @@ function App() {
             <Route path='/prestamos' element={<Prestamos/>}/>  
             <Route path='/pedidos' element={<Pedidos/>}/>
             <Route path='/historial' element={<Historial/>}/>
+          </Route>
+
+          {/* Ruta protegida para el RolId 2 */}
+          <Route element={<ProtectedRoute requiredRoleId={2} />}>
+            <Route path="/firmaPedidos" element={<FirmaPedidos />} />
           </Route>
           
         </Routes>
