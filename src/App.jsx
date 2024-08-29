@@ -23,6 +23,7 @@ import Formularios from "./pages/Formularios.jsx";
 import PedidosIntructores from "./pages/PedidosIntructores.jsx";
 import FirmaPedidos from "./pages/FirmaPedidos.jsx";
 import FormatoHerram from "./pages/FormatoHerram.jsx";
+import HomeCoord from "./pages/HomeCoord.jsx";
 
 
 function App() {
@@ -57,7 +58,8 @@ function App() {
 
           {/* Ruta protegida para el RolId 2 */}
           <Route element={<ProtectedRoute requiredRoleId={2} />}>
-            <Route path="/firmaPedidos" element={<FirmaPedidos />} />
+            <Route path="/homecoord" element={<HomeCoord />} />
+            <Route path="/firmaPedidos" element={<FirmaPedidos />} />            
           </Route>
           
         </Routes>

@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import fondo from "/logoSena.png";
 import siga from "/Siga.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { FaGripLinesVertical } from "react-icons/fa6";
 import FirmasDos from './../components/FirmasDos';
 import TablaPedidosFirma from "../components/TablaPedidosFirma";
+import SidebarCoord from "../components/SidebarCoord";
+import Home from "../components/Home";
 
 const FirmaPedidos = () => {
+  const [sidebarToggleCoord, setsidebarToggleCoord] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -156,28 +158,59 @@ const FirmaPedidos = () => {
   };
 
   return (
+
+    <div className="flex min-h-screen bg-grisClaro">
+    <SidebarCoord sidebarToggleCoord={sidebarToggleCoord} />
+    <div
+      className={`flex flex-col flex-grow p-4 bg-grisClaro ${
+        sidebarToggleCoord ? "ml-64" : ""
+      } mt-16`}
+    >
+      <Home
+        sidebarToggle={sidebarToggleCoord}
+        setSidebarToggle={setsidebarToggleCoord}
+      />
     <div className="flex flex-col md:flex-row h-screen bg-grisClaro">
-      <div className="hidden md:flex items-star justify-center md:w-2/3 bg-grisClaro mx-4">
+      <div className="hidden md:flex items-star justify-center md:w-full bg-grisClaro mx-4">
         <div className="w-full mt-10">
           <div className={"px-4 py-3 w-full"}>
-            <div className="flex justify-between text-xs w-auto">
-              <img
-                className="w-20 h-20 object-cover ml-4 mr-2"
-                src={fondo}
-                alt="logoSena"
-              />
-              <div className="flex flex-col items-center text-base">
-                <span className="text-black text-center font-semibold hidden md:inline">
-                  FORMATO DE SOLICITUD DE SALIDA DE BIENES PARA EL USO DE LOS
-                  CUENTADANTES QUE TIENEN VÍNCULO CON LA ENTIDAD
-                </span>
+          <div className="flex items-center justify-between text-sm w-auto">
+                <img
+                  className="w-20 h-20 object-cover ml-2"
+                  src={fondo}
+                  alt="logoSena"
+                />
+                <div className="flex flex-col items-center">
+                  <span className="text-black font-semibold hidden md:inline">
+                    SERVICIO NACIONAL DE APRENDIZAJE SENA
+                  </span>
+                  <span className="text-black font-semibold hidden md:inline">
+                    GESTIÓN DE INFRAESTRUCTURA Y LOGÍSTICA
+                  </span>
+                  <span className="text-black font-semibold hidden md:inline">
+                    FORMATO DE SOLICITUD DE SALIDA DE BIENES PARA EL USO DE LOS
+                  </span>
+                  <span className="text-black font-semibold hidden md:inline">
+                    CUENTADANTES QUE TIENEN VÍNCULO CON LA ENTIDAD
+                  </span>
+                </div>
+                <img
+                  className="flex justify-end w-auto h-14 object-cover ml-2"
+                  src={siga}
+                  alt="siga"
+                />
+                <div className="flex flex-col">
+                  <span className="text-black font-semibold hidden md:inline">
+                    SBHNo.:
+                  </span>
+                  <span className="text-black font-semibold hidden md:inline">
+                    Versión: 04
+                  </span>
+                  <span className="text-black font-semibold hidden md:inline">
+                    Código: GIL-F-014
+                  </span>
+                </div>
               </div>
-              <img
-                className="flex justify-end w-auto h-14 object-cover mt-2 ml-2"
-                src={siga}
-                alt="siga"
-              />
-            </div>
 
           {/* DATOS FIJOS */}
             <div className={"px-2 py-2 w-full mt-6"}>
@@ -356,7 +389,7 @@ const FirmaPedidos = () => {
                     )}
                   </div>
 
-                  <div className="flex flex-col md:flex-row justify-between gap-x-4">
+                  <div className="flex flex-col md:flex-row justify-between gap-x-4 mb-4">
                     <div className="flex flex-row w-full md:w-3/4">
                       <label className="mb-1 font-bold text-xs mt-2">
                         Nombre del servidor público a quien se le asignará el
@@ -402,11 +435,6 @@ const FirmaPedidos = () => {
                       )}
                     </div>
                   </div>
-
-                  <div className="flex justify-end mt-2">
-                    <button className="btn-black2 mb-4" onClick={() => handleCreate("datos")}>
-                      Guardar y continuar</button>
-                  </div>
                 </div>
               )}
             </div>
@@ -423,7 +451,7 @@ const FirmaPedidos = () => {
 
               {accordionStates.productos && (
                 <div className="flex flex-col rounded-lg w-full">
-                  <div className="flex flex-row justify-between w-full mb-4">
+                  <div className="flex flex-row justify-center w-full mb-4">
                     <TablaPedidosFirma
                       accordionStates={accordionStates}
                       toggleAccordion={toggleAccordion}
@@ -464,35 +492,9 @@ const FirmaPedidos = () => {
           </div>
         </div>
       </div>
-
-      <div className="w-full md:w-1/2 bg-negro flex justify-center items-center md:clip-path2 h-full md:h-auto">
-        <div className="main w-3/4 md:w-1/2 text-center text-lg">
-          <div className="letras font-inter mb-4 md:mb-8">
-            <h1 className="text-white font-normal text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">
-              Bienvenido a
-            </h1>
-            <h1 className="text-white font-semibold text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">
-              inventario del
-            </h1>
-            <h1 className="text-sena font-semibold text-2xl md:text-4xl lg:text-5xl mt-2 md:mt-4">
-              Mobiliario
-            </h1>
-          </div>
-
-          <div className="mt-2 text-center">
-            <h1 className="text-white text-xs md:text-lg -mt-2 mb-4">
-              Aquí puedes revisar y firmar los pedidos realizados para ello inicia sesión.
-            </h1>
-          </div>
-
-          <div className="flex justify-center mt-4 md:mt-8">
-            <button className="btn-primary" onClick={handleNavigate}>
-              Iniciar sesión
-            </button>
-          </div>
-        </div>
-      </div>
       <ToastContainer />
+    </div>
+    </div>
     </div>
   );
 };

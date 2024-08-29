@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import Sidebar from "../components/Sidebar";
-import Home from "../components/Home";
 import Resumen from "../components/Resumen";
+import SidebarCoord from "../components/SidebarCoord";
+import Home from "../components/Home";
 
-const Dashboard = () => {
-  const [sidebarToggle, setSidebarToggle] = useState(false);
+const HomeCoord = () => {
+  const [sidebarToggleCoord, setsidebarToggleCoord] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-fondo">
-      <Sidebar sidebarToggle={sidebarToggle} />
+      <SidebarCoord sidebarToggleCoord={sidebarToggleCoord} />
       <div
         className={`flex flex-col flex-grow p-4 bg-fondo ${
-          sidebarToggle ? "ml-64" : ""
+          sidebarToggleCoord ? "ml-64" : ""
         } mt-16`}
       >
         <Home
-          sidebarToggle={sidebarToggle}
-          setSidebarToggle={setSidebarToggle}
+          sidebarToggle={sidebarToggleCoord}
+          setSidebarToggle={setsidebarToggleCoord}
         />
         <div className="flex-grow flex items-center justify-center">
           <div className="w-full max-w-7xl mx-auto">
@@ -28,4 +28,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default HomeCoord;

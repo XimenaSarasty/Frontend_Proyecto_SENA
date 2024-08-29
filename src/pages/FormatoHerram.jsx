@@ -160,24 +160,44 @@ const FormatoHerram = () => {
       <div className="hidden md:flex items-star justify-center md:w-2/3 bg-grisClaro mx-4">
         <div className="w-full mt-10">
           <div className={"px-4 py-3 w-full"}>
-            <div className="flex justify-between text-xs w-auto">
+          <div className="flex justify-between text-xs w-full">
               <img
-                className="w-20 h-20 object-cover ml-4 mr-2"
+                className="w-10 h-10 object-cover ml-4 mr-2 mt-2"
                 src={fondo}
                 alt="logoSena"
               />
               <div className="flex flex-col items-center text-base">
-                <span className="text-black text-center font-semibold hidden md:inline">
-                  FORMATO DE SOLICITUD DE SALIDA DE BIENES PARA EL USO DE LOS
-                  CUENTADANTES QUE TIENEN VÍNCULO CON LA ENTIDAD
-                </span>
+                <span className="text-black text-center text-xs font-semibold hidden md:inline">
+                  SERVICIO NACIONAL DE APRENDIZAJE SENA
+                  </span>
+                <span className="text-black text-center text-xs font-semibold hidden md:inline">
+                    GESTIÓN DE INFRAESTRUCTURA Y LOGÍSTICA
+                  </span>
+                  <span className="text-black text-center text-xs font-semibold hidden md:inline">
+                    FORMATO DE SOLICITUD DE SALIDA DE BIENES PARA EL USO DE LOS
+                  </span>
+                  <span className="text-black text-center text-xs font-semibold hidden md:inline">
+                    CUENTADANTES QUE TIENEN VÍNCULO CON LA ENTIDAD
+                  </span>
               </div>
               <img
-                className="flex justify-end w-auto h-14 object-cover mt-2 ml-2"
+                className="flex justify-end w-auto h-10 object-cover mt-2 ml-2 mr-2"
                 src={siga}
                 alt="siga"
               />
+              <div className="flex flex-col mt-2">
+                  <span className="text-black font-semibold hidden md:inline">
+                    SBHNo.:
+                  </span>
+                  <span className="text-black font-semibold hidden md:inline">
+                    Versión: 04
+                  </span>
+                  <span className="text-black font-semibold hidden md:inline">
+                    Código: GIL-F-014
+                  </span>
+                </div>            
             </div>
+            
 
           {/* DATOS FIJOS */}
             <div className={"px-2 py-2 w-full mt-6"}>
